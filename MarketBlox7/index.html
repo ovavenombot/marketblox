@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MarketBlox — Roblox Items Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="cart.css"/>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="8" fill="#00c853"/>
+          <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+          <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+          <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+          <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+        </svg>
+      </div>
+      <span>Market<b>Blox</b></span>
+    </a>
+
+    <div class="nav-center">
+      <div class="game-dropdown">
+        <button class="dropdown-btn">
+          <span class="btn-icon">🎮</span>
+          Select Game
+          <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dropdown-menu">
+          <div class="dropdown-label">CHOOSE A GAME</div>
+          <a href="#" class="dropdown-item" onclick="selectGame('sab');return false">
+            <span class="di-emoji">🧠</span>
+            <div class="di-info">
+              <span class="di-name">Steal A Brainrot</span>
+              <span class="di-count">12 items</span>
+            </div>
+            <span class="di-arrow">→</span>
+          </a>
+          <a href="#" class="dropdown-item" onclick="selectGame('gpo');return false">
+            <span class="di-emoji">🌊</span>
+            <div class="di-info">
+              <span class="di-name">Grand Piece Online</span>
+              <span class="di-count">Coming soon</span>
+            </div>
+            <span class="di-arrow">→</span>
+          </a>
+          <a href="#" class="dropdown-item" onclick="selectGame('bf');return false">
+            <span class="di-emoji">🍎</span>
+            <div class="di-info">
+              <span class="di-name">Blox Fruits</span>
+              <span class="di-count">Coming soon</span>
+            </div>
+            <span class="di-arrow">→</span>
+          </a>
+          <a href="#" class="dropdown-item" onclick="selectGame('rivals');return false">
+            <span class="di-emoji">⚔️</span>
+            <div class="di-info">
+              <span class="di-name">Rivals</span>
+              <span class="di-count">Coming soon</span>
+            </div>
+            <span class="di-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <a href="#support" class="nav-link">Support</a>
+      <a href="https://youtu.be/NEPOFZU-dOk" target="_blank" class="nav-link">Tutorial</a>
+      <a href="#shop" class="nav-cta">
+        <span>Shop Now</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <button class="cart-nav-btn" onclick="openCart()" aria-label="Cart">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.66a2 2 0 001.99-1.61L23 6H6"/></svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#" onclick="selectGame('sab');closeMobile();return false">🧠 Steal A Brainrot</a>
+    <a href="#" onclick="selectGame('gpo');closeMobile();return false">🌊 Grand Piece Online</a>
+    <a href="#" onclick="selectGame('bf');closeMobile();return false">🍎 Blox Fruits</a>
+    <a href="#" onclick="selectGame('rivals');closeMobile();return false">⚔️ Rivals</a>
+    <div class="mobile-divider"></div>
+    <a href="#support" onclick="closeMobile()">Support</a>
+    <a href="https://youtu.be/NEPOFZU-dOk" target="_blank" onclick="closeMobile()">Tutorial</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-stars" id="heroStars"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-rating">
+          <span class="stars-row">★★★★★</span>
+          <span>Trusted by thousands of players</span>
+        </div>
+        <h1 class="hero-title">
+          Get the <span class="hero-accent">Items you<br/>love,</span> Delivered<br/>in Minutes!
+        </h1>
+        <p class="hero-sub">
+          <b>MarketBlox</b> is the <b>#1 marketplace</b> to get your SAB, GPO, BF & Rivals items — quickly! ✨<br/>
+          Fastest delivery, affordable prices, and 100% safe. 🧠
+        </p>
+        <div class="hero-actions">
+          <a href="#shop" class="btn-primary magnetic">
+            <span class="btn-bg"></span>
+            <span class="btn-content">🔥 Shop Now!</span>
+          </a>
+          <a href="#how" class="btn-ghost magnetic">
+            <span>How It Works</span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-pill">⚡ Instant Delivery</div>
+          <div class="trust-pill">🔒 100% Safe</div>
+          <div class="trust-pill">💬 24/7 Support</div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-game-cards">
+          <div class="hgc hgc1" onclick="selectGame('sab');scrollToShop()">
+            <div class="hgc-emoji">🧠</div>
+            <div class="hgc-info">
+              <div class="hgc-name">Steal A Brainrot</div>
+              <div class="hgc-price">From <b>$1.99</b></div>
+            </div>
+            <div class="hgc-arrow">→</div>
+          </div>
+          <div class="hgc hgc2" onclick="selectGame('gpo');scrollToShop()">
+            <div class="hgc-emoji">🌊</div>
+            <div class="hgc-info">
+              <div class="hgc-name">Grand Piece Online</div>
+              <div class="hgc-price">Coming Soon</div>
+            </div>
+            <div class="hgc-arrow">→</div>
+          </div>
+          <div class="hgc hgc3" onclick="selectGame('bf');scrollToShop()">
+            <div class="hgc-emoji">🍎</div>
+            <div class="hgc-info">
+              <div class="hgc-name">Blox Fruits</div>
+              <div class="hgc-price">Coming Soon</div>
+            </div>
+            <div class="hgc-arrow">→</div>
+          </div>
+          <div class="hgc hgc4" onclick="selectGame('rivals');scrollToShop()">
+            <div class="hgc-emoji">⚔️</div>
+            <div class="hgc-info">
+              <div class="hgc-name">Rivals</div>
+              <div class="hgc-price">Coming Soon</div>
+            </div>
+            <div class="hgc-arrow">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME SELECTOR -->
+  <section class="game-select" id="shop">
+    <div class="container">
+      <div class="section-tag">SHOP NOW</div>
+      <h2 class="section-heading">Choose Your Game</h2>
+      <div class="game-tabs">
+        <button class="game-tab active" onclick="selectGame('sab')" data-game="sab">
+          <span>🧠</span> Steal A Brainrot
+        </button>
+        <button class="game-tab" onclick="selectGame('gpo')" data-game="gpo">
+          <span>🌊</span> Grand Piece Online
+        </button>
+        <button class="game-tab" onclick="selectGame('bf')" data-game="bf">
+          <span>🍎</span> Blox Fruits
+        </button>
+        <button class="game-tab" onclick="selectGame('rivals')" data-game="rivals">
+          <span>⚔️</span> Rivals
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <div class="products-header">
+        <div>
+          <h3 id="gameTitle" class="game-title">🧠 Steal A Brainrot</h3>
+          <p id="productsCount" class="products-meta">12 Items · Instant Delivery</p>
+        </div>
+      </div>
+
+      <!-- SAB -->
+      <div class="products-grid" id="sab-products">
+        <div class="product-card" data-aos onclick="window.location='product.html?id=los-mobilis'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/893D78FA-11F1-49FF-8F55-01B98FF3F91A_L0_001_1772893035_transformed.png?v=1772894197&width=600" alt="Los Mobilis" onerror="this.parentElement.innerHTML='<div class=ef>🧠</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Los Mobilis</div>
+            <div class="product-price">$3.67</div>
+          </div>
+          <div class="card-btns">
+          <a href="product.html?id=los-mobilis" class="product-btn-buy">⚡ BUY NOW</a>
+          <button class="product-btn-cart" onclick="addToCart('los-mobilis');event.stopPropagation()">Add to Cart</button>
+        </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=67'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/3259EDFA-F6E7-46C2-B754-14EC5A50E3F7_L0_001_1772892952_transformed_89db3a18-dcae-4929-95a1-4e255c02e871.png?v=1772894142&width=600" alt="67" onerror="this.parentElement.innerHTML='<div class=ef>🧠</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">67</div>
+            <div class="product-price">$3.99</div>
+          </div>
+          <div class="card-btns">
+          <a href="product.html?id=67" class="product-btn-buy">⚡ BUY NOW</a>
+          <button class="product-btn-cart" onclick="addToCart('67');event.stopPropagation()">Add to Cart</button>
+        </div>
+        </div>
+
+        <div class="product-card best-seller" data-aos onclick="window.location='product.html?id=celestial-pegasus'">
+          <div class="bs-badge">⭐ BEST SELLER</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/B8436553-A201-4696-829E-275846CC601B_L0_001_1772893045_transformed_6d823985-692a-4d66-bf5c-d896fdf39dc7.png?v=1772899995&width=600" alt="Celestial Pegasus" onerror="this.parentElement.innerHTML='<div class=ef>🦄</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Celestial Pegasus</div>
+            <div class="product-price">$29.99</div>
+          </div>
+          <div class="card-btns">
+          <a href="product.html?id=celestial-pegasus" class="product-btn-buy">⚡ BUY NOW</a>
+          <button class="product-btn-cart" onclick="addToCart('celestial-pegasus');event.stopPropagation()">Add to Cart</button>
+        </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=tic-tac-sahur'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/1BA47741-08E2-499B-8F0C-939AC4D72980_L0_001_1772893039_transformed.png?v=1772894455&width=600" alt="Tic Tac Sahur" onerror="this.parentElement.innerHTML='<div class=ef>🧠</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Tic Tac Sahur</div>
+            <div class="product-price">$14.99</div>
+          </div>
+          <div class="card-btns">
+          <a href="product.html?id=tic-tac-sahur" class="product-btn-buy">⚡ BUY NOW</a>
+          <button class="product-btn-cart" onclick="addToCart('tic-tac-sahur');event.stopPropagation()">Add to Cart</button>
+        </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=esok-sekolah'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/A44A802D-A2E7-491A-866A-5F914DDFDD22_L0_001_1772893043_transformed.png?v=1772894488&width=600" alt="Esok Sekolah" onerror="this.parentElement.innerHTML='<div class=ef>🧠</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Esok Sekolah</div>
+            <div class="product-price">$4.99</div>
+          </div>
+          <div class="card-btns">
+          <a href="product.html?id=esok-sekolah" class="product-btn-buy">⚡ BUY NOW</a>
+          <button class="product-btn-cart" onclick="addToCart('esok-sekolah');event.stopPropagation()">Add to Cart</button>
+        </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=hydra-dragon'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/rn-image_picker_lib_temp_c68b6230-5e72-401e-b654-791cefec5fa2.png?v=1773698190&width=600" alt="Hydra Dragon" onerror="this.parentElement.innerHTML='<div class=ef>🐉</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Hydra Dragon Cannelloni</div>
+            <div class="product-price">$82.99</div>
+          </div>
+          <div class="card-btns">
+          <a href="product.html?id=hydra-dragon" class="product-btn-buy">⚡ BUY NOW</a>
+          <button class="product-btn-cart" onclick="addToCart('hydra-dragon');event.stopPropagation()">Add to Cart</button>
+        </div>
+        </div>
+
+        <div class="product-card" data-aos>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/592D66A2-CA6D-40BF-A5F6-4DA5F5800D9D_L0_001_1773433104_transformed.png?v=1773435717&width=600" alt="Cursed Burguru" onerror="this.parentElement.innerHTML='<div class=ef>👹</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Cursed Burguru & Fryuru</div>
+            <div class="product-price">$149.99</div>
+          </div>
+          <button class="product-btn magnetic" onclick="alert('Connect your Shopify Buy Button here!')">⚡ BUY NOW</button>
+        </div>
+
+        <div class="product-card" data-aos>
+          <div class="product-img"><div class="ef">💰</div></div>
+          <div class="product-body">
+            <div class="product-name">Money Money Puggy</div>
+            <div class="product-price">$5.99</div>
+          </div>
+          <button class="product-btn magnetic" onclick="alert('Connect your Shopify Buy Button here!')">⚡ BUY NOW</button>
+        </div>
+
+        <div class="product-card" data-aos>
+          <div class="product-img"><div class="ef">🦎</div></div>
+          <div class="product-body">
+            <div class="product-name">Garama and Madundung</div>
+            <div class="product-price">$9.99</div>
+          </div>
+          <button class="product-btn magnetic" onclick="alert('Connect your Shopify Buy Button here!')">⚡ BUY NOW</button>
+        </div>
+
+        <div class="product-card" data-aos>
+          <div class="product-img"><div class="ef">🌀</div></div>
+          <div class="product-body">
+            <div class="product-name">Skibidi Rizz Lord</div>
+            <div class="product-price">$7.99</div>
+          </div>
+          <button class="product-btn magnetic" onclick="alert('Connect your Shopify Buy Button here!')">⚡ BUY NOW</button>
+        </div>
+
+        <div class="product-card" data-aos>
+          <div class="product-img"><div class="ef">⚡</div></div>
+          <div class="product-body">
+            <div class="product-name">Sigma Cat</div>
+            <div class="product-price">$12.99</div>
+          </div>
+          <button class="product-btn magnetic" onclick="alert('Connect your Shopify Buy Button here!')">⚡ BUY NOW</button>
+        </div>
+
+        <div class="product-card custom-card" data-aos>
+          <div class="product-img"><div class="ef">👑</div></div>
+          <div class="product-body">
+            <div class="product-name">Custom Order</div>
+            <div class="product-price">Contact Us</div>
+          </div>
+          <a href="#support" class="product-btn btn-outline">📩 CONTACT</a>
+        </div>
+      </div>
+
+      <!-- Coming Soon grids -->
+      <div class="products-grid hidden" id="gpo-products"><div class="coming-soon-box"><div class="cs-emoji">🌊</div><h3>Grand Piece Online</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
+      <div class="products-grid hidden" id="bf-products"><div class="coming-soon-box"><div class="cs-emoji">🍎</div><h3>Blox Fruits</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
+      <div class="products-grid hidden" id="rivals-products"><div class="coming-soon-box"><div class="cs-emoji">⚔️</div><h3>Rivals</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="section-tag">PROCESS</div>
+      <h2 class="section-heading">How It Works</h2>
+      <div class="steps-row">
+        <div class="step-card" data-aos>
+          <div class="step-num">01</div>
+          <div class="step-icon">🛒</div>
+          <h3>Pick Your Item</h3>
+          <p>Browse by game, find the item you want and click Buy Now.</p>
+        </div>
+        <div class="step-connector">
+          <div class="connector-line"></div>
+          <svg class="connector-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="step-card" data-aos>
+          <div class="step-num">02</div>
+          <div class="step-icon">💳</div>
+          <h3>Secure Checkout</h3>
+          <p>Pay safely via Shopify. Cards, PayPal & more accepted.</p>
+        </div>
+        <div class="step-connector">
+          <div class="connector-line"></div>
+          <svg class="connector-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="step-card" data-aos>
+          <div class="step-num">03</div>
+          <div class="step-icon">⚡</div>
+          <h3>Get Delivered</h3>
+          <p>Receive your item within minutes directly to your account.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section class="support" id="support">
+    <div class="container">
+      <div class="section-tag">HELP</div>
+      <h2 class="section-heading">Need Help?</h2>
+      <div class="support-grid">
+        <a href="https://discord.gg/yourlink" target="_blank" class="support-card discord magnetic" data-aos>
+          <div class="sc-top">
+            <div class="sc-icon">💬</div>
+            <div class="sc-badge">Fastest</div>
+          </div>
+          <h3>Discord Server</h3>
+          <p>Join our server and open a ticket for instant support.</p>
+          <div class="sc-link">discord.gg/marketblox <span>→</span></div>
+        </a>
+        <a href="mailto:support@marketblox.gg" class="support-card email magnetic" data-aos>
+          <div class="sc-top">
+            <div class="sc-icon">📧</div>
+          </div>
+          <h3>Email Support</h3>
+          <p>Send us a message and we'll respond within the hour.</p>
+          <div class="sc-link">support@marketblox.gg <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <div class="logo-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#00c853"/><rect x="6" y="6" width="7" height="7" rx="2" fill="white"/><rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/><rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/><rect x="15" y="15" width="7" height="7" rx="2" fill="white"/></svg>
+            </div>
+            <span>Market<b>Blox</b></span>
+          </a>
+          <p>The trusted Roblox items marketplace. Fast delivery, fair prices, full support.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Games</h4>
+          <a href="#" onclick="selectGame('sab');return false">Steal A Brainrot</a>
+          <a href="#" onclick="selectGame('gpo');return false">Grand Piece Online</a>
+          <a href="#" onclick="selectGame('bf');return false">Blox Fruits</a>
+          <a href="#" onclick="selectGame('rivals');return false">Rivals</a>
+        </div>
+        <div class="footer-col">
+          <h4>Help</h4>
+          <a href="#support">Support</a>
+          <a href="https://youtu.be/NEPOFZU-dOk" target="_blank">Tutorial</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 MarketBlox · Not affiliated with Roblox Corporation</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- CART OVERLAY -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <!-- CART DRAWER -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        🛒 Shopping Cart
+        <span id="drawerCount">0</span>
+      </div>
+      <button class="drawer-close" onclick="closeCart()">✕</button>
+    </div>
+
+    <div class="drawer-items" id="drawerItems"></div>
+
+    <!-- EMPTY STATE -->
+    <div class="drawer-empty" id="drawerEmpty" style="display:flex">
+      <div class="drawer-empty-icon">🛒</div>
+      <h3>Your cart is empty</h3>
+      <p>Add some items to get started!</p>
+      <button class="drawer-empty-btn" onclick="closeCart()">Browse Products</button>
+    </div>
+
+    <!-- SUGGESTIONS -->
+    <div class="drawer-suggestions" id="drawerSuggestions" style="display:none">
+      <div class="drawer-suggestions-title">You may also like</div>
+      <div class="suggestions-row" id="suggestionsRow"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="drawer-footer" id="drawerFooter" style="display:none">
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">$0.00</span>
+      </div>
+      <div class="drawer-delivery">
+        <span>Delivery</span>
+        <span>FREE ⚡</span>
+      </div>
+      <div class="drawer-total">
+        <span>Total</span>
+        <span id="drawerTotal">$0.00 USD</span>
+      </div>
+      <label class="drawer-terms" id="drawerTermsLabel">
+        <input type="checkbox" id="drawerTerms"/>
+        I agree with the terms and conditions.
+      </label>
+      <button class="drawer-checkout-btn" onclick="drawerCheckout()">
+        CHECK OUT →
+      </button>
+      <button class="drawer-view-cart" onclick="closeCart()">Continue Shopping</button>
+      <div class="drawer-pay-icons">
+        <span class="dpi">VISA</span>
+        <span class="dpi">MC</span>
+        <span class="dpi">AMEX</span>
+        <span class="dpi">PayPal</span>
+        <span class="dpi">₿ BTC</span>
+        <span class="dpi">G Pay</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="cart-toast" id="cartToast">✅ Added to cart!</div>
+
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmed — MarketBlox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #00c853;
+      --green-light: #e8f9ef;
+      --navy: #111815;
+      --bg: #f4f6f3;
+      --border: #e2e8e4;
+      --text: #1a1f1b;
+      --text2: #5a6b5e;
+      --font-display: 'Nunito', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.1);
+    }
+
+    .success-anim {
+      width: 80px; height: 80px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+      animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .logo b { color: var(--green); }
+    .logo-icon {
+      width: 28px; height: 28px;
+      background: var(--green);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: var(--text2);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .order-id {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.875rem 1.25rem;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text2);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .order-id span { color: var(--green); font-size: 0.8rem; word-break: break-all; }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 0.875rem 1rem;
+    }
+    .step-num {
+      width: 26px; height: 26px;
+      background: var(--green);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .step-text h3 {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 800;
+      margin-bottom: 0.1rem;
+    }
+    .step-text p { font-size: 0.8rem; color: var(--text2); line-height: 1.4; }
+
+    .discord-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      background: #5865f2;
+      color: white;
+      text-decoration: none;
+      padding: 0.9rem;
+      border-radius: 14px;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 800;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 0.75rem;
+    }
+    .discord-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(88,101,242,0.35);
+    }
+
+    .back-btn {
+      display: block;
+      width: 100%;
+      background: transparent;
+      color: var(--text2);
+      border: 1.5px solid var(--border);
+      padding: 0.8rem;
+      border-radius: 14px;
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .back-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      top: -10px;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confetti" id="confetti"></div>
+
+  <div class="card">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="2" width="9" height="9" rx="2" fill="white"/>
+          <rect x="17" y="2" width="9" height="9" rx="2" fill="white" opacity="0.6"/>
+          <rect x="2" y="17" width="9" height="9" rx="2" fill="white" opacity="0.6"/>
+          <rect x="17" y="17" width="9" height="9" rx="2" fill="white"/>
+        </svg>
+      </div>
+      Market<b>Blox</b>
+    </div>
+
+    <div class="success-anim">✅</div>
+
+    <h1>Order Confirmed!</h1>
+    <p class="subtitle">
+      Thank you for your purchase! Your item will be delivered to your Roblox account within minutes.
+    </p>
+
+    <div class="order-id">
+      🧾 Order ID: <span id="orderId">Loading...</span>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <h3>Check your email</h3>
+          <p>You'll receive a payment confirmation from Stripe shortly.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <h3>Join our Discord</h3>
+          <p>Open a ticket and share your Order ID + Roblox username.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <h3>Receive your item ⚡</h3>
+          <p>We'll deliver directly to your account. No password needed!</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="https://discord.gg/YOURDISCORDLINK" target="_blank" class="discord-btn">
+      💬 Join Discord for Delivery
+    </a>
+    <a href="index.html" class="back-btn">← Continue Shopping</a>
+  </div>
+
+  <script>
+    // Get order ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const orderEl = document.getElementById('orderId');
+    if (sessionId) {
+      orderEl.textContent = sessionId.substring(0, 24) + '...';
+    } else {
+      orderEl.textContent = 'MB-' + Date.now();
+    }
+
+    // Clear cart after successful payment
+    localStorage.removeItem('mb_cart');
+
+    // Confetti animation
+    const confetti = document.getElementById('confetti');
+    const colors = ['#00c853', '#69f0ae', '#00e676', '#1b5e20', '#ffffff', '#b2dfdb'];
+    for (let i = 0; i < 80; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.cssText = `
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        width: ${Math.random() * 10 + 5}px;
+        height: ${Math.random() * 10 + 5}px;
+        border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+        animation-duration: ${Math.random() * 2 + 2}s;
+        animation-delay: ${Math.random() * 1.5}s;
+        opacity: ${Math.random() * 0.8 + 0.2};
+      `;
+      confetti.appendChild(piece);
+    }
+    setTimeout(() => confetti.remove(), 5000);
+  </script>
+</body>
+</html>
