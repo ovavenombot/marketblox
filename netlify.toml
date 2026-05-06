@@ -1,6 +1,8 @@
 [build]
+  base = "MarketBlox7"
   publish = "MarketBlox7"
   functions = "MarketBlox7/netlify/functions"
+  command = "npm install"
 
 [functions]
   node_bundler = "esbuild"
