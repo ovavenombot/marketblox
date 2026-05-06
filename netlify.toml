@@ -1,5 +1,5 @@
 [build]
-  command = "cd MarketBlox7 && npm ci"
+  command = "cd MarketBlox7 && npm install"
   publish = "MarketBlox7"
   functions = "MarketBlox7/netlify/functions"
 
