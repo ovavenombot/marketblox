@@ -1,7 +1,7 @@
 [build]
   base = "MarketBlox7"
-  publish = "."
-  functions = "netlify/functions"
+  publish = "MarketBlox7"
+  functions = "MarketBlox7/netlify/functions"
   command = "npm install"
 
 [functions]
