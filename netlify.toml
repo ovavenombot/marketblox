@@ -1,0 +1,11 @@
+[build]
+  publish = "MarketBlox7"
+  functions = "MarketBlox7/netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/checkout"
+  to = "/.netlify/functions/checkout"
+  status = 200
