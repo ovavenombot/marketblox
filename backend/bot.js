@@ -16,7 +16,7 @@ const client = new Client({
 
 // Resolves when the bot is fully logged in
 let botReady = false;
-const readyPromise = new Promise(resolve => client.once('ready',() => { botReady = true; resolve(); }));
+const readyPromise = new Promise(resolve => client.once('clientReady',() => { botReady = true; resolve(); }));
 async function waitReady() { if (!botReady) await readyPromise; }
 
 // ── Slash command definitions ─────────────────────────────────────────────────
@@ -554,7 +554,7 @@ client.on('interactionCreate', async interaction => {
 
 // ── Start bot ─────────────────────────────────────────────────────────────────
 
-client.once('ready',async () => {
+client.once('clientReady',async () => {
   console.log(`🤖 MarketBlox bot logged in as ${client.user.tag}`);
   try {
     await registerCommands();
