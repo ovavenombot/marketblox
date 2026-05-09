@@ -68,7 +68,10 @@
             </button>
           </div>
         </div>
-        <button type="button" class="forgot-link" onclick="handleForgot()">Forgot password?</button>
+        <div style="display:flex;justify-content:space-between;margin-top:-.5rem">
+          <button type="button" class="forgot-link" onclick="handleResend()">Resend verification email</button>
+          <button type="button" class="forgot-link" onclick="handleForgot()">Forgot password?</button>
+        </div>
         <button type="submit" class="auth-btn" id="loginBtn">
           <span class="auth-btn-text">Log In</span>
           <span class="auth-btn-spinner" style="display:none"></span>
@@ -197,6 +200,28 @@
         err.style.color = '';
         err.textContent = friendlyError(ex.code);
         setLoading(btn, false);
+      }
+    };
+
+    window.handleResend = async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pw    = document.getElementById('loginPassword').value;
+      const err   = document.getElementById('loginError');
+      if (!email || !pw) { err.textContent = 'Enter your email and password first.'; return; }
+      try {
+        const cred = await signInWithEmailAndPassword(auth, email, pw);
+        if (cred.user.emailVerified) {
+          err.style.color = '#00c853';
+          err.textContent = 'Your email is already verified! You can log in.';
+        } else {
+          await sendEmailVerification(cred.user);
+          err.style.color = '#00c853';
+          err.textContent = 'Verification email resent! Check your inbox (and spam folder).';
+        }
+        await auth.signOut();
+      } catch (ex) {
+        err.style.color = '';
+        err.textContent = friendlyError(ex.code);
       }
     };
 
