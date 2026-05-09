@@ -197,6 +197,30 @@ app.post('/api/stripe-webhook', async (req, res) => {
   res.json({ received: true });
 });
 
+// ── POST /api/chat (Groq proxy) ───────────────────────────────────────────────
+
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { messages } = req.body;
+    if (!messages?.length) return res.status(400).json({ error: 'No messages' });
+
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ model: 'llama-3.1-8b-instant', messages, max_tokens: 300, temperature: 0.6 }),
+    });
+
+    const data = await groqRes.json();
+    if (!groqRes.ok) return res.status(groqRes.status).json({ error: data?.error?.message || 'Groq error' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── GET /api/order/by-session/:sessionId ─────────────────────────────────────
 
 app.get('/api/order/by-session/:sessionId', (req, res) => {

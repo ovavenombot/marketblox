@@ -2,9 +2,7 @@
 //   MARKETBLOX — AI CHAT WIDGET
 // ================================
 
-// ▼ PASTE YOUR FREE GROQ API KEY HERE
-// Get one free at: https://console.groq.com (sign up → API Keys → Create)
-const MB_API_KEY = 'YOUR_GROQ_API_KEY_HERE';
+const MB_CHAT_URL = 'https://marketblox.onrender.com/api/chat';
 
 const MB_SYSTEM_PROMPT = `You are the MarketBlox Assistant — a helpful, friendly AI support bot for MarketBlox, a trusted Roblox items marketplace.
 
@@ -163,18 +161,10 @@ async function mbCallAI(userMessage) {
     ...mbConversation.slice(-8),
   ];
 
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const res = await fetch(MB_CHAT_URL, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${MB_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages,
-      max_tokens: 300,
-      temperature: 0.6,
-    }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages }),
   });
 
   const data = await res.json();
@@ -232,7 +222,7 @@ async function mbCallAI(userMessage) {
         <input class="mb-chat-input" id="mbChatInput" type="text" placeholder="Type your message..." autocomplete="off"/>
         <button class="mb-chat-send" id="mbSendBtn" onclick="mbSendChat()">Send</button>
       </div>
-      <button class="mb-live-agent" onclick="window.open('https://discord.gg/yourlink','_blank')">
+      <button class="mb-live-agent" onclick="window.open('https://discord.gg/muHRWMqpr8','_blank')">
         <span class="mb-live-agent-dot"></span> Talk to a Live Agent
       </button>
     </div>
@@ -331,16 +321,9 @@ async function mbGetReply(message) {
   mbShowTyping();
 
   try {
-    if (MB_API_KEY && MB_API_KEY !== 'YOUR_GROQ_KEY_HERE') {
-      const reply = await mbCallAI(message);
-      mbHideTyping();
-      mbAddBotMessage(reply);
-    } else {
-      // Fallback keyword bot if no API key set
-      await new Promise(r => setTimeout(r, 900 + Math.random() * 400));
-      mbHideTyping();
-      mbAddBotMessage(mbFallbackReply(message));
-    }
+    const reply = await mbCallAI(message);
+    mbHideTyping();
+    mbAddBotMessage(reply);
   } catch (err) {
     console.error('MarketBlox AI error:', err);
     mbHideTyping();
