@@ -2,7 +2,7 @@
 //   MARKETBLOX — AI CHAT WIDGET
 // ================================
 
-const MB_CHAT_URL = 'https://marketblox.onrender.com/api/chat';
+const MB_CHAT_URL = 'https://marketblox-production.up.railway.app/api/chat';
 
 const MB_SYSTEM_PROMPT = `You are the MarketBlox Assistant — a helpful, friendly AI support bot for MarketBlox, a trusted Roblox items marketplace.
 

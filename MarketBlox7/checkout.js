@@ -3,7 +3,7 @@
 // ================================
 
 // Change this to your deployed backend URL in production
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = 'https://marketblox-production.up.railway.app';
 const FEE_RATE = 0.0635;
 
 let cart = JSON.parse(localStorage.getItem('mb_cart') || '[]');
