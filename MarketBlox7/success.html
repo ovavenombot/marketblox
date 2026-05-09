@@ -266,12 +266,17 @@
     </div>
   </div>
 
-  <script>
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+
     const BACKEND_URL = 'https://marketblox-production.up.railway.app';
 
-    async function loadOrder() {
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get('session_id');
+    async function loadOrder(sessionId) {
       const badge = document.getElementById('orderBadge');
       if (!sessionId) { badge.textContent = 'Order received'; return; }
       try {
@@ -286,6 +291,17 @@
       localStorage.removeItem('mb_cart');
     }
 
+    async function saveOrderForUser(user, sessionId) {
+      try {
+        const idToken = await user.getIdToken();
+        await fetch('/.netlify/functions/save-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, idToken }),
+        });
+      } catch (e) { console.error('save-order:', e); }
+    }
+
     function launchConfetti() {
       const end = Date.now() + 2800;
       const colors = ['#00c853', '#69f0ae', '#ffffff', '#b9f6ca'];
@@ -296,10 +312,18 @@
       })();
     }
 
-    // Load real Discord invite from backend env if exposed, otherwise use default
     document.addEventListener('DOMContentLoaded', () => {
       launchConfetti();
-      loadOrder();
+      const params    = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+      loadOrder(sessionId);
+
+      // Save order to account if logged in
+      if (sessionId) {
+        onAuthStateChanged(auth, (user) => {
+          if (user) saveOrderForUser(user, sessionId);
+        });
+      }
     });
 
     window.addEventListener('scroll', () => {

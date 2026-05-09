@@ -200,6 +200,45 @@ body {
 .nav-link:hover { color: var(--green); }
 .nav-link:hover::after { transform: scaleX(1); }
 
+/* Auth Login/Account nav button */
+.nav-link-account {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  color: var(--text2);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: .875rem;
+  font-weight: 600;
+  padding: .45rem .85rem;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  transition: border-color .2s, color .2s, background .2s;
+}
+.nav-link-account:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+.nav-link-account.auth-logged-in {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--green-light);
+}
+.auth-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: .72rem;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .nav-cta {
   display: inline-flex;
   align-items: center;

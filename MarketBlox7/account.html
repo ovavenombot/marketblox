@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account — MarketBlox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="account.css"/>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="8" fill="#00c853"/>
+          <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+          <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+          <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+          <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+        </svg>
+      </div>
+      <span>Market<b>Blox</b></span>
+    </a>
+    <div class="nav-right">
+      <a href="index.html" class="nav-link">← Shop</a>
+      <button class="nav-link" id="logoutBtn" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:.875rem;font-family:inherit;" onclick="handleLogout()">Log Out</button>
+    </div>
+  </nav>
+
+  <!-- ACCOUNT PAGE -->
+  <div class="acc-wrap" id="accWrap" style="display:none">
+    <div class="container">
+
+      <!-- HEADER -->
+      <div class="acc-header">
+        <div class="acc-avatar" id="accAvatar">?</div>
+        <div class="acc-header-info">
+          <h1 class="acc-name" id="accEmail">Loading…</h1>
+          <p class="acc-sub">MarketBlox Member</p>
+        </div>
+      </div>
+
+      <!-- STATS ROW -->
+      <div class="acc-stats">
+
+        <!-- BALANCE CARD -->
+        <div class="acc-stat-card acc-balance-card">
+          <div class="acc-stat-label">Store Balance</div>
+          <div class="acc-stat-value" id="accBalance">€0.00</div>
+          <p class="acc-stat-hint">Use your balance to pay for any item instantly</p>
+          <button class="acc-topup-btn" onclick="openTopup()">+ Add Balance</button>
+        </div>
+
+        <!-- ORDERS STAT -->
+        <div class="acc-stat-card">
+          <div class="acc-stat-label">Total Orders</div>
+          <div class="acc-stat-value" id="accOrderCount">0</div>
+          <p class="acc-stat-hint">All-time completed purchases</p>
+        </div>
+
+        <!-- SPENT STAT -->
+        <div class="acc-stat-card">
+          <div class="acc-stat-label">Total Spent</div>
+          <div class="acc-stat-value" id="accTotalSpent">€0.00</div>
+          <p class="acc-stat-hint">Across all your orders</p>
+        </div>
+
+      </div>
+
+      <!-- ORDER HISTORY -->
+      <div class="acc-section">
+        <h2 class="acc-section-title">Order History</h2>
+        <div id="ordersContainer">
+          <div class="acc-orders-loading">Loading orders…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOP-UP MODAL -->
+  <div class="topup-overlay" id="topupOverlay" onclick="closeTopup()" style="display:none"></div>
+  <div class="topup-modal" id="topupModal" style="display:none">
+    <div class="topup-header">
+      <h3>Add Balance</h3>
+      <button onclick="closeTopup()" class="topup-close">✕</button>
+    </div>
+    <p class="topup-hint">Choose an amount to add to your store wallet. Paid securely via Stripe.</p>
+    <div class="topup-amounts">
+      <button class="topup-amt" onclick="selectAmount(5)">€5</button>
+      <button class="topup-amt" onclick="selectAmount(10)">€10</button>
+      <button class="topup-amt" onclick="selectAmount(20)">€20</button>
+      <button class="topup-amt" onclick="selectAmount(50)">€50</button>
+    </div>
+    <div class="topup-custom-row">
+      <span class="topup-eur">€</span>
+      <input type="number" id="topupCustom" placeholder="Custom amount" min="1" max="500" step="0.01"/>
+    </div>
+    <div class="topup-error" id="topupError"></div>
+    <button class="topup-pay-btn" id="topupPayBtn" onclick="processTopup()">
+      <span id="topupPayText">Pay & Add Balance</span>
+      <span class="acc-spinner" id="topupSpinner" style="display:none"></span>
+    </button>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      query,
+      where,
+      orderBy,
+      getDocs
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    let currentUser = null;
+    let selectedAmount = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+      document.getElementById('accWrap').style.display = '';
+      renderHeader(user);
+      await Promise.all([loadBalance(user.uid), loadOrders(user.uid)]);
+
+      // Handle topup redirect back
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('topup') === 'success') {
+        const sid = params.get('session_id');
+        if (sid) await verifyTopup(sid);
+        window.history.replaceState({}, '', 'account.html');
+      }
+    });
+
+    function renderHeader(user) {
+      const email   = user.email || '';
+      const initial = email[0]?.toUpperCase() || '?';
+      document.getElementById('accAvatar').textContent = initial;
+      document.getElementById('accEmail').textContent  = email;
+    }
+
+    async function loadBalance(uid) {
+      try {
+        const snap = await getDoc(doc(db, 'users', uid));
+        if (snap.exists()) {
+          const bal = snap.data().balance || 0;
+          document.getElementById('accBalance').textContent = formatEur(bal);
+        }
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadOrders(uid) {
+      const container = document.getElementById('ordersContainer');
+      try {
+        const q    = query(
+          collection(db, 'orders'),
+          where('userId', '==', uid),
+          orderBy('createdAt', 'desc')
+        );
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          container.innerHTML = `<div class="acc-no-orders">
+            <div class="acc-no-orders-icon">🛒</div>
+            <p>No orders yet. <a href="index.html">Start shopping!</a></p>
+          </div>`;
+          return;
+        }
+
+        let totalSpent = 0;
+        const rows = snap.docs.map(d => {
+          const o = d.data();
+          totalSpent += o.total || 0;
+          const date = o.createdAt?.toDate?.()?.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) || '—';
+          const itemList = (o.items || []).map(i => `<span class="order-item-tag">${i.name}</span>`).join('');
+          return `
+            <div class="order-row">
+              <div class="order-row-left">
+                <div class="order-id">#${d.id.slice(-8).toUpperCase()}</div>
+                <div class="order-date">${date}</div>
+                <div class="order-items">${itemList || '—'}</div>
+                ${o.robloxUsername ? `<div class="order-roblox">Roblox: <b>${o.robloxUsername}</b></div>` : ''}
+              </div>
+              <div class="order-row-right">
+                <div class="order-amount">${formatEur(o.total)}</div>
+                <div class="order-status order-status-paid">Paid</div>
+              </div>
+            </div>`;
+        });
+
+        container.innerHTML = `<div class="orders-list">${rows.join('')}</div>`;
+        document.getElementById('accOrderCount').textContent = snap.size;
+        document.getElementById('accTotalSpent').textContent = formatEur(totalSpent);
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="acc-orders-loading">Could not load orders.</div>`;
+      }
+    }
+
+    async function verifyTopup(sessionId) {
+      try {
+        const idToken = await currentUser.getIdToken();
+        const res = await fetch('/.netlify/functions/verify-topup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, idToken }),
+        });
+        if (res.ok) await loadBalance(currentUser.uid);
+      } catch (e) { console.error(e); }
+    }
+
+    window.handleLogout = async () => {
+      await signOut(auth);
+      window.location.href = 'index.html';
+    };
+
+    window.openTopup = () => {
+      document.getElementById('topupOverlay').style.display = '';
+      document.getElementById('topupModal').style.display   = '';
+      document.getElementById('topupError').textContent     = '';
+      document.getElementById('topupCustom').value          = '';
+      selectedAmount = null;
+      document.querySelectorAll('.topup-amt').forEach(b => b.classList.remove('selected'));
+    };
+
+    window.closeTopup = () => {
+      document.getElementById('topupOverlay').style.display = 'none';
+      document.getElementById('topupModal').style.display   = 'none';
+    };
+
+    window.selectAmount = (amt) => {
+      selectedAmount = amt;
+      document.getElementById('topupCustom').value = '';
+      document.querySelectorAll('.topup-amt').forEach(b => {
+        b.classList.toggle('selected', parseFloat(b.textContent.replace('€','')) === amt);
+      });
+    };
+
+    window.processTopup = async () => {
+      const customVal = parseFloat(document.getElementById('topupCustom').value);
+      const amount = customVal || selectedAmount;
+      const errEl  = document.getElementById('topupError');
+      errEl.textContent = '';
+
+      if (!amount || amount < 1) { errEl.textContent = 'Select or enter an amount (min €1).'; return; }
+      if (amount > 500)          { errEl.textContent = 'Maximum top-up is €500.'; return; }
+
+      const btn = document.getElementById('topupPayBtn');
+      document.getElementById('topupPayText').style.display    = 'none';
+      document.getElementById('topupSpinner').style.display    = 'inline-block';
+      btn.disabled = true;
+
+      try {
+        const idToken = await currentUser.getIdToken();
+        const res = await fetch('/.netlify/functions/create-topup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount, userId: currentUser.uid, userEmail: currentUser.email, idToken }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          errEl.textContent = data.error || 'Something went wrong.';
+        }
+      } catch (e) {
+        errEl.textContent = 'Network error. Try again.';
+      } finally {
+        document.getElementById('topupPayText').style.display = '';
+        document.getElementById('topupSpinner').style.display = 'none';
+        btn.disabled = false;
+      }
+    };
+
+    function formatEur(cents) {
+      return '€' + ((cents || 0) / 100).toFixed(2);
+    }
+  </script>
+</body>
+</html>
