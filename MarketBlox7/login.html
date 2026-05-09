@@ -120,6 +120,7 @@
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       sendPasswordResetEmail,
+      sendEmailVerification,
       onAuthStateChanged
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import {
@@ -133,9 +134,9 @@
     const auth = getAuth(app);
     const db   = getFirestore(app);
 
-    // If already logged in, redirect to account
+    // If already logged in and verified, redirect to account
     onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = 'account.html';
+      if (user && user.emailVerified) window.location.href = 'account.html';
     });
 
     window.handleLogin = async (e) => {
@@ -145,11 +146,17 @@
       err.textContent = '';
       setLoading(btn, true);
       try {
-        await signInWithEmailAndPassword(
+        const cred = await signInWithEmailAndPassword(
           auth,
           document.getElementById('loginEmail').value.trim(),
           document.getElementById('loginPassword').value
         );
+        if (!cred.user.emailVerified) {
+          await auth.signOut();
+          err.textContent = 'Please verify your email first. Check your inbox for the verification link.';
+          setLoading(btn, false);
+          return;
+        }
         window.location.href = 'account.html';
       } catch (ex) {
         err.textContent = friendlyError(ex.code);
@@ -178,8 +185,16 @@
           balance:   0,
           createdAt: serverTimestamp(),
         });
-        window.location.href = 'account.html';
+        // Send verification email
+        await sendEmailVerification(cred.user);
+        // Sign out and show confirmation instead of redirecting
+        await auth.signOut();
+        err.style.color = '#00c853';
+        err.textContent = '✅ Account created! Check your email and click the verification link, then log in.';
+        setLoading(btn, false);
+        document.getElementById('signupForm').querySelectorAll('input').forEach(i => i.value = '');
       } catch (ex) {
+        err.style.color = '';
         err.textContent = friendlyError(ex.code);
         setLoading(btn, false);
       }
