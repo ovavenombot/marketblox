@@ -563,8 +563,10 @@ client.once('clientReady', async () => {
   }
 });
 
-client.login(process.env.DISCORD_BOT_TOKEN).catch(err => {
-  console.error('Bot login failed:', err.message);
+const token = process.env.DISCORD_BOT_TOKEN;
+console.log('[Bot] Token present:', !!token, '| Length:', token?.length);
+client.login(token).catch(err => {
+  console.error('[Bot] Login failed:', err.message);
 });
 
 module.exports = { createOrderTicket, dmUser };
