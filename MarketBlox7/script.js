@@ -223,24 +223,29 @@ document.querySelectorAll('.product-card').forEach(card => {
 
 // CLICK TO OPEN DROPDOWN
 const dropdownBtn = document.querySelector('.dropdown-btn');
-const dropdownMenu = document.querySelector('.dropdown-menu');
-const chevron = document.querySelector('.chevron');
-if (dropdownBtn) {
+const gameDropdown = document.querySelector('.game-dropdown');
+if (dropdownBtn && gameDropdown) {
   dropdownBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isOpen = dropdownMenu.classList.contains('open');
-    dropdownMenu.classList.toggle('open');
-    if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    gameDropdown.classList.toggle('open');
   });
   document.addEventListener('click', () => {
-    dropdownMenu.classList.remove('open');
-    if (chevron) chevron.style.transform = '';
+    gameDropdown.classList.remove('open');
   });
+  gameDropdown.addEventListener('click', (e) => e.stopPropagation());
 }
 
-// Dropdown menu open class
-const dmStyle = document.createElement('style');
-dmStyle.textContent = `.dropdown-menu.open{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}`;
-document.head.appendChild(dmStyle);
+// GAME PICKER MODAL
+function openGamePicker() {
+  document.getElementById('gamePickerModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGamePicker() {
+  document.getElementById('gamePickerModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeGamePicker();
+});
 
 console.log('%c MarketBlox 🟢 v4 ', 'background:#00c853;color:#fff;font-weight:bold;font-size:14px;padding:4px 12px;border-radius:20px;');

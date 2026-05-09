@@ -112,6 +112,334 @@ const PRODUCTS = {
     stripeLink: 'YOUR_STRIPE_LINK_HERE',
     cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
   },
+
+  // ── RIVALS ───────────────────────────────────────────────────
+  'rivals-legendary-key': {
+    name: 'Legendary Key Bundle [x1.1k]',
+    game: '⚔️ Rivals',
+    price: '$33.67',
+    priceNum: 33.67,
+    original: '',
+    discount: '',
+    badge: '⭐ BEST SELLER',
+    img: 'https://shoplox.fun/cdn/shop/files/lengendary_key_bundle.png?v=1774785605&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-ultra-key': {
+    name: 'Ultra Key Bundle [x450]',
+    game: '⚔️ Rivals',
+    price: '$15.67',
+    priceNum: 15.67,
+    original: '',
+    discount: '',
+    badge: '🔥 POPULAR',
+    img: 'https://shoplox.fun/cdn/shop/files/ultra_key_bundle.png?v=1774785602&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-heavy-duty': {
+    name: 'Heavy Duty Bundle',
+    game: '⚔️ Rivals',
+    price: '$13.99',
+    priceNum: 13.99,
+    original: '',
+    discount: '',
+    badge: '🔥 POPULAR',
+    img: 'https://shoplox.fun/cdn/shop/files/heavy_duty_dunble_rival.png?v=1774785611&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-classic-bundle': {
+    name: 'Classic Bundle',
+    game: '⚔️ Rivals',
+    price: '$8.49',
+    priceNum: 8.49,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/class_bundle_rival.png?v=1774785615&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-season-pass-level': {
+    name: '+10 Season Pass Level',
+    game: '⚔️ Rivals',
+    price: '$7.49',
+    priceNum: 7.49,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/10_seasib_pass_rival.png?v=1774785600&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-pixel-bundle': {
+    name: 'Pixel Bundle',
+    game: '⚔️ Rivals',
+    price: '$6.99',
+    priceNum: 6.99,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/pixel_bundle_rival_e781146f-5926-4a9e-af10-c3c6b6d07607.png?v=1774785614&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-skin-case-1': {
+    name: 'Skin Case 1 [x3]',
+    game: '⚔️ Rivals',
+    price: '$5.89',
+    priceNum: 5.89,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/x3_skin_case.png?v=1774785609&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-skin-case-2': {
+    name: 'Skin Case 2 [x3]',
+    game: '⚔️ Rivals',
+    price: '$5.69',
+    priceNum: 5.69,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/x3_skin_case_2.png?v=1774785611&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-skin-case-3': {
+    name: 'Skin Case 3 [x3]',
+    game: '⚔️ Rivals',
+    price: '$5.69',
+    priceNum: 5.69,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/skin_case_3x_3.png?v=1774785608&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-exogun-bundle': {
+    name: 'ExoGun Bundle',
+    game: '⚔️ Rivals',
+    price: '$4.99',
+    priceNum: 4.99,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/exogun_bundle.png?v=1774785614&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-prime-season-pass': {
+    name: 'Prime Season Pass',
+    game: '⚔️ Rivals',
+    price: '$4.99',
+    priceNum: 4.99,
+    original: '$6.99',
+    discount: '29% OFF',
+    badge: '🔥 POPULAR',
+    img: 'https://shoplox.fun/cdn/shop/files/prime_pass_rival.png?v=1774785599&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-medkit-bundle': {
+    name: 'Medkit Bundle',
+    game: '⚔️ Rivals',
+    price: '$1.99',
+    priceNum: 1.99,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/medkit_bundle.png?v=1774785614&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'rivals-rpg-bundle': {
+    name: 'RPG Bundle',
+    game: '⚔️ Rivals',
+    price: '$0.99',
+    priceNum: 0.99,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/rpg_bundle.png?v=1774785613&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+
+  // ── BLOX FRUITS ──────────────────────────────────────────────
+  'bf-permanent-dragon': {
+    name: 'Permanent Dragon',
+    game: '🍎 Blox Fruits',
+    price: '$30.99',
+    priceNum: 30.99,
+    original: '',
+    discount: '',
+    badge: '⭐ BEST SELLER',
+    img: 'https://shoplox.fun/cdn/shop/files/Dragon_1.webp?v=1774785573&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-control': {
+    name: 'Permanent Control',
+    game: '🍎 Blox Fruits',
+    price: '$25.00',
+    priceNum: 25.00,
+    original: '',
+    discount: '',
+    badge: '🔥 POPULAR',
+    img: 'https://shoplox.fun/cdn/shop/files/Control.webp?v=1774785571&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-kitsune': {
+    name: 'Permanent Kitsune',
+    game: '🍎 Blox Fruits',
+    price: '$24.00',
+    priceNum: 24.00,
+    original: '',
+    discount: '',
+    badge: '🔥 POPULAR',
+    img: 'https://shoplox.fun/cdn/shop/files/Kitsune.webp?v=1774785568&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-yeti': {
+    name: 'Permanent Yeti',
+    game: '🍎 Blox Fruits',
+    price: '$18.00',
+    priceNum: 18.00,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Yeti.webp?v=1774785567&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-tiger': {
+    name: 'Permanent Tiger',
+    game: '🍎 Blox Fruits',
+    price: '$17.00',
+    priceNum: 17.00,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Tiger.webp?v=1774785564&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-dough': {
+    name: 'Permanent Dough',
+    game: '🍎 Blox Fruits',
+    price: '$15.00',
+    priceNum: 15.00,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Dough.webp?v=1774785566&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-mammoth': {
+    name: 'Permanent Mammoth',
+    game: '🍎 Blox Fruits',
+    price: '$13.75',
+    priceNum: 13.75,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Mammoth_0c289336-ee44-4c57-be82-91bcca203002.webp?v=1774785575&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-spirit': {
+    name: 'Permanent Spirit',
+    game: '🍎 Blox Fruits',
+    price: '$13.75',
+    priceNum: 13.75,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Spirit.webp?v=1774785563&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-gas': {
+    name: 'Permanent Gas',
+    game: '🍎 Blox Fruits',
+    price: '$13.50',
+    priceNum: 13.50,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_35mub835mub835mu.png?v=1774785559&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-venom': {
+    name: 'Permanent Venom',
+    game: '🍎 Blox Fruits',
+    price: '$13.25',
+    priceNum: 13.25,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_6dr87w6dr87w6dr8_f0796a33-fbf3-4d3b-97de-862ae1561bd6.png?v=1774785558&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-t-rex': {
+    name: 'Permanent T-Rex',
+    game: '🍎 Blox Fruits',
+    price: '$12.75',
+    priceNum: 12.75,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_az6esgaz6esgaz6e.png?v=1774785564&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-portal': {
+    name: 'Permanent Portal',
+    game: '🍎 Blox Fruits',
+    price: '$11.00',
+    priceNum: 11.00,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Portal.webp?v=1774785561&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-creation': {
+    name: 'Permanent Creation',
+    game: '🍎 Blox Fruits',
+    price: '$9.75',
+    priceNum: 9.75,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_a6tyifa6tyifa6ty.png?v=1774785561&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
+  'bf-permanent-buddha': {
+    name: 'Permanent Buddha',
+    game: '🍎 Blox Fruits',
+    price: '$8.50',
+    priceNum: 8.50,
+    original: '',
+    discount: '',
+    badge: '🆕 NEW',
+    img: 'https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_z7l0j4z7l0j4z7l0.png?v=1774785557&width=600',
+    stripeLink: 'YOUR_STRIPE_LINK_HERE',
+    cryptoLink: 'YOUR_CRYPTO_LINK_HERE',
+  },
 };
 
 // ================================
@@ -121,9 +449,20 @@ const params = new URLSearchParams(window.location.search);
 const productId = params.get('id') || 'los-mobilis';
 const product = PRODUCTS[productId] || PRODUCTS['los-mobilis'];
 
+// Track which game the user is browsing
+(function trackGameView() {
+  const gameKeyMap = { 'Steal A Brainrot': 'sab', 'Blox Fruits': 'bf', 'Grand Piece Online': 'gpo', 'Rivals': 'rivals', '⚔️ Rivals': 'rivals' };
+  const key = Object.keys(gameKeyMap).find(k => product.game.includes(k));
+  if (!key) return;
+  const views = JSON.parse(localStorage.getItem('mb_game_views') || '{}');
+  views[gameKeyMap[key]] = (views[gameKeyMap[key]] || 0) + 1;
+  localStorage.setItem('mb_game_views', JSON.stringify(views));
+})();
+
 // Populate page
 document.getElementById('page-title').textContent = `${product.name} — MarketBlox`;
 document.getElementById('bc-name').textContent = product.name;
+document.getElementById('bc-game').textContent = product.game;
 document.getElementById('prod-name').textContent = product.name;
 document.getElementById('prod-game').textContent = product.game;
 document.getElementById('prod-price').textContent = product.price;
@@ -143,15 +482,25 @@ if (product.original) {
 
 // Image
 const mainImg = document.getElementById('main-img');
+const gameEmoji = product.game.includes('Blox Fruits') ? '🍎' : product.game.includes('Rivals') ? '⚔️' : '🧠';
 if (product.img) {
+  mainImg.onerror = () => {
+    mainImg.style.display = 'none';
+    const fallback = document.createElement('div');
+    fallback.className = 'img-fallback';
+    fallback.textContent = gameEmoji;
+    mainImg.parentElement.appendChild(fallback);
+  };
   mainImg.src = product.img;
   mainImg.alt = product.name;
-  // Order image
   const orderImg = document.getElementById('order-img');
   orderImg.innerHTML = `<img src="${product.img}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"/>`;
 } else {
   mainImg.style.display = 'none';
-  mainImg.parentElement.innerHTML += `<div class="img-fallback">🧠</div>`;
+  const fallback = document.createElement('div');
+  fallback.className = 'img-fallback';
+  fallback.textContent = gameEmoji;
+  mainImg.parentElement.appendChild(fallback);
 }
 
 // ================================

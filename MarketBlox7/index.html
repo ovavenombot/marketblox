@@ -31,13 +31,12 @@
     <div class="nav-center">
       <div class="game-dropdown">
         <button class="dropdown-btn">
-          <span class="btn-icon">🎮</span>
           Select Game
           <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="dropdown-menu">
           <div class="dropdown-label">CHOOSE A GAME</div>
-          <a href="#" class="dropdown-item" onclick="selectGame('sab');return false">
+          <a href="shop.html?game=sab" class="dropdown-item">
            <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
             <div class="di-info">
               <span class="di-name">Steal A Brainrot</span>
@@ -45,27 +44,27 @@
             </div>
             <span class="di-arrow">→</span>
           </a>
-          <a href="#" class="dropdown-item" onclick="selectGame('gpo');return false">
+          <a class="dropdown-item" style="opacity:0.5;pointer-events:none;cursor:default">
             <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
             <div class="di-info">
-              <span class="di-name">Sailor Piece </span>
+              <span class="di-name">Sailor Piece</span>
               <span class="di-count">Coming soon</span>
             </div>
             <span class="di-arrow">→</span>
           </a>
-          <a href="#" class="dropdown-item" onclick="selectGame('bf');return false">
-            <span class="di-emoji">🍎</span>
+          <a href="shop.html?game=bf" class="dropdown-item">
+            <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
             <div class="di-info">
               <span class="di-name">Blox Fruits</span>
-              <span class="di-count">Coming soon</span>
+              <span class="di-count">14 items</span>
             </div>
             <span class="di-arrow">→</span>
           </a>
-          <a href="#" class="dropdown-item" onclick="selectGame('rivals');return false">
-            <span class="di-emoji">⚔️</span>
+          <a href="shop.html?game=rivals" class="dropdown-item">
+            <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
             <div class="di-info">
               <span class="di-name">Rivals</span>
-              <span class="di-count">Coming soon</span>
+              <span class="di-count">13 items</span>
             </div>
             <span class="di-arrow">→</span>
           </a>
@@ -93,10 +92,10 @@
 
   <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#" onclick="selectGame('sab');closeMobile();return false">🧠 Steal A Brainrot</a>
-    <a href="#" onclick="selectGame('gpo');closeMobile();return false">🌊 Grand Piece Online</a>
-    <a href="#" onclick="selectGame('bf');closeMobile();return false">🍎 Blox Fruits</a>
-    <a href="#" onclick="selectGame('rivals');closeMobile();return false">⚔️ Rivals</a>
+    <a href="shop.html?game=sab">🧠 Steal A Brainrot</a>
+    <a style="opacity:0.45;pointer-events:none">🌊 Grand Piece Online — Coming Soon</a>
+    <a href="shop.html?game=bf">🍎 Blox Fruits</a>
+    <a href="shop.html?game=rivals">⚔️ Rivals</a>
     <div class="mobile-divider"></div>
     <a href="#support" onclick="closeMobile()">Support</a>
     <a href="https://youtu.be/NEPOFZU-dOk" target="_blank" onclick="closeMobile()">Tutorial</a>
@@ -119,7 +118,7 @@
           Fastest delivery, affordable prices, and 100% safe. 🧠
         </p>
         <div class="hero-actions">
-          <a href="#shop" class="btn-primary magnetic">
+          <a href="#shop" class="btn-primary magnetic" onclick="openGamePicker();return false">
             <span class="btn-bg"></span>
             <span class="btn-content">🔥 Shop Now!</span>
           </a>
@@ -136,35 +135,35 @@
       </div>
       <div class="hero-right">
         <div class="hero-game-cards">
-          <div class="hgc hgc1" onclick="selectGame('sab');scrollToShop()">
-            <div class="hgc-emoji">🧠</div>
+          <div class="hgc hgc1" onclick="window.location='shop.html?game=sab'">
+            <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" alt="Steal A Brainrot"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Steal A Brainrot</div>
               <div class="hgc-price">From <b>$1.99</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
-          <div class="hgc hgc2" onclick="selectGame('gpo');scrollToShop()">
-            <div class="hgc-emoji">🌊</div>
+          <div class="hgc hgc2" style="opacity:0.6;pointer-events:none">
+            <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt="Grand Piece Online"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Grand Piece Online</div>
               <div class="hgc-price">Coming Soon</div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
-          <div class="hgc hgc3" onclick="selectGame('bf');scrollToShop()">
-            <div class="hgc-emoji">🍎</div>
+          <div class="hgc hgc3" onclick="window.location='shop.html?game=bf'">
+            <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" alt="Blox Fruits"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Blox Fruits</div>
-              <div class="hgc-price">Coming Soon</div>
+              <div class="hgc-price">From <b>$8.50</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
-          <div class="hgc hgc4" onclick="selectGame('rivals');scrollToShop()">
-            <div class="hgc-emoji">⚔️</div>
+          <div class="hgc hgc4" onclick="window.location='shop.html?game=rivals'">
+            <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" alt="Rivals"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Rivals</div>
-              <div class="hgc-price">Coming Soon</div>
+              <div class="hgc-price">From <b>$0.99</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
@@ -173,30 +172,105 @@
     </div>
   </section>
 
-  <!-- GAME SELECTOR -->
+  <!-- BEST SELLERS -->
   <section class="game-select" id="shop">
     <div class="container">
-      <div class="section-tag">SHOP NOW</div>
-      <h2 class="section-heading">Choose Your Game</h2>
-      <div class="game-tabs">
-        <button class="game-tab active" onclick="selectGame('sab')" data-game="sab">
-          <span>🧠</span> Steal A Brainrot
-        </button>
-        <button class="game-tab" onclick="selectGame('gpo')" data-game="gpo">
-          <span>🌊</span> Grand Piece Online
-        </button>
-        <button class="game-tab" onclick="selectGame('bf')" data-game="bf">
-          <span>🍎</span> Blox Fruits
-        </button>
-        <button class="game-tab" onclick="selectGame('rivals')" data-game="rivals">
-          <span>⚔️</span> Rivals
-        </button>
+      <div class="section-tag">TOP PICKS</div>
+      <h2 class="section-heading">
+        <span class="fire-float">🔥</span> Top Best Sellers <span class="fire-float fire-float-delay">🔥</span>
+      </h2>
+      <div class="products-grid" style="margin-top:2rem">
+
+        <!-- SAB Best Sellers -->
+        <div class="product-card best-seller" data-aos onclick="window.location='product.html?id=celestial-pegasus'">
+          <div class="bs-badge">⭐ BEST SELLER</div>
+          <div class="prod-game-tag-sm">🧠 Steal A Brainrot</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/B8436553-A201-4696-829E-275846CC601B_L0_001_1772893045_transformed_6d823985-692a-4d66-bf5c-d896fdf39dc7.png?v=1772899995&width=600" alt="Celestial Pegasus" onerror="this.parentElement.innerHTML='<div class=ef>🦄</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Celestial Pegasus</div>
+            <div class="product-price">$29.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=celestial-pegasus" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('celestial-pegasus');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=hydra-dragon'">
+          <div class="prod-game-tag-sm">🧠 Steal A Brainrot</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/rn-image_picker_lib_temp_c68b6230-5e72-401e-b654-791cefec5fa2.png?v=1773698190&width=600" alt="Hydra Dragon" onerror="this.parentElement.innerHTML='<div class=ef>🐉</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Hydra Dragon Cannelloni</div>
+            <div class="product-price">$82.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=hydra-dragon" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('hydra-dragon');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <!-- BF Best Sellers -->
+        <div class="product-card best-seller" data-aos onclick="window.location='product.html?id=bf-permanent-dragon'">
+          <div class="bs-badge">⭐ BEST SELLER</div>
+          <div class="prod-game-tag-sm">🍎 Blox Fruits</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Dragon_1.webp?v=1774785573&width=600" alt="Permanent Dragon" onerror="this.parentElement.innerHTML='<div class=ef>🐉</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Dragon</div>
+            <div class="product-price">$30.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-dragon" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-dragon');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-control'">
+          <div class="prod-game-tag-sm">🍎 Blox Fruits</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Control.webp?v=1774785571&width=600" alt="Permanent Control" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Control</div>
+            <div class="product-price">$25.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-control" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-control');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <!-- Rivals Best Sellers -->
+        <div class="product-card best-seller" data-aos onclick="window.location='product.html?id=rivals-legendary-key'">
+          <div class="bs-badge">⭐ BEST SELLER</div>
+          <div class="prod-game-tag-sm">⚔️ Rivals</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/lengendary_key_bundle.png?v=1774785605&width=600" alt="Legendary Key Bundle" onerror="this.parentElement.innerHTML='<div class=ef>🗝️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Legendary Key Bundle [x1.1k]</div>
+            <div class="product-price">$33.67</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-legendary-key" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-legendary-key');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-heavy-duty'">
+          <div class="prod-game-tag-sm">⚔️ Rivals</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/heavy_duty_dunble_rival.png?v=1774785611&width=600" alt="Heavy Duty Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Heavy Duty Bundle</div>
+            <div class="product-price">$13.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-heavy-duty" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-heavy-duty');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- PRODUCTS -->
-  <section class="products-section" id="products">
+  <!-- PRODUCTS-REMOVED -->
+  <section class="products-section" id="products" style="display:none">
     <div class="container">
       <div class="products-header">
         <div>
@@ -337,8 +411,338 @@
 
       <!-- Coming Soon grids -->
       <div class="products-grid hidden" id="gpo-products"><div class="coming-soon-box"><div class="cs-emoji">🌊</div><h3>Grand Piece Online</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
-      <div class="products-grid hidden" id="bf-products"><div class="coming-soon-box"><div class="cs-emoji">🍎</div><h3>Blox Fruits</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
-      <div class="products-grid hidden" id="rivals-products"><div class="coming-soon-box"><div class="cs-emoji">⚔️</div><h3>Rivals</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
+      <div class="products-grid hidden" id="bf-products">
+
+        <div class="product-card best-seller" data-aos onclick="window.location='product.html?id=bf-permanent-dragon'">
+          <div class="bs-badge">⭐ BEST SELLER</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Dragon_1.webp?v=1774785573&width=600" alt="Permanent Dragon" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Dragon</div>
+            <div class="product-price">$30.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-dragon" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-dragon');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-control'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Control.webp?v=1774785571&width=600" alt="Permanent Control" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Control</div>
+            <div class="product-price">$25.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-control" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-control');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-kitsune'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Kitsune.webp?v=1774785568&width=600" alt="Permanent Kitsune" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Kitsune</div>
+            <div class="product-price">$24.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-kitsune" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-kitsune');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-yeti'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Yeti.webp?v=1774785567&width=600" alt="Permanent Yeti" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Yeti</div>
+            <div class="product-price">$18.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-yeti" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-yeti');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-tiger'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Tiger.webp?v=1774785564&width=600" alt="Permanent Tiger" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Tiger</div>
+            <div class="product-price">$17.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-tiger" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-tiger');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-dough'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Dough.webp?v=1774785566&width=600" alt="Permanent Dough" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Dough</div>
+            <div class="product-price">$15.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-dough" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-dough');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-mammoth'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Mammoth_0c289336-ee44-4c57-be82-91bcca203002.webp?v=1774785575&width=600" alt="Permanent Mammoth" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Mammoth</div>
+            <div class="product-price">$13.75</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-mammoth" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-mammoth');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-spirit'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Spirit.webp?v=1774785563&width=600" alt="Permanent Spirit" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Spirit</div>
+            <div class="product-price">$13.75</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-spirit" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-spirit');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-gas'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_35mub835mub835mu.png?v=1774785559&width=600" alt="Permanent Gas" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Gas</div>
+            <div class="product-price">$13.50</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-gas" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-gas');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-venom'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_6dr87w6dr87w6dr8_f0796a33-fbf3-4d3b-97de-862ae1561bd6.png?v=1774785558&width=600" alt="Permanent Venom" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Venom</div>
+            <div class="product-price">$13.25</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-venom" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-venom');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-t-rex'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_az6esgaz6esgaz6e.png?v=1774785564&width=600" alt="Permanent T-Rex" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent T-Rex</div>
+            <div class="product-price">$12.75</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-t-rex" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-t-rex');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-portal'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Portal.webp?v=1774785561&width=600" alt="Permanent Portal" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Portal</div>
+            <div class="product-price">$11.00</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-portal" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-portal');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-creation'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_a6tyifa6tyifa6ty.png?v=1774785561&width=600" alt="Permanent Creation" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Creation</div>
+            <div class="product-price">$9.75</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-creation" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-creation');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=bf-permanent-buddha'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/Gemini_Generated_Image_z7l0j4z7l0j4z7l0.png?v=1774785557&width=600" alt="Permanent Buddha" onerror="this.parentElement.innerHTML='<div class=ef>🍎</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Permanent Buddha</div>
+            <div class="product-price">$8.50</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=bf-permanent-buddha" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('bf-permanent-buddha');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="products-grid hidden" id="rivals-products">
+
+        <div class="product-card best-seller" data-aos onclick="window.location='product.html?id=rivals-legendary-key'">
+          <div class="bs-badge">⭐ BEST SELLER</div>
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/lengendary_key_bundle.png?v=1774785605&width=600" alt="Legendary Key Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Legendary Key Bundle [x1.1k]</div>
+            <div class="product-price">$33.67</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-legendary-key" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-legendary-key');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-ultra-key'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/ultra_key_bundle.png?v=1774785602&width=600" alt="Ultra Key Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Ultra Key Bundle [x450]</div>
+            <div class="product-price">$15.67</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-ultra-key" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-ultra-key');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-heavy-duty'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/heavy_duty_dunble_rival.png?v=1774785611&width=600" alt="Heavy Duty Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Heavy Duty Bundle</div>
+            <div class="product-price">$13.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-heavy-duty" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-heavy-duty');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-classic-bundle'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/class_bundle_rival.png?v=1774785615&width=600" alt="Classic Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Classic Bundle</div>
+            <div class="product-price">$8.49</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-classic-bundle" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-classic-bundle');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-season-pass-level'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/10_seasib_pass_rival.png?v=1774785600&width=600" alt="+10 Season Pass Level" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">+10 Season Pass Level</div>
+            <div class="product-price">$7.49</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-season-pass-level" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-season-pass-level');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-pixel-bundle'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/pixel_bundle_rival_e781146f-5926-4a9e-af10-c3c6b6d07607.png?v=1774785614&width=600" alt="Pixel Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Pixel Bundle</div>
+            <div class="product-price">$6.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-pixel-bundle" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-pixel-bundle');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-skin-case-1'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/x3_skin_case.png?v=1774785609&width=600" alt="Skin Case 1" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Skin Case 1 [x3]</div>
+            <div class="product-price">$5.89</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-skin-case-1" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-skin-case-1');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-skin-case-2'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/x3_skin_case_2.png?v=1774785611&width=600" alt="Skin Case 2" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Skin Case 2 [x3]</div>
+            <div class="product-price">$5.69</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-skin-case-2" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-skin-case-2');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-skin-case-3'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/skin_case_3x_3.png?v=1774785608&width=600" alt="Skin Case 3" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Skin Case 3 [x3]</div>
+            <div class="product-price">$5.69</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-skin-case-3" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-skin-case-3');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-exogun-bundle'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/exogun_bundle.png?v=1774785614&width=600" alt="ExoGun Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">ExoGun Bundle</div>
+            <div class="product-price">$4.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-exogun-bundle" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-exogun-bundle');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-prime-season-pass'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/prime_pass_rival.png?v=1774785599&width=600" alt="Prime Season Pass" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Prime Season Pass</div>
+            <div class="product-price">$4.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-prime-season-pass" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-prime-season-pass');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-medkit-bundle'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/medkit_bundle.png?v=1774785614&width=600" alt="Medkit Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">Medkit Bundle</div>
+            <div class="product-price">$1.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-medkit-bundle" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-medkit-bundle');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card" data-aos onclick="window.location='product.html?id=rivals-rpg-bundle'">
+          <div class="product-img"><img src="https://shoplox.fun/cdn/shop/files/rpg_bundle.png?v=1774785613&width=600" alt="RPG Bundle" onerror="this.parentElement.innerHTML='<div class=ef>⚔️</div>'"/></div>
+          <div class="product-body">
+            <div class="product-name">RPG Bundle</div>
+            <div class="product-price">$0.99</div>
+          </div>
+          <div class="card-btns">
+            <a href="product.html?id=rivals-rpg-bundle" class="product-btn-buy">⚡ BUY NOW</a>
+            <button class="product-btn-cart" onclick="addToCart('rivals-rpg-bundle');event.stopPropagation()">Add to Cart</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -502,10 +906,64 @@
     </div>
   </div>
 
+  <!-- GAME PICKER MODAL -->
+  <div class="gpm-overlay" id="gamePickerModal" onclick="closeGamePicker()">
+    <div class="gpm-modal" onclick="event.stopPropagation()">
+      <button class="gpm-close" onclick="closeGamePicker()">✕</button>
+      <h2 class="gpm-title">✨ Choose Your Game ✨</h2>
+
+      <div class="gpm-section-label">SHOP NOW</div>
+      <div class="gpm-grid">
+
+        <div class="gpm-card" onclick="window.location='shop.html?game=sab'">
+          <img class="gpm-bg" src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" alt="Steal A Brainrot"/>
+          <div class="gpm-card-footer">
+            <img class="gpm-icon" src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" alt=""/>
+            <span>Steal A Brainrot</span>
+          </div>
+        </div>
+
+        <div class="gpm-card" onclick="window.location='shop.html?game=bf'">
+          <img class="gpm-bg" src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" alt="Blox Fruits"/>
+          <div class="gpm-card-footer">
+            <img class="gpm-icon" src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" alt=""/>
+            <span>Blox Fruits</span>
+          </div>
+        </div>
+
+        <div class="gpm-card" onclick="window.location='shop.html?game=rivals'">
+          <img class="gpm-bg" src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" alt="Rivals"/>
+          <div class="gpm-card-footer">
+            <img class="gpm-icon" src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" alt=""/>
+            <span>Rivals</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="gpm-section-label gpm-label-soon">COMING SOON <span class="gpm-stay-tuned">STAY TUNED!</span></div>
+      <div class="gpm-grid">
+
+        <div class="gpm-card gpm-coming-soon">
+          <img class="gpm-bg" src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt="Grand Piece Online"/>
+          <div class="gpm-card-footer">
+            <img class="gpm-icon" src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt=""/>
+            <span>Grand Piece Online</span>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="gpm-footer-text">MORE GAMES COMING SOON! 🚀</p>
+    </div>
+  </div>
+
   <!-- TOAST -->
   <div class="cart-toast" id="cartToast">✅ Added to cart!</div>
 
   <script src="script.js"></script>
   <script src="cart.js"></script>
+  <link rel="stylesheet" href="chat.css"/>
+  <script src="chat.js"></script>
 </body>
 </html>

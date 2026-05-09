@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment secrets — NEVER commit these
+backend/.env
+.env
+
+# Database
+backend/marketblox.db
+
+# Claude memory
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
