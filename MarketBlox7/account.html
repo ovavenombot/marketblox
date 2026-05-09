@@ -6,144 +6,170 @@
   <title>My Account — MarketBlox</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="account.css"/>
+  <link rel="stylesheet" href="auth.css"/>
 </head>
-<body>
-
-  <canvas id="particles"></canvas>
+<body class="acc-body">
 
   <!-- NAVBAR -->
-  <nav class="navbar" id="navbar">
-    <a href="index.html" class="logo">
-      <div class="logo-icon">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <rect width="28" height="28" rx="8" fill="#00c853"/>
-          <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
-          <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
-          <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
-          <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
-        </svg>
-      </div>
-      <span>Market<b>Blox</b></span>
+  <nav class="acc-navbar">
+    <a href="index.html" class="acc-nav-logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="8" fill="#00c853"/>
+        <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+        <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+        <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+        <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+      </svg>
+      Market<b>Blox</b>
     </a>
-    <div class="nav-right">
-      <a href="index.html" class="nav-link">← Shop</a>
-      <button class="nav-link" id="logoutBtn" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:.875rem;font-family:inherit;" onclick="handleLogout()">Log Out</button>
+    <div class="acc-nav-right">
+      <button class="acc-user-btn" id="userMenuBtn" onclick="toggleDropdown()">
+        <div class="acc-user-avatar" id="navAvatar">?</div>
+        <span id="navName">Account</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="acc-dropdown" id="accDropdown">
+        <div class="acc-dropdown-email" id="dropEmail"></div>
+        <a href="#" onclick="switchTab('orders');closeDropdown();return false">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          My Orders
+        </a>
+        <a href="#" onclick="switchTab('profile');closeDropdown();return false">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </a>
+        <button class="logout-btn" onclick="handleLogout()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logout
+        </button>
+      </div>
     </div>
   </nav>
 
-  <!-- ACCOUNT PAGE -->
-  <div class="acc-wrap" id="accWrap" style="display:none">
-    <div class="container">
+  <!-- MAIN -->
+  <main class="acc-main" id="accMain" style="display:none">
 
-      <!-- HEADER -->
-      <div class="acc-header">
-        <div class="acc-avatar" id="accAvatar">?</div>
-        <div class="acc-header-info">
-          <h1 class="acc-name" id="accEmail">Loading…</h1>
-          <p class="acc-sub">MarketBlox Member</p>
+    <!-- Profile header -->
+    <div class="acc-profile-card">
+      <div class="acc-profile-avatar" id="profileAvatar">?</div>
+      <div class="acc-profile-info">
+        <div class="acc-profile-name">
+          <span id="profileName">Loading…</span>
+          <span class="acc-badge">User</span>
         </div>
+        <div class="acc-profile-email" id="profileEmail"></div>
       </div>
-
-      <!-- STATS ROW -->
-      <div class="acc-stats">
-
-        <!-- BALANCE CARD -->
-        <div class="acc-stat-card acc-balance-card">
-          <div class="acc-stat-label">Store Balance</div>
-          <div class="acc-stat-value" id="accBalance">€0.00</div>
-          <p class="acc-stat-hint">Use your balance to pay for any item instantly</p>
-          <button class="acc-topup-btn" onclick="openTopup()">+ Add Balance</button>
-        </div>
-
-        <!-- ORDERS STAT -->
-        <div class="acc-stat-card">
-          <div class="acc-stat-label">Total Orders</div>
-          <div class="acc-stat-value" id="accOrderCount">0</div>
-          <p class="acc-stat-hint">All-time completed purchases</p>
-        </div>
-
-        <!-- SPENT STAT -->
-        <div class="acc-stat-card">
-          <div class="acc-stat-label">Total Spent</div>
-          <div class="acc-stat-value" id="accTotalSpent">€0.00</div>
-          <p class="acc-stat-hint">Across all your orders</p>
-        </div>
-
-      </div>
-
-      <!-- ORDER HISTORY -->
-      <div class="acc-section">
-        <h2 class="acc-section-title">Order History</h2>
-        <div id="ordersContainer">
-          <div class="acc-orders-loading">Loading orders…</div>
-        </div>
-      </div>
-
+      <button class="acc-logout-btn" onclick="handleLogout()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
     </div>
-  </div>
 
-  <!-- TOP-UP MODAL -->
-  <div class="topup-overlay" id="topupOverlay" onclick="closeTopup()" style="display:none"></div>
-  <div class="topup-modal" id="topupModal" style="display:none">
-    <div class="topup-header">
-      <h3>Add Balance</h3>
-      <button onclick="closeTopup()" class="topup-close">✕</button>
+    <!-- Wallet -->
+    <div class="acc-wallet-card">
+      <div class="acc-wallet-icon">💰</div>
+      <div class="acc-wallet-info">
+        <div class="acc-wallet-label">Wallet Balance</div>
+        <div class="acc-wallet-amount" id="walletAmount">€0.00</div>
+      </div>
+      <button class="acc-deposit-btn" onclick="openTopup()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Deposit Funds
+      </button>
     </div>
-    <p class="topup-hint">Choose an amount to add to your store wallet. Paid securely via Stripe.</p>
+
+    <!-- Tabs -->
+    <div class="acc-tabs">
+      <button class="acc-tab active" id="tabOrders" onclick="switchTab('orders')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+        My Orders
+      </button>
+      <button class="acc-tab" id="tabProfile" onclick="switchTab('profile')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+      </button>
+    </div>
+
+    <!-- Orders panel -->
+    <div id="panelOrders">
+      <div id="ordersContent"><div class="acc-empty"><div class="acc-empty-icon">📦</div><p>Loading…</p></div></div>
+    </div>
+
+    <!-- Profile panel -->
+    <div id="panelProfile" style="display:none">
+      <div class="acc-settings-card">
+        <div class="acc-settings-title">Account Info</div>
+        <div class="acc-settings-field">
+          <div class="acc-settings-label">Display Name</div>
+          <input class="acc-settings-input" id="settingName" type="text" placeholder="Your name"/>
+        </div>
+        <div class="acc-settings-field">
+          <div class="acc-settings-label">Email</div>
+          <input class="acc-settings-input" id="settingEmail" type="email" disabled/>
+        </div>
+        <button class="acc-save-btn" onclick="saveName()">Save Changes</button>
+        <div class="acc-msg" id="nameMsg"></div>
+      </div>
+      <div class="acc-settings-card">
+        <div class="acc-settings-title">Change Password</div>
+        <div class="acc-settings-field">
+          <div class="acc-settings-label">New Password</div>
+          <input class="acc-settings-input" id="newPw" type="password" placeholder="At least 6 characters"/>
+        </div>
+        <div class="acc-settings-field">
+          <div class="acc-settings-label">Confirm New Password</div>
+          <input class="acc-settings-input" id="newPwConfirm" type="password" placeholder="Repeat password"/>
+        </div>
+        <button class="acc-save-btn" onclick="changePassword()">Update Password</button>
+        <div class="acc-msg" id="pwMsg"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- TOPUP MODAL -->
+  <div class="topup-overlay" id="topupOverlay" onclick="closeTopup()"></div>
+  <div class="topup-modal" id="topupModal">
+    <button class="topup-close-btn" onclick="closeTopup()">✕</button>
+    <h3>Deposit Funds</h3>
+    <p class="topup-hint">Add credit to your MarketBlox wallet. Paid securely via Stripe.</p>
     <div class="topup-amounts">
-      <button class="topup-amt" onclick="selectAmount(5)">€5</button>
-      <button class="topup-amt" onclick="selectAmount(10)">€10</button>
-      <button class="topup-amt" onclick="selectAmount(20)">€20</button>
-      <button class="topup-amt" onclick="selectAmount(50)">€50</button>
+      <button class="topup-amt" onclick="selectAmt(5)">€5</button>
+      <button class="topup-amt" onclick="selectAmt(10)">€10</button>
+      <button class="topup-amt" onclick="selectAmt(20)">€20</button>
+      <button class="topup-amt" onclick="selectAmt(50)">€50</button>
     </div>
-    <div class="topup-custom-row">
-      <span class="topup-eur">€</span>
-      <input type="number" id="topupCustom" placeholder="Custom amount" min="1" max="500" step="0.01"/>
-    </div>
-    <div class="topup-error" id="topupError"></div>
-    <button class="topup-pay-btn" id="topupPayBtn" onclick="processTopup()">
-      <span id="topupPayText">Pay & Add Balance</span>
-      <span class="acc-spinner" id="topupSpinner" style="display:none"></span>
+    <input class="topup-custom" id="topupCustom" type="number" placeholder="Custom amount (€)" min="1" max="500" step="0.01"/>
+    <div class="topup-err" id="topupErr"></div>
+    <button class="topup-pay" id="topupPayBtn" onclick="processTopup()">
+      <span id="topupPayText">Pay & Add Funds</span>
+      <span class="auth-spinner" id="topupSpinner"></span>
     </button>
   </div>
 
-  <script src="script.js"></script>
   <script src="firebase-config.js"></script>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import {
-      getAuth,
-      onAuthStateChanged,
-      signOut
+      getAuth, onAuthStateChanged, signOut, updateProfile, updatePassword
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      query,
-      where,
-      orderBy,
-      getDocs
+      getFirestore, doc, getDoc, collection, query, where, orderBy, getDocs
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
     const db   = getFirestore(app);
-
     let currentUser = null;
-    let selectedAmount = null;
+    let selectedAmt = null;
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = 'login.html'; return; }
       currentUser = user;
-      document.getElementById('accWrap').style.display = '';
-      renderHeader(user);
+      renderUser(user);
+      document.getElementById('accMain').style.display = '';
       await Promise.all([loadBalance(user.uid), loadOrders(user.uid)]);
 
-      // Handle topup redirect back
       const params = new URLSearchParams(window.location.search);
       if (params.get('topup') === 'success') {
         const sid = params.get('session_id');
@@ -152,68 +178,60 @@
       }
     });
 
-    function renderHeader(user) {
-      const email   = user.email || '';
-      const initial = email[0]?.toUpperCase() || '?';
-      document.getElementById('accAvatar').textContent = initial;
-      document.getElementById('accEmail').textContent  = email;
+    function renderUser(user) {
+      const name    = user.displayName || user.email.split('@')[0];
+      const initial = name[0].toUpperCase();
+      document.getElementById('profileAvatar').textContent = initial;
+      document.getElementById('navAvatar').textContent     = initial;
+      document.getElementById('navName').textContent       = name;
+      document.getElementById('profileName').textContent   = name;
+      document.getElementById('profileEmail').textContent  = user.email;
+      document.getElementById('dropEmail').textContent     = user.email;
+      document.getElementById('settingName').value         = name;
+      document.getElementById('settingEmail').value        = user.email;
     }
 
     async function loadBalance(uid) {
       try {
         const snap = await getDoc(doc(db, 'users', uid));
-        if (snap.exists()) {
-          const bal = snap.data().balance || 0;
-          document.getElementById('accBalance').textContent = formatEur(bal);
-        }
+        const bal  = snap.exists() ? (snap.data().balance || 0) : 0;
+        document.getElementById('walletAmount').textContent = '€' + (bal / 100).toFixed(2);
       } catch (e) { console.error(e); }
     }
 
     async function loadOrders(uid) {
-      const container = document.getElementById('ordersContainer');
+      const container = document.getElementById('ordersContent');
       try {
-        const q    = query(
-          collection(db, 'orders'),
-          where('userId', '==', uid),
-          orderBy('createdAt', 'desc')
-        );
+        const q    = query(collection(db, 'orders'), where('userId', '==', uid), orderBy('createdAt', 'desc'));
         const snap = await getDocs(q);
-
         if (snap.empty) {
-          container.innerHTML = `<div class="acc-no-orders">
-            <div class="acc-no-orders-icon">🛒</div>
-            <p>No orders yet. <a href="index.html">Start shopping!</a></p>
+          container.innerHTML = `<div class="acc-empty">
+            <div class="acc-empty-icon">📦</div>
+            <h3>No orders yet</h3>
+            <p>Your orders will appear here once you make a purchase.</p>
+            <a href="index.html" class="acc-browse-btn">✦ Browse Products</a>
           </div>`;
           return;
         }
-
-        let totalSpent = 0;
         const rows = snap.docs.map(d => {
-          const o = d.data();
-          totalSpent += o.total || 0;
+          const o    = d.data();
           const date = o.createdAt?.toDate?.()?.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) || '—';
-          const itemList = (o.items || []).map(i => `<span class="order-item-tag">${i.name}</span>`).join('');
-          return `
-            <div class="order-row">
-              <div class="order-row-left">
-                <div class="order-id">#${d.id.slice(-8).toUpperCase()}</div>
-                <div class="order-date">${date}</div>
-                <div class="order-items">${itemList || '—'}</div>
-                ${o.robloxUsername ? `<div class="order-roblox">Roblox: <b>${o.robloxUsername}</b></div>` : ''}
-              </div>
-              <div class="order-row-right">
-                <div class="order-amount">${formatEur(o.total)}</div>
-                <div class="order-status order-status-paid">Paid</div>
-              </div>
-            </div>`;
+          const tags = (o.items || []).map(i => `<span class="acc-order-tag">${i.name}</span>`).join('');
+          return `<div class="acc-order-card">
+            <div>
+              <div class="acc-order-id">#${d.id.slice(-8).toUpperCase()}</div>
+              <div class="acc-order-date">${date}</div>
+              <div class="acc-order-items">${tags || '—'}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div class="acc-order-amount">€${((o.total||0)/100).toFixed(2)}</div>
+              <div class="acc-order-status">Paid</div>
+            </div>
+          </div>`;
         });
-
-        container.innerHTML = `<div class="orders-list">${rows.join('')}</div>`;
-        document.getElementById('accOrderCount').textContent = snap.size;
-        document.getElementById('accTotalSpent').textContent = formatEur(totalSpent);
+        container.innerHTML = `<div class="acc-orders-list">${rows.join('')}</div>`;
       } catch (e) {
-        console.error(e);
-        container.innerHTML = `<div class="acc-orders-loading">Could not load orders.</div>`;
+        container.innerHTML = `<div class="acc-empty"><p>Could not load orders.</p></div>`;
       }
     }
 
@@ -229,72 +247,100 @@
       } catch (e) { console.error(e); }
     }
 
-    window.handleLogout = async () => {
-      await signOut(auth);
-      window.location.href = 'index.html';
+    window.switchTab = (tab) => {
+      document.getElementById('panelOrders').style.display  = tab === 'orders'  ? '' : 'none';
+      document.getElementById('panelProfile').style.display = tab === 'profile' ? '' : 'none';
+      document.getElementById('tabOrders').classList.toggle('active',  tab === 'orders');
+      document.getElementById('tabProfile').classList.toggle('active', tab === 'profile');
     };
 
-    window.openTopup = () => {
-      document.getElementById('topupOverlay').style.display = '';
-      document.getElementById('topupModal').style.display   = '';
-      document.getElementById('topupError').textContent     = '';
-      document.getElementById('topupCustom').value          = '';
-      selectedAmount = null;
+    window.saveName = async () => {
+      const name = document.getElementById('settingName').value.trim();
+      const msg  = document.getElementById('nameMsg');
+      if (!name) { msg.style.color = '#ff5252'; msg.textContent = 'Name cannot be empty.'; return; }
+      try {
+        await updateProfile(currentUser, { displayName: name });
+        renderUser(currentUser);
+        msg.style.color = '#00c853';
+        msg.textContent = 'Name updated!';
+      } catch (e) {
+        msg.style.color = '#ff5252';
+        msg.textContent = 'Failed to update name.';
+      }
+    };
+
+    window.changePassword = async () => {
+      const pw   = document.getElementById('newPw').value;
+      const pw2  = document.getElementById('newPwConfirm').value;
+      const msg  = document.getElementById('pwMsg');
+      if (pw !== pw2)  { msg.style.color = '#ff5252'; msg.textContent = 'Passwords do not match.'; return; }
+      if (pw.length < 6) { msg.style.color = '#ff5252'; msg.textContent = 'Password must be at least 6 characters.'; return; }
+      try {
+        await updatePassword(currentUser, pw);
+        msg.style.color = '#00c853';
+        msg.textContent = 'Password updated!';
+        document.getElementById('newPw').value = '';
+        document.getElementById('newPwConfirm').value = '';
+      } catch (e) {
+        msg.style.color = '#ff5252';
+        msg.textContent = 'Please log out and log back in before changing your password.';
+      }
+    };
+
+    window.handleLogout = async () => { await signOut(auth); window.location.href = 'index.html'; };
+
+    window.toggleDropdown = () => document.getElementById('accDropdown').classList.toggle('open');
+    window.closeDropdown  = () => document.getElementById('accDropdown').classList.remove('open');
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('userMenuBtn').contains(e.target)) closeDropdown();
+    });
+
+    window.openTopup  = () => {
+      document.getElementById('topupOverlay').style.display = 'block';
+      document.getElementById('topupModal').style.display   = 'block';
+      document.getElementById('topupErr').textContent = '';
+      document.getElementById('topupCustom').value = '';
+      selectedAmt = null;
       document.querySelectorAll('.topup-amt').forEach(b => b.classList.remove('selected'));
     };
-
     window.closeTopup = () => {
       document.getElementById('topupOverlay').style.display = 'none';
       document.getElementById('topupModal').style.display   = 'none';
     };
-
-    window.selectAmount = (amt) => {
-      selectedAmount = amt;
+    window.selectAmt = (amt) => {
+      selectedAmt = amt;
       document.getElementById('topupCustom').value = '';
       document.querySelectorAll('.topup-amt').forEach(b => {
         b.classList.toggle('selected', parseFloat(b.textContent.replace('€','')) === amt);
       });
     };
-
     window.processTopup = async () => {
-      const customVal = parseFloat(document.getElementById('topupCustom').value);
-      const amount = customVal || selectedAmount;
-      const errEl  = document.getElementById('topupError');
+      const custom = parseFloat(document.getElementById('topupCustom').value);
+      const amount = custom || selectedAmt;
+      const errEl  = document.getElementById('topupErr');
       errEl.textContent = '';
-
       if (!amount || amount < 1) { errEl.textContent = 'Select or enter an amount (min €1).'; return; }
-      if (amount > 500)          { errEl.textContent = 'Maximum top-up is €500.'; return; }
-
-      const btn = document.getElementById('topupPayBtn');
+      if (amount > 500)          { errEl.textContent = 'Maximum deposit is €500.'; return; }
       document.getElementById('topupPayText').style.display    = 'none';
       document.getElementById('topupSpinner').style.display    = 'inline-block';
-      btn.disabled = true;
-
+      document.getElementById('topupPayBtn').disabled = true;
       try {
         const idToken = await currentUser.getIdToken();
-        const res = await fetch('/.netlify/functions/create-topup', {
+        const res  = await fetch('/.netlify/functions/create-topup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ amount, userId: currentUser.uid, userEmail: currentUser.email, idToken }),
         });
         const data = await res.json();
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          errEl.textContent = data.error || 'Something went wrong.';
-        }
-      } catch (e) {
-        errEl.textContent = 'Network error. Try again.';
-      } finally {
+        if (data.url) { window.location.href = data.url; }
+        else { errEl.textContent = data.error || 'Something went wrong.'; }
+      } catch (e) { errEl.textContent = 'Network error. Try again.'; }
+      finally {
         document.getElementById('topupPayText').style.display = '';
         document.getElementById('topupSpinner').style.display = 'none';
-        btn.disabled = false;
+        document.getElementById('topupPayBtn').disabled = false;
       }
     };
-
-    function formatEur(cents) {
-      return '€' + ((cents || 0) / 100).toFixed(2);
-    }
   </script>
 </body>
 </html>

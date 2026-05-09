@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify Email — MarketBlox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="auth.css"/>
+</head>
+<body class="auth-body">
+
+  <a href="index.html" class="auth-logo">
+    <svg width="30" height="30" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="8" fill="#00c853"/>
+      <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+      <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+      <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+      <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+    </svg>
+    Market<b>Blox</b>
+  </a>
+
+  <div class="auth-card">
+    <div class="verify-icon">📧</div>
+    <h1 class="auth-card-title">Verify Your Email</h1>
+
+    <p class="verify-email-text">
+      We've sent a verification link to:<br/>
+      <b id="verifyEmailDisplay">your email</b><br/><br/>
+      Click the link in the email to activate your account, then come back and log in.
+    </p>
+
+    <div class="auth-error" id="verifyMsg"></div>
+
+    <a href="login.html" class="auth-submit" style="text-decoration:none;margin-bottom:.75rem">
+      Go to Login
+    </a>
+
+    <div class="verify-resend">
+      Didn't receive it?
+      <button class="auth-link" onclick="handleResend()" id="resendBtn">Resend email</button>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      sendEmailVerification
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+
+    const params = new URLSearchParams(window.location.search);
+    const email  = params.get('email') || '';
+    if (email) document.getElementById('verifyEmailDisplay').textContent = decodeURIComponent(email);
+
+    // Store email for resend (needs password - ask user)
+    window.handleResend = async () => {
+      const msg = document.getElementById('verifyMsg');
+      const pw  = prompt('Enter your password to resend the verification email:');
+      if (!pw) return;
+      msg.textContent = '';
+      msg.className = 'auth-error';
+      try {
+        const cred = await signInWithEmailAndPassword(auth, decodeURIComponent(email), pw);
+        if (cred.user.emailVerified) {
+          msg.className = 'auth-error auth-success';
+          msg.textContent = 'Your email is already verified! You can log in now.';
+        } else {
+          await sendEmailVerification(cred.user);
+          msg.className = 'auth-error auth-success';
+          msg.textContent = 'Verification email resent! Check your inbox and spam folder.';
+        }
+        await auth.signOut();
+      } catch (ex) {
+        msg.textContent = 'Could not resend — check your password and try again.';
+      }
+    };
+  </script>
+</body>
+</html>
