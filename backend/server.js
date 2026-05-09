@@ -36,7 +36,7 @@ app.post('/api/create-checkout', async (req, res) => {
 
     const lineItems = items.map(item => ({
       price_data: {
-        currency:     'usd',
+        currency:     'eur',
         product_data: { name: item.name, description: item.game || 'MarketBlox' },
         unit_amount:  Math.round(item.priceNum * 100),
       },
@@ -46,7 +46,7 @@ app.post('/api/create-checkout', async (req, res) => {
     // Processing fee as separate line item
     lineItems.push({
       price_data: {
-        currency:     'usd',
+        currency:     'eur',
         product_data: { name: 'Processing Fee' },
         unit_amount:  Math.round(fee * 100),
       },
