@@ -3,6 +3,9 @@
   publish = "MarketBlox7"
   functions = "MarketBlox7/netlify/functions"
 
+[build.environment]
+  SECRETS_SCAN_OMIT_PATHS = "MarketBlox7/firebase-config.js"
+
 [functions]
   node_bundler = "esbuild"
 
