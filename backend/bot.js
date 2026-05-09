@@ -565,8 +565,12 @@ client.once('ready',async () => {
 
 const token = process.env.DISCORD_BOT_TOKEN;
 console.log('[Bot] Token present:', !!token, '| Length:', token?.length);
-client.login(token).catch(err => {
-  console.error('[Bot] Login failed:', err.message);
-});
+client.login(token)
+  .then(() => console.log('[Bot] Login resolved'))
+  .catch(err => console.error('[Bot] Login failed:', err.message));
+
+setTimeout(() => {
+  if (!botReady) console.error('[Bot] Still not ready after 30s — Discord gateway may be blocked');
+}, 30000);
 
 module.exports = { createOrderTicket, dmUser };
