@@ -89,7 +89,7 @@ function renderCart() {
           <div class="drawer-item-name">${item.name}</div>
           <div class="drawer-item-game">${item.game || 'Steal A Brainrot'}</div>
           <div class="drawer-item-price-row">
-            <span class="drawer-item-price">${item.price}</span>
+            <span class="drawer-item-price" data-usd="${item.priceNum}">${typeof MB_CURRENCY !== 'undefined' ? MB_CURRENCY.formatPrice(item.priceNum) : item.price}</span>
             ${item.original ? `<span class="drawer-item-original">${item.original}</span>` : ''}
           </div>
         </div>
@@ -105,8 +105,9 @@ function renderCart() {
 
   const subtotalEl = document.getElementById('drawerSubtotal');
   const totalEl = document.getElementById('drawerTotal');
-  if (subtotalEl) subtotalEl.textContent = `$${totalPrice.toFixed(2)} USD`;
-  if (totalEl) totalEl.textContent = `$${totalPrice.toFixed(2)} USD`;
+  const priceStr = typeof MB_CURRENCY !== 'undefined' ? MB_CURRENCY.formatPrice(totalPrice) : `$${totalPrice.toFixed(2)}`;
+  if (subtotalEl) subtotalEl.textContent = priceStr;
+  if (totalEl)    totalEl.textContent    = priceStr;
 }
 
 function addToCart(productId, showDrawer = true) {

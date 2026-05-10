@@ -57,7 +57,7 @@ function renderShopGrid() {
       </div>
       <div class="product-body">
         <div class="product-name">${p.name}</div>
-        <div class="product-price">${p.price}</div>
+        <div class="product-price" data-usd="${p.priceNum}">${p.price}</div>
       </div>
       <div class="card-btns">
         <a href="product.html?id=${p.id}" class="product-btn-buy">⚡ BUY NOW</a>
