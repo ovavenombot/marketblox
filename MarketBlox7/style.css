@@ -919,7 +919,7 @@ body {
 /* Row */
 .hiw-row {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   max-width: 980px;
   margin: 0 auto;
@@ -983,7 +983,7 @@ body {
 .hiw-card p  { font-size: .925rem; color: rgba(255,255,255,0.5); line-height: 1.7; }
 
 /* Connector */
-.hiw-connector { flex-shrink: 0; padding: 0 .75rem; padding-top: 24px; }
+.hiw-connector { flex-shrink: 0; padding: 0 .75rem; padding-top: 24px; align-self: center; }
 .hiw-dash-line  { animation: hiwDashFlow 1.8s linear infinite; }
 @keyframes hiwDashFlow { to { stroke-dashoffset: -18; } }
 
