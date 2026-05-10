@@ -25,19 +25,20 @@
     .currency-picker { position: relative; }
     .cp-btn {
       display: flex; align-items: center; gap: 5px;
-      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
-      border-radius: 8px; padding: 6px 10px; cursor: pointer;
-      color: #fff; font-family: inherit; font-size: .82rem; font-weight: 700;
+      background: rgba(0,200,83,.1); border: 1.5px solid rgba(0,200,83,.3);
+      border-radius: 8px; padding: 5px 10px; cursor: pointer;
+      color: #0a2e14; font-family: inherit; font-size: .82rem; font-weight: 700;
       transition: background .15s, border-color .15s;
       white-space: nowrap;
     }
-    .cp-btn:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.35); }
-    .cp-symbol { font-size: .9rem; }
+    .cp-btn:hover { background: rgba(0,200,83,.18); border-color: #00c853; }
+    .cp-symbol { font-size: .88rem; color: #00a846; }
+    .cp-code   { color: #0a2e14; }
     .cp-dropdown {
       position: absolute; top: calc(100% + 6px); right: 0;
-      background: #111c14; border: 1px solid rgba(0,200,83,.25);
-      border-radius: 12px; padding: 6px; min-width: 210px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.5);
+      background: #fff; border: 1.5px solid rgba(0,200,83,.2);
+      border-radius: 12px; padding: 6px; min-width: 215px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.12);
       display: none; z-index: 9999;
     }
     .cp-dropdown.open { display: block; }
@@ -46,13 +47,13 @@
       width: 100%; padding: 8px 10px; border-radius: 8px;
       background: none; border: none; cursor: pointer;
       font-family: inherit; font-size: .82rem; text-align: left;
-      color: rgba(255,255,255,.75); transition: background .12s, color .12s;
+      color: #1a3a20; transition: background .12s, color .12s;
     }
-    .cp-option:hover, .cp-option.active { background: rgba(0,200,83,.12); color: #fff; }
-    .cp-option.active .cp-opt-code { color: #00c853; }
-    .cp-opt-symbol { width: 22px; font-weight: 700; color: #00c853; }
-    .cp-opt-code   { font-weight: 800; min-width: 36px; }
-    .cp-opt-name   { color: rgba(255,255,255,.45); font-size: .78rem; }
+    .cp-option:hover { background: #f0f9f2; }
+    .cp-option.active { background: rgba(0,200,83,.08); }
+    .cp-opt-symbol { width: 24px; font-weight: 800; color: #00a846; }
+    .cp-opt-code   { font-weight: 800; min-width: 36px; color: #0a2e14; }
+    .cp-opt-name   { color: #7a9e82; font-size: .78rem; }
   `;
   document.head.appendChild(style);
 
