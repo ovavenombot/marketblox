@@ -883,8 +883,14 @@ body {
   background: radial-gradient(circle, rgba(0,200,83,0.13) 0%, transparent 70%);
   pointer-events: none;
 }
-.how .section-tag { color: var(--green); }
-.how .section-heading { color: white; margin-bottom: .4rem; }
+.how .section-tag { color: var(--green); text-align: center; }
+.how .section-heading { color: white; margin-bottom: .4rem; text-align: center; }
+
+/* Game controller animation */
+.hiw-controller { animation: hiwControlFloat 3.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes hiwControlFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.hiw-btn-pulse { animation: hiwBtnPulse 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes hiwBtnPulse { 0%,60%,100% { opacity: 0; transform: scale(1); } 30% { opacity: 0.9; transform: scale(1.5); } }
 
 /* Shiny animated "MarketBlox" in heading */
 .hiw-brand {
