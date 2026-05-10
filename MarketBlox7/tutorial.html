@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tutorial — MarketBlox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="cart.css"/>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B6JP0L43HM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-B6JP0L43HM');
+  </script>
+
+  <style>
+    /* ── PAGE RESET ── */
+    body { background: #f4f9f5; }
+
+    /* ── NAVBAR ── */
+    .tut-nav { margin-bottom: 0; }
+
+    /* ── HERO ── */
+    .tut-hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .tut-hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse at center, rgba(0,200,83,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Floating badge */
+    @keyframes floatBadge {
+      0%,100% { transform: translateY(0) rotateX(0deg); }
+      50%      { transform: translateY(-10px) rotateX(6deg); }
+    }
+    @keyframes badgeGlow {
+      0%,100% { box-shadow: 0 4px 20px rgba(0,200,83,.2), 0 0 0 0 rgba(0,200,83,0); }
+      50%      { box-shadow: 0 8px 32px rgba(0,200,83,.4), 0 0 0 6px rgba(0,200,83,.06); }
+    }
+    .tut-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #00c853, #00a846);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      animation: floatBadge 3s ease-in-out infinite, badgeGlow 3s ease-in-out infinite;
+      perspective: 400px;
+      transform-style: preserve-3d;
+    }
+    .tut-badge-dot {
+      width: 7px; height: 7px;
+      background: rgba(255,255,255,.8);
+      border-radius: 50%;
+      animation: floatBadge 1.5s ease-in-out infinite alternate;
+    }
+
+    .tut-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      color: #0a1f0f;
+      margin-bottom: .75rem;
+      line-height: 1.1;
+    }
+    .tut-title span { color: var(--green); }
+
+    .tut-sub {
+      font-size: 1rem;
+      color: #5a7a63;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+
+    /* ── VIDEO ── */
+    .tut-video-wrap {
+      max-width: 780px;
+      margin: 0 auto 1rem;
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 32px 80px rgba(0,0,0,.14),
+        0 8px 24px rgba(0,200,83,.1),
+        0 0 0 1.5px rgba(0,200,83,.2);
+      transform: perspective(1000px) rotateX(2deg);
+      transition: transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s;
+    }
+    .tut-video-wrap:hover {
+      transform: perspective(1000px) rotateX(0deg) scale(1.01);
+      box-shadow: 0 40px 100px rgba(0,0,0,.18), 0 12px 32px rgba(0,200,83,.15);
+    }
+    .tut-video-wrap iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: none;
+    }
+
+    .tut-video-note {
+      font-size: .78rem;
+      color: #8aab92;
+      margin-bottom: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* ── STEPS SECTION ── */
+    .tut-steps-section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    .tut-section-label {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: .7rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+    .tut-section-title {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 900;
+      color: #0a1f0f;
+      margin-bottom: .5rem;
+      letter-spacing: -.02em;
+    }
+    .tut-section-sub {
+      text-align: center;
+      color: #6a8a72;
+      font-size: .9rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Steps list */
+    .tut-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .tut-steps::before {
+      content: '';
+      position: absolute;
+      left: 28px; top: 28px; bottom: 28px;
+      width: 2px;
+      background: linear-gradient(to bottom, #00c853, rgba(0,200,83,.1));
+      border-radius: 2px;
+    }
+
+    /* Step item */
+    @keyframes stepIn {
+      from { opacity:0; transform: translateX(-16px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+    .tut-step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      position: relative;
+      animation: stepIn .4s ease both;
+    }
+    .tut-step:nth-child(1) { animation-delay: .05s }
+    .tut-step:nth-child(2) { animation-delay: .1s }
+    .tut-step:nth-child(3) { animation-delay: .15s }
+    .tut-step:nth-child(4) { animation-delay: .2s }
+    .tut-step:nth-child(5) { animation-delay: .25s }
+    .tut-step:nth-child(6) { animation-delay: .3s }
+    .tut-step:nth-child(7) { animation-delay: .35s }
+
+    .tut-step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2.5px solid rgba(0,200,83,.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--font-display);
+      font-size: .95rem;
+      font-weight: 900;
+      color: var(--green);
+      box-shadow: 0 4px 16px rgba(0,200,83,.12);
+      position: relative;
+      z-index: 1;
+      transition: background .2s, border-color .2s, box-shadow .2s, transform .2s;
+    }
+    .tut-step.open .tut-step-num,
+    .tut-step:hover .tut-step-num {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+      box-shadow: 0 6px 20px rgba(0,200,83,.35);
+      transform: scale(1.08);
+    }
+
+    .tut-step-body {
+      flex: 1;
+      background: #fff;
+      border-radius: 18px;
+      border: 1.5px solid rgba(0,200,83,.12);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,.05);
+      transition: box-shadow .25s, border-color .25s, transform .25s cubic-bezier(.22,1,.36,1);
+      cursor: pointer;
+    }
+    .tut-step-body:hover {
+      border-color: rgba(0,200,83,.3);
+      box-shadow: 0 8px 28px rgba(0,0,0,.09), 0 2px 8px rgba(0,200,83,.1);
+      transform: translateX(4px);
+    }
+    .tut-step.open .tut-step-body {
+      border-color: rgba(0,200,83,.4);
+      box-shadow: 0 12px 36px rgba(0,0,0,.1), 0 4px 12px rgba(0,200,83,.12);
+    }
+
+    .tut-step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      gap: 1rem;
+    }
+    .tut-step-header-left {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .tut-step-icon {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: rgba(0,200,83,.1);
+      border: 1px solid rgba(0,200,83,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background .2s, transform .2s;
+    }
+    .tut-step.open .tut-step-icon {
+      background: var(--green);
+      border-color: var(--green);
+      transform: rotate(-8deg) scale(1.1);
+    }
+    .tut-step-name {
+      font-family: var(--font-display);
+      font-size: .93rem;
+      font-weight: 800;
+      color: #0a1f0f;
+    }
+    .tut-step-chevron {
+      color: #aac8b2;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), color .2s;
+      flex-shrink: 0;
+    }
+    .tut-step.open .tut-step-chevron {
+      transform: rotate(180deg);
+      color: var(--green);
+    }
+
+    .tut-step-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .4s cubic-bezier(.22,1,.36,1);
+    }
+    .tut-step.open .tut-step-content { max-height: 300px; }
+
+    .tut-step-text {
+      padding: 0 1.25rem 1.25rem;
+      font-size: .875rem;
+      color: #5a7a63;
+      line-height: 1.65;
+      border-top: 1px solid rgba(0,200,83,.08);
+      padding-top: 1rem;
+      margin-top: 0;
+    }
+    .tut-step-text a { color: var(--green); font-weight: 700; }
+
+    /* ── FEATURES ── */
+    .tut-features {
+      max-width: 900px;
+      margin: 0 auto 5rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    @media (max-width: 640px) { .tut-features { grid-template-columns: 1fr; } }
+
+    @keyframes featFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+    .tut-feat {
+      background: #fff;
+      border-radius: 18px;
+      border: 1.5px solid rgba(0,200,83,.12);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,.05);
+      transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s;
+    }
+    .tut-feat:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 36px rgba(0,0,0,.1), 0 4px 12px rgba(0,200,83,.1);
+    }
+    .tut-feat-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(0,200,83,.15), rgba(0,200,83,.06));
+      border: 1.5px solid rgba(0,200,83,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto 1rem;
+    }
+    .tut-feat-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: .95rem;
+      color: #0a1f0f;
+      margin-bottom: .4rem;
+    }
+    .tut-feat-sub { font-size: .8rem; color: #7a9e82; line-height: 1.5; }
+    .tut-feat-sub a { color: var(--green); font-weight: 700; }
+
+    /* ── CTA ── */
+    .tut-cta {
+      text-align: center;
+      padding: 4rem 1.5rem 6rem;
+      position: relative;
+    }
+    .tut-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,200,83,.04), transparent 60%);
+      pointer-events: none;
+    }
+    .tut-cta h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 900;
+      color: #0a1f0f;
+      margin-bottom: .6rem;
+      letter-spacing: -.02em;
+    }
+    .tut-cta p { color: #6a8a72; margin-bottom: 2rem; }
+    .tut-cta-btns { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+    .tut-btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--green); color: #fff;
+      font-family: var(--font-display); font-weight: 800; font-size: .9rem;
+      padding: .85rem 1.75rem; border-radius: 100px; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(0,200,83,.3);
+    }
+    .tut-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,200,83,.45); }
+    .tut-btn-secondary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #fff; color: #5865f2;
+      border: 1.5px solid rgba(88,101,242,.25);
+      font-family: var(--font-display); font-weight: 800; font-size: .9rem;
+      padding: .85rem 1.75rem; border-radius: 100px; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .tut-btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(88,101,242,.2); }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .tut-hero { padding: 4rem 1rem 2rem; }
+      .tut-steps::before { left: 20px; }
+      .tut-step-num { width: 42px; height: 42px; font-size: .8rem; }
+      .tut-video-wrap { border-radius: 16px; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect width="28" height="28" rx="8" fill="#00c853"/>
+          <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
+          <rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+          <rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/>
+          <rect x="15" y="15" width="7" height="7" rx="2" fill="white"/>
+        </svg>
+      </div>
+      <span>Market<b>Blox</b></span>
+    </a>
+    <div class="nav-center">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="index.html#support" class="nav-link">Support</a>
+      <a href="tutorial" class="nav-link" style="color:var(--green);font-weight:800">Tutorial</a>
+    </div>
+    <div class="nav-right show-mobile-cart">
+      <div id="currencyPickerSlot"></div>
+      <button class="cart-nav-btn" onclick="openCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.66a2 2 0 001.99-1.61L23 6H6"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <div class="auth-nav-wrap" id="authNavWrap">
+        <a href="login.html" id="authNavBtn" class="nav-link-account">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Login</span>
+        </a>
+        <div class="auth-nav-dropdown" id="authNavDropdown"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="tut-hero">
+    <div class="tut-badge">
+      <span class="tut-badge-dot"></span>
+      Step-by-Step Guide
+      <span class="tut-badge-dot"></span>
+    </div>
+    <h1 class="tut-title">How to Order on <span>MarketBlox</span></h1>
+    <p class="tut-sub">Watch the video below then follow the steps to get your Roblox items delivered fast and safely.</p>
+
+    <div class="tut-video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/NEPOFZU-dOk"
+        title="MarketBlox Tutorial"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <p class="tut-video-note">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Watch the full tutorial before placing your first order
+    </p>
+  </div>
+
+  <!-- STEPS -->
+  <div class="tut-steps-section">
+    <div class="tut-section-label">Order Process</div>
+    <h2 class="tut-section-title">Order Steps</h2>
+    <p class="tut-section-sub">Follow each step carefully for a smooth experience</p>
+
+    <div class="tut-steps" id="tutSteps">
+
+      <div class="tut-step open" onclick="toggleStep(this)">
+        <div class="tut-step-num">1</div>
+        <div class="tut-step-body">
+          <div class="tut-step-header">
+            <div class="tut-step-header-left">
+              <div class="tut-step-icon">🛒</div>
+              <div class="tut-step-name">Add Items to Your Cart</div>
+            </div>
+            <svg class="tut-step-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="tut-step-content">
+            <div class="tut-step-text">Browse through our different games and add everything you want to your cart. You can mix items from multiple games in a single order — no need to checkout separately!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tut-step" onclick="toggleStep(this)">
+        <div class="tut-step-num">2</div>
+        <div class="tut-step-body">
+          <div class="tut-step-header">
+            <div class="tut-step-header-left">
+              <div class="tut-step-icon">💳</div>
+              <div class="tut-step-name">Proceed to Checkout</div>
+            </div>
+            <svg class="tut-step-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="tut-step-content">
+            <div class="tut-step-text">When you're ready, open your cart and click "Proceed to Checkout". Review your items and quantities before moving forward.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tut-step" onclick="toggleStep(this)">
+        <div class="tut-step-num">3</div>
+        <div class="tut-step-body">
+          <div class="tut-step-header">
+            <div class="tut-step-header-left">
+              <div class="tut-step-icon">👤</div>
+              <div class="tut-step-name">Enter Your Roblox Username & Link Discord</div>
+            </div>
+            <svg class="tut-step-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="tut-step-content">
+            <div class="tut-step-text">Fill in your Roblox username accurately — this is how our staff will deliver your items in-game. Link your Discord account so your support ticket is created for the right account.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tut-step" onclick="toggleStep(this)">
+        <div class="tut-step-num">4</div>
+        <div class="tut-step-body">
+          <div class="tut-step-header">
+            <div class="tut-step-header-left">
+              <div class="tut-step-icon">💰</div>
+              <div class="tut-step-name">Complete Payment</div>
+            </div>
+            <svg class="tut-step-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="tut-step-content">
+            <div class="tut-step-text">Select your preferred payment method — we support Stripe (credit/debit card) and crypto. Complete the payment through our secure checkout flow. Your data is fully encrypted.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tut-step" onclick="toggleStep(this)">
+        <div class="tut-step-num">5</div>
+        <div class="tut-step-body">
+          <div class="tut-step-header">
+            <div class="tut-step-header-left">
+              <div class="tut-step-icon">💬</div>
+              <div class="tut-step-name">Join Our Discord Server</div>
+            </div>
+            <svg class="tut-step-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="tut-step-content">
+            <div class="tut-step-text">A private support ticket will be automatically created in our Discord server after payment. Make sure you have joined the server at <a href="https://discord.gg/marketblox" target="_blank">discord.gg/marketblox</a> before completing your order.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tut-step" onclick="toggleStep(this)">
+        <div class="tut-step-num">6</div>
+        <div class="tut-step-body">
+          <div class="tut-step-header">
+            <div class="tut-step-header-left">
+              <div class="tut-step-icon">⚡</div>
+              <div class="tut-step-name">Receive Your Items via the Ticket</div>
+            </div>
+            <svg class="tut-step-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="tut-step-content">
+            <div class="tut-step-text">Our delivery staff will reach out through your ticket and deliver your purchased items in-game via Roblox. Just follow their instructions and enjoy your items — usually within minutes!</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="tut-features">
+    <div class="tut-feat">
+      <div class="tut-feat-icon">🔒</div>
+      <div class="tut-feat-title">Secure Payments</div>
+      <div class="tut-feat-sub">All transactions are processed through Stripe and crypto — 100% secure and encrypted.</div>
+    </div>
+    <div class="tut-feat">
+      <div class="tut-feat-icon">⚡</div>
+      <div class="tut-feat-title">Fast Delivery</div>
+      <div class="tut-feat-sub">Our staff works around the clock to deliver your items as quickly as possible.</div>
+    </div>
+    <div class="tut-feat">
+      <div class="tut-feat-icon">💬</div>
+      <div class="tut-feat-title">24/7 Support</div>
+      <div class="tut-feat-sub">Need help? Open a ticket in our <a href="https://discord.gg/marketblox" target="_blank">Discord server</a> anytime.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="tut-cta">
+    <h2>Ready to Shop? 🎮</h2>
+    <p>Browse our catalogue and grab your favourite Roblox items today.</p>
+    <div class="tut-cta-btns">
+      <a href="index.html#shop" class="tut-btn-primary">
+        🛒 Browse Products
+      </a>
+      <a href="https://discord.gg/marketblox" target="_blank" class="tut-btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.042.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Join Our Discord
+      </a>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <div class="cart-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61h9.66a2 2 0 001.99-1.61L23 6H6"/></svg>
+        Cart (<span id="drawerCount">0</span>)
+      </div>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-empty" id="drawerEmpty">
+      <div style="font-size:3rem">🛒</div>
+      <p>Your cart is empty</p>
+      <a href="index.html#shop" class="btn-primary magnetic" onclick="closeCart()"><span class="btn-bg"></span><span class="btn-content">Browse Products</span></a>
+    </div>
+    <div class="cart-items" id="drawerItems"></div>
+    <div class="cart-footer" id="drawerFooter">
+      <div class="cart-totals">
+        <div class="cart-row"><span>Subtotal</span><span id="drawerSubtotal">$0.00</span></div>
+        <div class="cart-row cart-total-row"><span>Total</span><span id="drawerTotal">$0.00</span></div>
+      </div>
+      <a href="checkout.html" class="cart-checkout-btn">Proceed to Checkout →</a>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="currency.js"></script>
+  <script src="cart.js"></script>
+  <script type="module" src="auth-nav.js"></script>
+
+  <script>
+    function toggleStep(el) {
+      const isOpen = el.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.tut-step').forEach(s => s.classList.remove('open'));
+      // Open clicked if it was closed
+      if (!isOpen) el.classList.add('open');
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
+</body>
+</html>
