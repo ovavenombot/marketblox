@@ -280,6 +280,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { trackPurchases } from './best-sellers.js';
 
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
@@ -289,6 +290,20 @@
     async function loadOrder(sessionId) {
       const badge = document.getElementById('orderBadge');
       if (!sessionId) { badge.textContent = 'Order received'; return; }
+
+      // Track purchase counts (only once per session)
+      if (!sessionStorage.getItem('mb_tracked_' + sessionId)) {
+        try {
+          const cartRaw = localStorage.getItem('mb_cart');
+          if (cartRaw) {
+            const items = JSON.parse(cartRaw);
+            const ids = items.map(i => i.id);
+            if (ids.length) trackPurchases(ids);
+          }
+        } catch { /* ignore */ }
+        sessionStorage.setItem('mb_tracked_' + sessionId, '1');
+      }
+
       try {
         const res = await fetch(`${BACKEND_URL}/api/order/by-session/${sessionId}`);
         if (res.ok) {
