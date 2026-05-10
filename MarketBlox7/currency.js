@@ -4,14 +4,14 @@
 
 (function () {
   const CURRENCIES = {
-    USD: { symbol: '$',   name: 'US Dollar'        },
-    EUR: { symbol: '€',   name: 'Euro'              },
-    GBP: { symbol: '£',   name: 'British Pound'     },
-    CAD: { symbol: 'C$',  name: 'Canadian Dollar'   },
-    AUD: { symbol: 'A$',  name: 'Australian Dollar' },
-    BRL: { symbol: 'R$',  name: 'Brazilian Real'    },
-    MXN: { symbol: 'MX$', name: 'Mexican Peso'      },
-    INR: { symbol: '₹',   name: 'Indian Rupee'      },
+    USD: { symbol: '$',   flag: '🇺🇸', name: 'US Dollar'        },
+    EUR: { symbol: '€',   flag: '🇪🇺', name: 'Euro'              },
+    GBP: { symbol: '£',   flag: '🇬🇧', name: 'British Pound'     },
+    CAD: { symbol: 'C$',  flag: '🇨🇦', name: 'Canadian Dollar'   },
+    AUD: { symbol: 'A$',  flag: '🇦🇺', name: 'Australian Dollar' },
+    BRL: { symbol: 'R$',  flag: '🇧🇷', name: 'Brazilian Real'    },
+    MXN: { symbol: 'MX$', flag: '🇲🇽', name: 'Mexican Peso'      },
+    INR: { symbol: '₹',   flag: '🇮🇳', name: 'Indian Rupee'      },
   };
 
   const FALLBACK = { USD:1, EUR:0.92, GBP:0.79, CAD:1.36, AUD:1.53, BRL:5.05, MXN:17.15, INR:83.5 };
@@ -19,88 +19,125 @@
   let rates   = { ...FALLBACK };
   let current = localStorage.getItem('mb_currency') || 'USD';
 
-  // Inject styles once
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes cpDropIn {
-      from { opacity:0; transform: translateY(-8px) scale(.97); }
-      to   { opacity:1; transform: translateY(0)    scale(1);   }
+    @keyframes cpSlideDown {
+      0%   { opacity:0; transform: translateY(-12px) scaleY(.92); }
+      60%  { opacity:1; transform: translateY(3px)   scaleY(1.01); }
+      100% { opacity:1; transform: translateY(0)     scaleY(1); }
     }
-    @keyframes cpItemIn {
-      from { opacity:0; transform: translateX(-6px); }
-      to   { opacity:1; transform: translateX(0);    }
+    @keyframes cpItemSlide {
+      from { opacity:0; transform: translateX(-14px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+    @keyframes cpArrowSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(180deg); }
+    }
+    @keyframes cpGlow {
+      0%,100% { box-shadow: 0 2px 10px rgba(0,200,83,.15); }
+      50%      { box-shadow: 0 4px 20px rgba(0,200,83,.35); }
     }
 
     .currency-picker { position: relative; }
 
     .cp-btn {
-      display: flex; align-items: center; gap: 6px;
-      background: linear-gradient(135deg, rgba(0,200,83,.12), rgba(0,200,83,.06));
-      border: 1.5px solid rgba(0,200,83,.35);
-      border-radius: 10px; padding: 6px 12px; cursor: pointer;
-      color: #0a2e14; font-family: inherit; font-size: .82rem; font-weight: 800;
-      transition: background .2s, border-color .2s, box-shadow .2s, transform .15s;
-      white-space: nowrap; letter-spacing: .01em;
-      box-shadow: 0 2px 8px rgba(0,200,83,.1);
+      display: flex; align-items: center; gap: 7px;
+      background: linear-gradient(135deg, #00c853 0%, #00a846 100%);
+      border: none;
+      border-radius: 12px; padding: 7px 13px; cursor: pointer;
+      color: #fff; font-family: inherit; font-size: .82rem; font-weight: 800;
+      transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+      white-space: nowrap; letter-spacing: .02em;
+      box-shadow: 0 3px 12px rgba(0,200,83,.3);
+      position: relative; overflow: hidden;
+    }
+    .cp-btn::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.18) 0%, transparent 60%);
+      pointer-events: none;
     }
     .cp-btn:hover {
-      background: linear-gradient(135deg, rgba(0,200,83,.2), rgba(0,200,83,.1));
-      border-color: #00c853;
-      box-shadow: 0 4px 16px rgba(0,200,83,.2);
-      transform: translateY(-1px);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 22px rgba(0,200,83,.45);
     }
-    .cp-btn:active { transform: scale(.97); }
+    .cp-btn:active { transform: scale(.96); }
 
-    .cp-btn svg { transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
-    .cp-btn.open svg { transform: rotate(180deg); }
-
-    .cp-symbol { font-size: .9rem; color: #00a846; }
-    .cp-code   { color: #0a2e14; }
+    .cp-flag   { font-size: 1rem; line-height: 1; }
+    .cp-code   { color: #fff; font-weight: 900; letter-spacing: .04em; }
+    .cp-arrow  {
+      width: 14px; height: 14px; display: flex; align-items: center; justify-content: center;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      opacity: .85;
+    }
+    .cp-btn.open .cp-arrow { transform: rotate(180deg); }
 
     .cp-dropdown {
-      position: absolute; top: calc(100% + 8px); right: 0;
-      background: #fff;
-      border: 1.5px solid rgba(0,200,83,.18);
-      border-radius: 16px; padding: 8px; min-width: 225px;
-      box-shadow: 0 16px 48px rgba(0,0,0,.13), 0 2px 8px rgba(0,200,83,.08);
+      position: absolute; top: calc(100% + 10px); right: 0;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(0,200,83,.2);
+      border-radius: 18px; padding: 6px; min-width: 240px;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.15),
+        0 4px 12px rgba(0,200,83,.1),
+        inset 0 1px 0 rgba(255,255,255,.9);
       display: none; z-index: 9999;
       transform-origin: top right;
     }
     .cp-dropdown.open {
       display: block;
-      animation: cpDropIn .22s cubic-bezier(.22,1,.36,1) both;
+      animation: cpSlideDown .28s cubic-bezier(.22,1,.36,1) both;
     }
 
+    .cp-header {
+      padding: 8px 12px 6px;
+      font-size: .7rem; font-weight: 800; letter-spacing: .08em;
+      color: #00a846; text-transform: uppercase;
+    }
     .cp-divider {
-      height: 1px; background: #eef6f0; margin: 4px 6px 6px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,200,83,.15), transparent);
+      margin: 2px 8px 6px;
     }
 
     .cp-option {
       display: flex; align-items: center; gap: 10px;
-      width: 100%; padding: 9px 12px; border-radius: 10px;
+      width: 100%; padding: 10px 12px; border-radius: 12px;
       background: none; border: none; cursor: pointer;
       font-family: inherit; font-size: .83rem; text-align: left;
-      color: #1a3a20; transition: background .15s, transform .15s;
-      opacity: 0;
+      color: #1a3a20;
+      transition: background .15s, transform .18s cubic-bezier(.34,1.56,.64,1);
+      opacity: 0; position: relative; overflow: hidden;
     }
     .cp-dropdown.open .cp-option {
-      animation: cpItemIn .18s ease both;
+      animation: cpItemSlide .22s cubic-bezier(.22,1,.36,1) both;
     }
-    .cp-option:hover {
-      background: #f0f9f2;
-      transform: translateX(3px);
+    .cp-option::before {
+      content: '';
+      position: absolute; inset: 0; border-radius: 12px;
+      background: linear-gradient(90deg, rgba(0,200,83,.08), transparent);
+      opacity: 0; transition: opacity .15s;
     }
+    .cp-option:hover { transform: translateX(4px); }
+    .cp-option:hover::before { opacity: 1; }
+
     .cp-option.active {
-      background: linear-gradient(90deg, rgba(0,200,83,.12), rgba(0,200,83,.04));
+      background: linear-gradient(90deg, rgba(0,200,83,.13), rgba(0,200,83,.04));
     }
     .cp-option.active .cp-opt-code { color: #00a846; }
 
-    .cp-opt-symbol {
-      width: 28px; font-weight: 900; color: #00c853; font-size: .95rem;
+    .cp-opt-flag   { font-size: 1.15rem; line-height: 1; flex-shrink: 0; }
+    .cp-opt-code   { font-weight: 900; min-width: 40px; color: #0a2e14; font-size: .84rem; }
+    .cp-opt-name   { color: #7a9e82; font-size: .76rem; flex: 1; }
+    .cp-opt-check  {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #00c853; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; font-weight: 900; flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,200,83,.4);
     }
-    .cp-opt-code   { font-weight: 800; min-width: 38px; color: #0a2e14; }
-    .cp-opt-name   { color: #7a9e82; font-size: .78rem; flex: 1; }
-    .cp-opt-check  { color: #00c853; font-size: .85rem; margin-left: auto; }
   `;
   document.head.appendChild(style);
 
@@ -130,9 +167,7 @@
       const n = parseFloat(el.dataset.usd);
       if (!isNaN(n)) el.textContent = formatPrice(n);
     });
-    // refresh cart totals if renderCart exists
     if (typeof renderCart === 'function') renderCart();
-    // update picker button label
     updateBtn();
   }
 
@@ -140,8 +175,8 @@
     const btn = document.getElementById('currencyPickerBtn');
     if (!btn) return;
     const cur = CURRENCIES[current];
-    btn.querySelector('.cp-symbol').textContent = cur.symbol;
-    btn.querySelector('.cp-code').textContent   = current;
+    btn.querySelector('.cp-flag').textContent = cur.flag;
+    btn.querySelector('.cp-code').textContent = current;
     document.querySelectorAll('.cp-option').forEach(o => {
       o.classList.toggle('active', o.dataset.code === current);
     });
@@ -182,21 +217,22 @@
     const slot = document.getElementById('currencyPickerSlot');
     if (!slot) return;
     const cur = CURRENCIES[current];
-    const chevron = `<svg width="11" height="11" viewBox="0 0 10 10" fill="none"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    const arrow = `<svg class="cp-arrow" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     slot.innerHTML = `
       <div class="currency-picker" id="currencyPicker">
         <button class="cp-btn" id="currencyPickerBtn" onclick="window.MB_CURRENCY.toggle()">
-          <span class="cp-symbol">${cur.symbol}</span>
+          <span class="cp-flag">${cur.flag}</span>
           <span class="cp-code">${current}</span>
-          ${chevron}
+          ${arrow}
         </button>
         <div class="cp-dropdown" id="currencyDropdown">
-          <div class="cp-divider" style="margin-top:0"></div>
+          <div class="cp-header">Select Currency</div>
+          <div class="cp-divider"></div>
           ${Object.entries(CURRENCIES).map(([code, c], i) => `
             <button class="cp-option${code === current ? ' active' : ''}" data-code="${code}"
               onclick="window.MB_CURRENCY.set('${code}')"
-              style="animation-delay:${i * 0.03}s">
-              <span class="cp-opt-symbol">${c.symbol}</span>
+              style="animation-delay:${i * 0.045}s">
+              <span class="cp-opt-flag">${c.flag}</span>
               <span class="cp-opt-code">${code}</span>
               <span class="cp-opt-name">${c.name}</span>
               ${code === current ? '<span class="cp-opt-check">✓</span>' : ''}
@@ -207,10 +243,10 @@
   }
 
   async function init() {
-    inject();       // show picker immediately with fallback rates
+    inject();
     applyToAll();
-    await fetchRates(); // fetch live rates in background
-    applyToAll();   // update prices with live rates
+    await fetchRates();
+    applyToAll();
   }
 
   window.MB_CURRENCY = { init, set, toggle, formatPrice, get current() { return current; } };
