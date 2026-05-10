@@ -660,21 +660,39 @@ body.acc-body {
 }
 
 /* Empty state */
+@keyframes emptyFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes emptyFadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
 .acc-empty {
   background: #fff;
   border: 1.5px dashed #c8e6cc;
   border-radius: 18px;
   padding: 3rem 1.5rem;
   text-align: center;
+  animation: emptyFadeIn .45s ease both;
+}
+
+.acc-empty-svg {
+  margin: 0 auto .75rem;
+  width: 80px; height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-box-svg {
+  width: 80px; height: 80px;
+  animation: emptyFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 6px 12px rgba(0,200,83,.18));
 }
 
 .acc-empty-icon { font-size: 2.5rem; margin-bottom: .75rem; }
 
 .acc-empty h3 {
   font-family: 'Nunito', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 800;
-  color: #3a6e46;
+  color: #1a3a20;
   margin-bottom: .4rem;
 }
 

@@ -78,7 +78,14 @@
     </div>
   </div>
 
-  <script>
+  <script src="firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, signInWithCustomToken } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    const app  = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+
     const params = new URLSearchParams(window.location.search);
     const email  = decodeURIComponent(params.get('email') || '');
     if (email) document.getElementById('verifyEmailDisplay').textContent = email;
@@ -112,8 +119,9 @@
         const data = await res.json();
         if (res.ok) {
           msg.className = 'auth-error auth-success';
-          msg.textContent = 'Email verified! Redirecting to login…';
-          setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+          msg.textContent = 'Email verified! Taking you to your account…';
+          await signInWithCustomToken(auth, data.customToken);
+          window.location.href = 'account.html';
         } else {
           msg.textContent = data.error || 'Something went wrong.';
           setLoading(false);
@@ -165,5 +173,6 @@
       document.getElementById('verifyBtn').disabled = on;
     }
   </script>
+
 </body>
 </html>

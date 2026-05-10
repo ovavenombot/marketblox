@@ -36,7 +36,10 @@ exports.handler = async (event) => {
     await admin.auth().updateUser(data.uid, { emailVerified: true });
     await ref.delete();
 
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    // Return a custom token so the client can sign in automatically
+    const customToken = await admin.auth().createCustomToken(data.uid);
+
+    return { statusCode: 200, body: JSON.stringify({ success: true, customToken }) };
   } catch (err) {
     console.error('verify-code error:', err);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };

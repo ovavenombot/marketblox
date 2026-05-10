@@ -84,6 +84,10 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
         My Orders
       </button>
+      <button class="acc-tab" id="tabTx" onclick="switchTab('transactions')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Transactions
+      </button>
       <button class="acc-tab" id="tabProfile" onclick="switchTab('profile')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Profile
@@ -92,7 +96,12 @@
 
     <!-- Orders panel -->
     <div id="panelOrders">
-      <div id="ordersContent"><div class="acc-empty"><div class="acc-empty-icon">📦</div><p>Loading…</p></div></div>
+      <div id="ordersContent"><div class="acc-empty"><div class="acc-empty-svg"><!-- loading --></div><p>Loading…</p></div></div>
+    </div>
+
+    <!-- Transactions panel -->
+    <div id="panelTx" style="display:none">
+      <div id="txContent"><div class="acc-empty"><div class="acc-empty-svg"></div><p>Loading…</p></div></div>
     </div>
 
     <!-- Profile panel -->
@@ -154,7 +163,7 @@
       getAuth, onAuthStateChanged, signOut, updateProfile, updatePassword
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import {
-      getFirestore, doc, getDoc, collection, query, where, orderBy, getDocs
+      getFirestore, doc, getDoc, collection, query, where, orderBy, getDocs, limit
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
     const app  = initializeApp(FIREBASE_CONFIG);
@@ -168,7 +177,7 @@
       currentUser = user;
       renderUser(user);
       document.getElementById('accMain').style.display = '';
-      await Promise.all([loadBalance(user.uid), loadOrders(user.uid)]);
+      await Promise.all([loadBalance(user.uid), loadOrders(user.uid), loadTransactions(user.uid)]);
 
       const params = new URLSearchParams(window.location.search);
       if (params.get('topup') === 'success') {
@@ -199,6 +208,15 @@
       } catch (e) { console.error(e); }
     }
 
+    const BOX_SVG = `<svg class="empty-box-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="38" width="60" height="34" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+      <path d="M10 38 L40 52 L70 38" stroke="#a5d6a7" stroke-width="2"/>
+      <path d="M40 52 L40 72" stroke="#a5d6a7" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <path d="M10 38 L22 14 L58 14 L70 38" fill="#f1f8f2" stroke="#a5d6a7" stroke-width="2"/>
+      <path d="M22 14 L32 38 M58 14 L48 38" stroke="#c8e6c9" stroke-width="1.5"/>
+      <path d="M32 14 Q40 8 48 14" stroke="#81c784" stroke-width="2" stroke-linecap="round"/>
+    </svg>`;
+
     async function loadOrders(uid) {
       const container = document.getElementById('ordersContent');
       try {
@@ -206,7 +224,7 @@
         const snap = await getDocs(q);
         if (snap.empty) {
           container.innerHTML = `<div class="acc-empty">
-            <div class="acc-empty-icon">📦</div>
+            <div class="acc-empty-svg">${BOX_SVG}</div>
             <h3>No orders yet</h3>
             <p>Your orders will appear here once you make a purchase.</p>
             <a href="index.html" class="acc-browse-btn">✦ Browse Products</a>
@@ -231,7 +249,50 @@
         });
         container.innerHTML = `<div class="acc-orders-list">${rows.join('')}</div>`;
       } catch (e) {
-        container.innerHTML = `<div class="acc-empty"><p>Could not load orders.</p></div>`;
+        container.innerHTML = `<div class="acc-empty"><p style="color:#e53935">Could not load orders.</p></div>`;
+      }
+    }
+
+    async function loadTransactions(uid) {
+      const container = document.getElementById('txContent');
+      try {
+        const q    = query(collection(db, 'credited_sessions'), where('userId', '==', uid), orderBy('at', 'desc'), limit(50));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          container.innerHTML = `<div class="acc-empty">
+            <div class="acc-empty-svg">
+              <svg class="empty-box-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="14" y="24" width="52" height="36" rx="6" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+                <line x1="14" y1="34" x2="66" y2="34" stroke="#a5d6a7" stroke-width="2"/>
+                <rect x="22" y="42" width="16" height="8" rx="2" fill="#c8e6c9"/>
+                <line x1="46" y1="44" x2="58" y2="44" stroke="#c8e6c9" stroke-width="2" stroke-linecap="round"/>
+                <line x1="46" y1="48" x2="54" y2="48" stroke="#c8e6c9" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>No transactions yet</h3>
+            <p>Your deposit history will appear here.</p>
+            <button class="acc-browse-btn" onclick="openTopup()">+ Deposit Funds</button>
+          </div>`;
+          return;
+        }
+        const rows = snap.docs.map(d => {
+          const t    = d.data();
+          const date = t.at?.toDate?.()?.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) || '—';
+          const time = t.at?.toDate?.()?.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) || '';
+          return `<div class="acc-order-card">
+            <div>
+              <div class="acc-order-id">DEPOSIT</div>
+              <div class="acc-order-date">${date} ${time}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div class="acc-order-amount" style="color:#00a846">+€${((t.amount||0)/100).toFixed(2)}</div>
+              <div class="acc-order-status">Credited</div>
+            </div>
+          </div>`;
+        });
+        container.innerHTML = `<div class="acc-orders-list">${rows.join('')}</div>`;
+      } catch (e) {
+        container.innerHTML = `<div class="acc-empty"><p style="color:#e53935">Could not load transactions.</p></div>`;
       }
     }
 
@@ -248,9 +309,11 @@
     }
 
     window.switchTab = (tab) => {
-      document.getElementById('panelOrders').style.display  = tab === 'orders'  ? '' : 'none';
-      document.getElementById('panelProfile').style.display = tab === 'profile' ? '' : 'none';
+      document.getElementById('panelOrders').style.display  = tab === 'orders'       ? '' : 'none';
+      document.getElementById('panelTx').style.display      = tab === 'transactions' ? '' : 'none';
+      document.getElementById('panelProfile').style.display = tab === 'profile'      ? '' : 'none';
       document.getElementById('tabOrders').classList.toggle('active',  tab === 'orders');
+      document.getElementById('tabTx').classList.toggle('active',      tab === 'transactions');
       document.getElementById('tabProfile').classList.toggle('active', tab === 'profile');
     };
 
