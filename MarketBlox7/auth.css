@@ -293,6 +293,12 @@ body.acc-body {
   font-family: 'Space Grotesk', sans-serif;
   min-height: 100vh;
   color: #111;
+  display: flex;
+  flex-direction: column;
+}
+
+body.acc-body .acc-main {
+  flex: 1;
 }
 
 .acc-navbar {
@@ -881,6 +887,74 @@ body.acc-body {
   transition: color .15s;
 }
 .topup-close-btn:hover { color: #e53935; }
+
+/* ── ACCOUNT FOOTER ── */
+.acc-footer {
+  background: #0a150d;
+  margin-top: 4rem;
+  padding: 3rem 1.5rem 0;
+}
+
+.acc-footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr;
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.acc-footer-logo {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: .75rem;
+}
+
+.acc-footer-brand p {
+  font-size: .82rem;
+  color: rgba(255,255,255,.4);
+  line-height: 1.65;
+}
+
+.acc-footer-col h4 {
+  font-family: 'Nunito', sans-serif;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #00c853;
+  margin-bottom: .85rem;
+}
+
+.acc-footer-col a {
+  display: block;
+  font-size: .83rem;
+  color: rgba(255,255,255,.45);
+  text-decoration: none;
+  margin-bottom: .5rem;
+  transition: color .15s;
+}
+.acc-footer-col a:hover { color: #fff; }
+
+.acc-footer-bottom {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.1rem 0;
+  font-size: .75rem;
+  color: rgba(255,255,255,.25);
+}
+
+@media (max-width: 620px) {
+  .acc-footer-inner { grid-template-columns: 1fr 1fr; }
+  .acc-footer-brand { grid-column: 1 / -1; }
+}
 
 @media (max-width: 520px) {
   .acc-profile-card { flex-wrap: wrap; }
