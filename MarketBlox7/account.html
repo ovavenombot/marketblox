@@ -217,21 +217,21 @@
       <path d="M32 14 Q40 8 48 14" stroke="#81c784" stroke-width="2" stroke-linecap="round"/>
     </svg>`;
 
+    const EMPTY_ORDERS = `<div class="acc-empty">
+      <div class="acc-empty-svg">${BOX_SVG}</div>
+      <h3>No orders yet</h3>
+      <p>Your orders will appear here once you make a purchase.</p>
+      <a href="index.html" class="acc-browse-btn">✦ Browse Products</a>
+    </div>`;
+
     async function loadOrders(uid) {
       const container = document.getElementById('ordersContent');
       try {
-        const q    = query(collection(db, 'orders'), where('userId', '==', uid), orderBy('createdAt', 'desc'));
+        const q    = query(collection(db, 'orders'), where('userId', '==', uid));
         const snap = await getDocs(q);
-        if (snap.empty) {
-          container.innerHTML = `<div class="acc-empty">
-            <div class="acc-empty-svg">${BOX_SVG}</div>
-            <h3>No orders yet</h3>
-            <p>Your orders will appear here once you make a purchase.</p>
-            <a href="index.html" class="acc-browse-btn">✦ Browse Products</a>
-          </div>`;
-          return;
-        }
-        const rows = snap.docs.map(d => {
+        if (snap.empty) { container.innerHTML = EMPTY_ORDERS; return; }
+        const docs = snap.docs.sort((a, b) => (b.data().createdAt?.seconds || 0) - (a.data().createdAt?.seconds || 0));
+        const rows = docs.map(d => {
           const o    = d.data();
           const date = o.createdAt?.toDate?.()?.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) || '—';
           const tags = (o.items || []).map(i => `<span class="acc-order-tag">${i.name}</span>`).join('');
@@ -249,14 +249,14 @@
         });
         container.innerHTML = `<div class="acc-orders-list">${rows.join('')}</div>`;
       } catch (e) {
-        container.innerHTML = `<div class="acc-empty"><p style="color:#e53935">Could not load orders.</p></div>`;
+        container.innerHTML = EMPTY_ORDERS;
       }
     }
 
     async function loadTransactions(uid) {
       const container = document.getElementById('txContent');
       try {
-        const q    = query(collection(db, 'credited_sessions'), where('userId', '==', uid), orderBy('at', 'desc'), limit(50));
+        const q    = query(collection(db, 'credited_sessions'), where('userId', '==', uid));
         const snap = await getDocs(q);
         if (snap.empty) {
           container.innerHTML = `<div class="acc-empty">
@@ -275,7 +275,8 @@
           </div>`;
           return;
         }
-        const rows = snap.docs.map(d => {
+        const txDocs = snap.docs.sort((a,b) => (b.data().at?.seconds||0) - (a.data().at?.seconds||0));
+        const rows = txDocs.map(d => {
           const t    = d.data();
           const date = t.at?.toDate?.()?.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) || '—';
           const time = t.at?.toDate?.()?.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) || '';
