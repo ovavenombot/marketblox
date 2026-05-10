@@ -7,6 +7,29 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="auth.css"/>
+  <style>
+    .code-input {
+      width: 100%;
+      padding: 1rem;
+      background: #f6faf7;
+      border: 2px solid #d6e8da;
+      border-radius: 12px;
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: .35em;
+      outline: none;
+      font-family: monospace;
+      color: #0a2e14;
+      margin-bottom: 1rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .code-input:focus {
+      border-color: #00c853;
+      box-shadow: 0 0 0 3px rgba(0,200,83,.12);
+    }
+    .code-input::placeholder { color: #c8e6cc; letter-spacing: .35em; }
+  </style>
 </head>
 <body class="auth-body">
 
@@ -23,64 +46,124 @@
 
   <div class="auth-card">
     <div class="verify-icon">📧</div>
-    <h1 class="auth-card-title">Verify Your Email</h1>
+    <h1 class="auth-card-title">Check Your Email</h1>
 
     <p class="verify-email-text">
-      We've sent a verification link to:<br/>
+      We sent a 6-digit code to:<br/>
       <b id="verifyEmailDisplay">your email</b><br/><br/>
-      Click the link in the email to activate your account, then come back and log in.
+      Enter it below to activate your account.
     </p>
+
+    <input
+      type="text"
+      id="codeInput"
+      class="code-input"
+      maxlength="6"
+      placeholder="000000"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      autocomplete="one-time-code"
+    />
 
     <div class="auth-error" id="verifyMsg"></div>
 
-    <a href="login.html" class="auth-submit" style="text-decoration:none;margin-bottom:.75rem">
-      Go to Login
-    </a>
+    <button class="auth-submit" id="verifyBtn" onclick="handleVerify()">
+      <span id="verifyBtnText">Verify Email</span>
+      <span class="auth-spinner" id="verifySpinner"></span>
+    </button>
 
     <div class="verify-resend">
       Didn't receive it?
-      <button class="auth-link" onclick="handleResend()" id="resendBtn">Resend email</button>
+      <button class="auth-link" onclick="handleResend()" id="resendBtn">Resend code</button>
     </div>
   </div>
 
-  <script src="firebase-config.js"></script>
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import {
-      getAuth,
-      signInWithEmailAndPassword,
-      sendEmailVerification
-    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-
-    const app  = initializeApp(FIREBASE_CONFIG);
-    const auth = getAuth(app);
-
+  <script>
     const params = new URLSearchParams(window.location.search);
-    const email  = params.get('email') || '';
-    if (email) document.getElementById('verifyEmailDisplay').textContent = decodeURIComponent(email);
+    const email  = decodeURIComponent(params.get('email') || '');
+    if (email) document.getElementById('verifyEmailDisplay').textContent = email;
 
-    // Store email for resend (needs password - ask user)
-    window.handleResend = async () => {
-      const msg = document.getElementById('verifyMsg');
-      const pw  = prompt('Enter your password to resend the verification email:');
-      if (!pw) return;
+    // Auto-focus and auto-submit on 6 digits
+    const inp = document.getElementById('codeInput');
+    inp.focus();
+    inp.addEventListener('input', () => {
+      inp.value = inp.value.replace(/\D/g, '').slice(0, 6);
+      if (inp.value.length === 6) handleVerify();
+    });
+
+    async function handleVerify() {
+      const msg  = document.getElementById('verifyMsg');
+      const code = inp.value.trim();
       msg.textContent = '';
       msg.className = 'auth-error';
-      try {
-        const cred = await signInWithEmailAndPassword(auth, decodeURIComponent(email), pw);
-        if (cred.user.emailVerified) {
-          msg.className = 'auth-error auth-success';
-          msg.textContent = 'Your email is already verified! You can log in now.';
-        } else {
-          await sendEmailVerification(cred.user);
-          msg.className = 'auth-error auth-success';
-          msg.textContent = 'Verification email resent! Check your inbox and spam folder.';
-        }
-        await auth.signOut();
-      } catch (ex) {
-        msg.textContent = 'Could not resend — check your password and try again.';
+
+      if (code.length !== 6) {
+        msg.textContent = 'Enter the 6-digit code from your email.';
+        return;
       }
-    };
+
+      setLoading(true);
+      try {
+        const res  = await fetch('/.netlify/functions/verify-code', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ email, code }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.className = 'auth-error auth-success';
+          msg.textContent = 'Email verified! Redirecting to login…';
+          setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+        } else {
+          msg.textContent = data.error || 'Something went wrong.';
+          setLoading(false);
+        }
+      } catch (ex) {
+        msg.textContent = 'Network error. Check your connection.';
+        setLoading(false);
+      }
+    }
+
+    async function handleResend() {
+      const msg = document.getElementById('verifyMsg');
+      msg.className = 'auth-error';
+      msg.textContent = '';
+
+      const btn = document.getElementById('resendBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      const pw = prompt('Enter your password to resend the code:');
+      if (!pw) { btn.disabled = false; btn.textContent = 'Resend code'; return; }
+
+      try {
+        const res  = await fetch('/.netlify/functions/send-verification-code', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ name: email.split('@')[0], email, password: pw }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.className = 'auth-error auth-success';
+          msg.textContent = 'New code sent! Check your inbox.';
+          inp.value = '';
+          inp.focus();
+        } else {
+          msg.textContent = data.error || 'Could not resend. Check your password.';
+        }
+      } catch (ex) {
+        msg.textContent = 'Network error.';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Resend code';
+    }
+
+    function setLoading(on) {
+      document.getElementById('verifyBtnText').style.display  = on ? 'none' : '';
+      document.getElementById('verifySpinner').style.display  = on ? 'inline-block' : 'none';
+      document.getElementById('verifyBtn').disabled = on;
+    }
   </script>
 </body>
 </html>

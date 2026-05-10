@@ -4,6 +4,7 @@
   "description": "MarketBlox - Roblox Items Store",
   "dependencies": {
     "stripe": "^14.0.0",
-    "firebase-admin": "^12.0.0"
+    "firebase-admin": "^12.0.0",
+    "resend": "^3.0.0"
   }
 }
