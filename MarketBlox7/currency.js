@@ -58,7 +58,10 @@
 
   async function fetchRates() {
     try {
-      const res  = await fetch('https://open.er-api.com/v6/latest/USD');
+      const controller = new AbortController();
+      const timeout    = setTimeout(() => controller.abort(), 4000);
+      const res  = await fetch('https://open.er-api.com/v6/latest/USD', { signal: controller.signal });
+      clearTimeout(timeout);
       const data = await res.json();
       if (data.result === 'success' && data.rates) { rates = data.rates; rates.USD = 1; }
     } catch (_) { /* keep fallback */ }
@@ -149,9 +152,10 @@
   }
 
   async function init() {
-    await fetchRates();
-    inject();
+    inject();       // show picker immediately with fallback rates
     applyToAll();
+    await fetchRates(); // fetch live rates in background
+    applyToAll();   // update prices with live rates
   }
 
   window.MB_CURRENCY = { init, set, toggle, formatPrice, get current() { return current; } };
