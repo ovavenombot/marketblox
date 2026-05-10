@@ -254,8 +254,8 @@ body {
   background: var(--green-light);
 }
 .auth-avatar {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--green);
   color: #fff;
@@ -267,6 +267,127 @@ body {
   justify-content: center;
   flex-shrink: 0;
 }
+.auth-nav-chevron {
+  transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+  opacity: .55;
+  flex-shrink: 0;
+}
+.auth-nav-wrap.open .auth-nav-chevron { transform: rotate(180deg); }
+
+/* ---- Auth dropdown ---- */
+.auth-nav-wrap { position: relative; }
+
+@keyframes authDropIn {
+  from { opacity:0; transform: translateY(-10px) scale(.94) perspective(400px) rotateX(-6deg); }
+  to   { opacity:1; transform: translateY(0)     scale(1)   perspective(400px) rotateX(0deg); }
+}
+
+.auth-nav-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 248px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1.5px solid rgba(0,200,83,.15);
+  padding: 6px;
+  z-index: 9999;
+  box-shadow:
+    0 24px 64px rgba(0,0,0,.13),
+    0 8px 24px rgba(0,200,83,.07),
+    0 2px 0  rgba(0,200,83,.08),
+    inset 0 1px 0 rgba(255,255,255,1);
+}
+.auth-nav-dropdown.open {
+  display: block;
+  animation: authDropIn .28s cubic-bezier(.22,1,.36,1) both;
+}
+
+.auth-dd-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 12px;
+}
+.auth-dd-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c853, #00a846);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,200,83,.35);
+}
+.auth-dd-info { min-width: 0; }
+.auth-dd-name {
+  font-weight: 800;
+  font-size: .88rem;
+  color: #0a2e14;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.auth-dd-email {
+  font-size: .72rem;
+  color: #8aab92;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.auth-dd-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,83,.15), transparent);
+  margin: 3px 6px;
+}
+
+.auth-dd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: .84rem;
+  font-weight: 700;
+  color: #1a3a20;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background .15s, transform .18s cubic-bezier(.34,1.56,.64,1), color .15s;
+}
+.auth-dd-item:hover {
+  background: #f0faf2;
+  transform: translateX(3px);
+}
+.auth-dd-icon {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: #f0faf2;
+  border: 1px solid rgba(0,200,83,.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #00a846;
+  transition: background .15s, box-shadow .15s;
+}
+.auth-dd-item:hover .auth-dd-icon {
+  background: #00c853;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0,200,83,.35);
+  border-color: transparent;
+}
+.auth-dd-logout { color: #d32f2f; }
+.auth-dd-logout .auth-dd-icon { color: #d32f2f; background: #fff3f3; border-color: rgba(211,47,47,.12); }
+.auth-dd-logout:hover { background: #fff3f3; transform: translateX(3px); }
+.auth-dd-logout:hover .auth-dd-icon { background: #d32f2f; color: #fff; box-shadow: 0 3px 10px rgba(211,47,47,.3); border-color: transparent; }
 
 .nav-cta {
   display: inline-flex;
