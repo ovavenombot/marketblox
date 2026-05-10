@@ -1173,23 +1173,29 @@ body {
   background: linear-gradient(135deg, #ff9800, #f44336);
   color: #fff;
   font-family: var(--font-display);
-  font-size: .58rem;
+  font-size: .56rem;
   font-weight: 900;
-  letter-spacing: .06em;
-  padding: 3px 8px;
+  letter-spacing: .04em;
+  padding: 3px 7px;
   border-radius: 20px;
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(244,67,54,.35);
   flex-shrink: 0;
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bs-game-tag {
-  font-size: .58rem;
+  font-size: .56rem;
   font-weight: 800;
-  padding: 3px 8px;
+  padding: 3px 7px;
   border-radius: 20px;
   white-space: nowrap;
   flex-shrink: 0;
+  max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tag-sab    { background: rgba(0,200,83,.12);  color: #00894a; border: 1px solid rgba(0,200,83,.2); }
 .tag-bf     { background: rgba(255,125,50,.12); color: #c05a00; border: 1px solid rgba(255,125,50,.2); }

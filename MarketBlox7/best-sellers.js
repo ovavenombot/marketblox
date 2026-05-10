@@ -41,7 +41,6 @@ export async function trackPurchases(productIds) {
 function renderCard(p, rank) {
   const gm      = GAME_META[p.game] || GAME_META['Steal A Brainrot'];
   const isBest  = rank <= 3;
-  const rankIcons = ['🥇','🥈','🥉'];
   const priceStr = typeof MB_CURRENCY !== 'undefined'
     ? MB_CURRENCY.formatPrice(p.priceNum)
     : p.price;
@@ -51,7 +50,7 @@ function renderCard(p, rank) {
          onclick="window.location='product.html?id=${p.id}'">
       <div class="bs-card-shine"></div>
       <div class="bs-card-top">
-        ${isBest ? `<div class="bs-badge">${rankIcons[rank-1]} BEST SELLER</div>` : '<div></div>'}
+        ${isBest ? `<div class="bs-badge">⭐ BEST SELLER</div>` : '<div></div>'}
         <div class="bs-game-tag ${gm.cls}">${gm.label}</div>
       </div>
       <div class="bs-img-wrap">
