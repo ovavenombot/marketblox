@@ -15,6 +15,12 @@
   status = 200
 
 [[redirects]]
+  from = "/*.html"
+  to = "/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/:page"
   to = "/:page.html"
   status = 200
