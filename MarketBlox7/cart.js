@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 //   MARKETBLOX — CART DRAWER JS
 // ================================
 
@@ -154,7 +154,7 @@ async function drawerCheckout() {
     return;
   }
   if (cart.length === 0) return;
-  window.location.href = 'checkout.html';
+  window.location.href = 'checkout';
 }
 
 function showToast(msg) {

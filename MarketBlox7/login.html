@@ -20,7 +20,7 @@
 </head>
 <body class="auth-body">
 
-  <a href="index.html" class="auth-logo">
+  <a href="/" class="auth-logo">
     <svg width="30" height="30" viewBox="0 0 28 28" fill="none">
       <rect width="28" height="28" rx="8" fill="#00c853"/>
       <rect x="6" y="6" width="7" height="7" rx="2" fill="white"/>
@@ -61,7 +61,7 @@
     </form>
 
     <div class="auth-bottom">
-      Don't have an account? <a href="register.html" class="auth-link">Register</a>
+      Don't have an account? <a href="register" class="auth-link">Register</a>
     </div>
   </div>
 
@@ -82,7 +82,7 @@
     const auth = getAuth(app);
 
     onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) window.location.href = 'account.html';
+      if (user && user.emailVerified) window.location.href = 'account';
     });
 
     window.handleLogin = async (e) => {
@@ -107,7 +107,7 @@
           setLoading(btn, 'loginBtnText', 'loginSpinner', false);
           return;
         }
-        window.location.href = 'account.html';
+        window.location.href = 'account';
       } catch (ex) {
         err.textContent = friendlyError(ex.code);
         setLoading(btn, 'loginBtnText', 'loginSpinner', false);

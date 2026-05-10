@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+﻿const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
@@ -33,7 +33,7 @@ exports.handler = async (event) => {
         quantity: 1,
       }],
       mode: 'payment',
-      success_url: `${process.env.URL}/account.html?topup=success&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.URL}/account?topup=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.URL}/account.html`,
       customer_email: userEmail || undefined,
       metadata: {

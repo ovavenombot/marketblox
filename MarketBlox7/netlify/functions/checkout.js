@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+﻿const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
   // Only allow POST
@@ -39,7 +39,7 @@ exports.handler = async (event) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${process.env.URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.URL}/`,
       customer_email: customerEmail || undefined,
       metadata: {

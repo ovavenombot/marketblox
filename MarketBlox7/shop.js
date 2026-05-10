@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 //   MARKETBLOX — GAME SHOP PAGE
 // ================================
 
@@ -49,7 +49,7 @@ function renderShopGrid() {
   }
 
   grid.innerHTML = products.map((p, i) => `
-    <div class="product-card" data-aos onclick="window.location='product.html?id=${p.id}'">
+    <div class="product-card" data-aos onclick="window.location='product?id=${p.id}'">
       <div class="product-img">
         ${p.img
           ? `<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=ef>${p.emoji}</div>'"/>`
@@ -60,7 +60,7 @@ function renderShopGrid() {
         <div class="product-price" data-usd="${p.priceNum}">${p.price}</div>
       </div>
       <div class="card-btns">
-        <a href="product.html?id=${p.id}" class="product-btn-buy">⚡ BUY NOW</a>
+        <a href="product?id=${p.id}" class="product-btn-buy">⚡ BUY NOW</a>
         <button class="product-btn-cart" onclick="addToCart('${p.id}');event.stopPropagation()">Add to Cart</button>
       </div>
     </div>

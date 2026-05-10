@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 //   MARKETBLOX — PRODUCT PAGE JS
 // ================================
 
@@ -605,7 +605,7 @@ function showSuccess() {
 function closeSuccess() {
   document.getElementById('successModal').classList.remove('open');
   document.body.style.overflow = '';
-  window.location.href = 'index.html';
+  window.location.href = '/';
 }
 
 // Close modals on overlay click

@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 //   MARKETBLOX — AI CHAT WIDGET
 // ================================
 
@@ -73,46 +73,46 @@ REFUNDS: Refunds are handled on a case-by-case basis. Contact support on Discord
 PRODUCT LINKS (use these exact links — never make up URLs):
 
 🧠 Steal A Brainrot:
-- Los Mobilis $3.67 → product.html?id=los-mobilis
-- 67 $3.99 → product.html?id=67
-- Celestial Pegasus $29.99 → product.html?id=celestial-pegasus
-- Tic Tac Sahur $14.99 → product.html?id=tic-tac-sahur
-- Esok Sekolah $4.99 → product.html?id=esok-sekolah
-- Hydra Dragon Cannelloni $82.99 → product.html?id=hydra-dragon
-- Cursed Burguru & Fryuru $149.99 → product.html?id=cursed-burguru
-- Money Money Puggy $5.99 → product.html?id=money-puggy
-- Sigma Cat $12.99 → product.html?id=sigma-cat
+- Los Mobilis $3.67 → product?id=los-mobilis
+- 67 $3.99 → product?id=67
+- Celestial Pegasus $29.99 → product?id=celestial-pegasus
+- Tic Tac Sahur $14.99 → product?id=tic-tac-sahur
+- Esok Sekolah $4.99 → product?id=esok-sekolah
+- Hydra Dragon Cannelloni $82.99 → product?id=hydra-dragon
+- Cursed Burguru & Fryuru $149.99 → product?id=cursed-burguru
+- Money Money Puggy $5.99 → product?id=money-puggy
+- Sigma Cat $12.99 → product?id=sigma-cat
 
 🍎 Blox Fruits:
-- Permanent Dragon $30.99 → product.html?id=bf-permanent-dragon
-- Permanent Control $25.00 → product.html?id=bf-permanent-control
-- Permanent Kitsune $24.00 → product.html?id=bf-permanent-kitsune
-- Permanent Yeti $18.00 → product.html?id=bf-permanent-yeti
-- Permanent Tiger $17.00 → product.html?id=bf-permanent-tiger
-- Permanent Dough $15.00 → product.html?id=bf-permanent-dough
-- Permanent Mammoth $13.75 → product.html?id=bf-permanent-mammoth
-- Permanent Spirit $13.75 → product.html?id=bf-permanent-spirit
-- Permanent Gas $13.50 → product.html?id=bf-permanent-gas
-- Permanent Venom $13.25 → product.html?id=bf-permanent-venom
-- Permanent T-Rex $12.75 → product.html?id=bf-permanent-t-rex
-- Permanent Portal $11.00 → product.html?id=bf-permanent-portal
-- Permanent Creation $9.75 → product.html?id=bf-permanent-creation
-- Permanent Buddha $8.50 → product.html?id=bf-permanent-buddha
+- Permanent Dragon $30.99 → product?id=bf-permanent-dragon
+- Permanent Control $25.00 → product?id=bf-permanent-control
+- Permanent Kitsune $24.00 → product?id=bf-permanent-kitsune
+- Permanent Yeti $18.00 → product?id=bf-permanent-yeti
+- Permanent Tiger $17.00 → product?id=bf-permanent-tiger
+- Permanent Dough $15.00 → product?id=bf-permanent-dough
+- Permanent Mammoth $13.75 → product?id=bf-permanent-mammoth
+- Permanent Spirit $13.75 → product?id=bf-permanent-spirit
+- Permanent Gas $13.50 → product?id=bf-permanent-gas
+- Permanent Venom $13.25 → product?id=bf-permanent-venom
+- Permanent T-Rex $12.75 → product?id=bf-permanent-t-rex
+- Permanent Portal $11.00 → product?id=bf-permanent-portal
+- Permanent Creation $9.75 → product?id=bf-permanent-creation
+- Permanent Buddha $8.50 → product?id=bf-permanent-buddha
 
 ⚔️ Rivals:
-- Legendary Key Bundle [x1.1k] $33.67 → product.html?id=rivals-legendary-key
-- Ultra Key Bundle [x450] $15.67 → product.html?id=rivals-ultra-key
-- Heavy Duty Bundle $13.99 → product.html?id=rivals-heavy-duty
-- Classic Bundle $8.49 → product.html?id=rivals-classic-bundle
-- +10 Season Pass Level $7.49 → product.html?id=rivals-season-pass-level
-- Pixel Bundle $6.99 → product.html?id=rivals-pixel-bundle
-- Skin Case 1 [x3] $5.89 → product.html?id=rivals-skin-case-1
-- Skin Case 2 [x3] $5.69 → product.html?id=rivals-skin-case-2
-- Skin Case 3 [x3] $5.69 → product.html?id=rivals-skin-case-3
-- ExoGun Bundle $4.99 → product.html?id=rivals-exogun-bundle
-- Prime Season Pass $4.99 → product.html?id=rivals-prime-season-pass
-- Medkit Bundle $1.99 → product.html?id=rivals-medkit-bundle
-- RPG Bundle $0.99 → product.html?id=rivals-rpg-bundle
+- Legendary Key Bundle [x1.1k] $33.67 → product?id=rivals-legendary-key
+- Ultra Key Bundle [x450] $15.67 → product?id=rivals-ultra-key
+- Heavy Duty Bundle $13.99 → product?id=rivals-heavy-duty
+- Classic Bundle $8.49 → product?id=rivals-classic-bundle
+- +10 Season Pass Level $7.49 → product?id=rivals-season-pass-level
+- Pixel Bundle $6.99 → product?id=rivals-pixel-bundle
+- Skin Case 1 [x3] $5.89 → product?id=rivals-skin-case-1
+- Skin Case 2 [x3] $5.69 → product?id=rivals-skin-case-2
+- Skin Case 3 [x3] $5.69 → product?id=rivals-skin-case-3
+- ExoGun Bundle $4.99 → product?id=rivals-exogun-bundle
+- Prime Season Pass $4.99 → product?id=rivals-prime-season-pass
+- Medkit Bundle $1.99 → product?id=rivals-medkit-bundle
+- RPG Bundle $0.99 → product?id=rivals-rpg-bundle
 
 STRICT RULES — NEVER BREAK:
 - NEVER say an item was delivered, sent, or added to cart — you cannot do this, only the website can
@@ -120,7 +120,7 @@ STRICT RULES — NEVER BREAK:
 - NEVER make up URLs — only use the exact product.html links listed above
 - NEVER link to any external site (no petmart.fun, shoplox.fun, or any other domain)
 - If a user says they paid, tell them: "Join our Discord and open a support ticket with your Roblox username and order ID. We'll deliver within minutes! 💬"
-- When listing products, always format as: "• Name — $X.XX → [Buy here](product.html?id=ID)"
+- When listing products, always format as: "• Name — $X.XX → [Buy here](product?id=ID)"
 - Be friendly, concise, use emojis occasionally
 - Answer in the same language the user writes in
 - Keep responses short (2-4 sentences unless listing products)`;

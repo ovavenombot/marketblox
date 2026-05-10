@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 //   MARKETBLOX — BEST SELLERS
 // ================================
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
@@ -47,7 +47,7 @@ function renderCard(p, rank) {
 
   return `
     <div class="bs-card${isBest ? ' bs-card--top' : ''}" data-id="${p.id}"
-         onclick="window.location='product.html?id=${p.id}'">
+         onclick="window.location='product?id=${p.id}'">
       <div class="bs-card-shine"></div>
       <div class="bs-card-top">
         ${isBest ? `<div class="bs-badge">⭐ BEST SELLER</div>` : '<div></div>'}
@@ -64,7 +64,7 @@ function renderCard(p, rank) {
         <div class="bs-price" data-usd="${p.priceNum}">${priceStr}</div>
       </div>
       <div class="bs-btns">
-        <a href="product.html?id=${p.id}" class="bs-btn-buy" onclick="event.stopPropagation()">⚡ BUY NOW</a>
+        <a href="product?id=${p.id}" class="bs-btn-buy" onclick="event.stopPropagation()">⚡ BUY NOW</a>
         <button class="bs-btn-cart" onclick="addToCart('${p.id}');event.stopPropagation()">Add to Cart</button>
       </div>
     </div>`;

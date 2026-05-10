@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 //   MARKETBLOX — CHECKOUT PAGE JS
 // ================================
 
@@ -12,7 +12,7 @@ let discordUsername = localStorage.getItem('mb_discord_username') || null;
 
 function init() {
   if (cart.length === 0) {
-    window.location.href = 'index.html';
+    window.location.href = '/';
     return;
   }
   renderItems();

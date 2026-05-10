@@ -1,4 +1,4 @@
-// Runs on every page — updates the navbar Login/Account button
+﻿// Runs on every page — updates the navbar Login/Account button
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
@@ -32,13 +32,13 @@ onAuthStateChanged(auth, (user) => {
           </div>
         </div>
         <div class="auth-dd-divider"></div>
-        <a href="account.html" class="auth-dd-item">
+        <a href="account" class="auth-dd-item">
           <span class="auth-dd-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </span>
           Profile
         </a>
-        <a href="account.html" class="auth-dd-item">
+        <a href="account" class="auth-dd-item">
           <span class="auth-dd-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
           </span>
@@ -54,7 +54,7 @@ onAuthStateChanged(auth, (user) => {
 
       document.getElementById('authLogoutBtn')?.addEventListener('click', async () => {
         await signOut(auth);
-        window.location.href = 'login.html';
+        window.location.href = 'login';
       });
     }
 
