@@ -457,8 +457,21 @@ body {
 .mobile-divider { height: 1px; background: var(--border); margin: 0.25rem 0; }
 
 @media (max-width: 800px) {
-  .nav-center, .nav-right { display: none; }
+  .nav-center { display: none; }
+  .nav-right { display: none; }
   .hamburger { display: flex; }
+}
+
+/* On product/shop pages without hamburger, show cart in nav-right on mobile */
+@media (max-width: 800px) {
+  .nav-right.show-mobile-cart {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .nav-right.show-mobile-cart .nav-link,
+  .nav-right.show-mobile-cart .nav-cta,
+  .nav-right.show-mobile-cart #currencyPickerSlot { display: none; }
+  .nav-right.show-mobile-cart .cart-nav-btn { display: flex; }
 }
 
 /* ===================== HERO ===================== */

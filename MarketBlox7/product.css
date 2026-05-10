@@ -961,3 +961,127 @@
   flex-wrap: wrap;
 }
 
+/* ===================== MOBILE OVERHAUL ===================== */
+@media (max-width: 640px) {
+
+  /* Fix: remove sticky from gallery on mobile — it freezes the image */
+  .product-gallery {
+    position: static !important;
+  }
+
+  .product-main {
+    padding: 1.25rem 0 7rem; /* bottom pad for sticky bar */
+  }
+
+  .product-layout {
+    gap: 1.25rem;
+  }
+
+  /* Smaller, cleaner image */
+  .main-image-wrap {
+    border-radius: 18px;
+    max-width: 320px;
+    margin: 0 auto 0.875rem;
+    aspect-ratio: 1;
+  }
+
+  /* Trust row: 2 columns on mobile */
+  .trust-row {
+    max-width: 320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  .trust-item-sm {
+    font-size: .68rem;
+    padding: 0.5rem 0.4rem;
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  /* Product info tighter */
+  .product-info-panel { padding-top: 0; }
+
+  .prod-name {
+    font-size: clamp(1.4rem, 6vw, 1.9rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .prod-price { font-size: 1.65rem; }
+
+  .prod-features {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .feat-title { font-size: .8rem; }
+  .feat-sub   { font-size: .7rem; }
+
+  /* How it works: stack vertically */
+  .how-steps-row {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+  .how-step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+  }
+  .how-num { margin: 0; flex-shrink: 0; }
+  .how-icon { font-size: 1.2rem; margin: 0; flex-shrink: 0; }
+  .how-text { font-size: .8rem; margin: 0; }
+  .how-sub  { display: none; }
+
+  /* Hide inline buy buttons on mobile — replaced by sticky bar */
+  .buy-actions { display: none; }
+
+  /* Sticky bottom buy bar */
+  .mobile-buy-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 1500;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    gap: 0.6rem;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+  }
+  .mobile-buy-bar .add-cart-btn,
+  .mobile-buy-bar .checkout-now-btn {
+    flex: 1;
+    padding: 0.85rem 0.5rem;
+    font-size: .85rem;
+    border-radius: 12px;
+  }
+
+  /* Cart toast above sticky bar */
+  .cart-toast { bottom: 5.5rem; }
+
+  /* Breadcrumb smaller */
+  .breadcrumb { font-size: .78rem; padding: 0.5rem 0; }
+
+  /* Checkout modal full-screen on mobile */
+  .checkout-modal {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-height: 92vh;
+    transform: translateY(100%);
+  }
+  .modal-overlay { align-items: flex-end; }
+  .modal-overlay.open .checkout-modal { transform: translateY(0); }
+}
+
+/* Show mobile bar only on mobile */
+.mobile-buy-bar { display: none; }
+
