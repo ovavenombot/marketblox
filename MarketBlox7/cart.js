@@ -198,7 +198,7 @@ function renderSuggestions(currentId) {
       </div>
       <div class="suggestion-info">
         <div class="suggestion-name">${p.name}</div>
-        <div class="suggestion-price">${p.price}</div>
+        <div class="suggestion-price" data-usd="${p.priceNum}">${typeof MB_CURRENCY !== 'undefined' ? MB_CURRENCY.formatPrice(p.priceNum) : p.price}</div>
       </div>
     </div>
   `).join('');

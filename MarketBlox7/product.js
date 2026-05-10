@@ -465,11 +465,18 @@ document.getElementById('bc-name').textContent = product.name;
 document.getElementById('bc-game').textContent = product.game;
 document.getElementById('prod-name').textContent = product.name;
 document.getElementById('prod-game').textContent = product.game;
-document.getElementById('prod-price').textContent = product.price;
+const _fmt = (n) => typeof MB_CURRENCY !== 'undefined' ? MB_CURRENCY.formatPrice(n) : product.price;
+const prodPriceEl = document.getElementById('prod-price');
+prodPriceEl.textContent = _fmt(product.priceNum);
+prodPriceEl.dataset.usd = product.priceNum;
 document.getElementById('prod-badge').textContent = product.badge;
 document.getElementById('order-name').textContent = product.name;
-document.getElementById('order-price').textContent = product.price;
-document.getElementById('order-total-price').textContent = product.price;
+const orderPriceEl = document.getElementById('order-price');
+orderPriceEl.textContent = _fmt(product.priceNum);
+orderPriceEl.dataset.usd = product.priceNum;
+const orderTotalEl = document.getElementById('order-total-price');
+orderTotalEl.textContent = _fmt(product.priceNum);
+orderTotalEl.dataset.usd = product.priceNum;
 
 // Original price & discount
 if (product.original) {
