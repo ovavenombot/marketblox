@@ -137,8 +137,8 @@
   </main>
 
   <!-- TOPUP MODAL -->
-  <div class="topup-overlay" id="topupOverlay" onclick="closeTopup()"></div>
-  <div class="topup-modal" id="topupModal">
+  <div class="topup-overlay" id="topupOverlay" onclick="closeTopup()">
+  <div class="topup-modal" id="topupModal" onclick="event.stopPropagation()">
     <button class="topup-close-btn" onclick="closeTopup()">✕</button>
     <h3>Deposit Funds</h3>
     <p class="topup-hint">Add credit to your MarketBlox wallet. Paid securely via Stripe.</p>
@@ -154,6 +154,7 @@
       <span id="topupPayText">Pay & Add Funds</span>
       <span class="auth-spinner" id="topupSpinner"></span>
     </button>
+  </div>
   </div>
 
   <script src="firebase-config.js"></script>
@@ -360,8 +361,7 @@
     });
 
     window.openTopup  = () => {
-      document.getElementById('topupOverlay').style.display = 'block';
-      document.getElementById('topupModal').style.display   = 'block';
+      document.getElementById('topupOverlay').style.display = 'flex';
       document.getElementById('topupErr').textContent = '';
       document.getElementById('topupCustom').value = '';
       selectedAmt = null;
@@ -369,7 +369,6 @@
     };
     window.closeTopup = () => {
       document.getElementById('topupOverlay').style.display = 'none';
-      document.getElementById('topupModal').style.display   = 'none';
     };
     window.selectAmt = (amt) => {
       selectedAmt = amt;
