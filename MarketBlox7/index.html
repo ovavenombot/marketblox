@@ -50,36 +50,23 @@
         <div class="dropdown-menu">
           <div class="dropdown-label">CHOOSE A GAME</div>
           <a href="shop?game=sab" class="dropdown-item">
-           <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
-            <div class="di-info">
-              <span class="di-name">Steal A Brainrot</span>
-              <span class="di-count">12 items</span>
-            </div>
-            <span class="di-arrow">→</span>
+            <span class="di-img-wrap"><img src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" class="di-img" alt="SAB"/></span>
+            <span class="di-name">Steal A Brainrot</span>
+            <svg class="di-arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a class="dropdown-item" style="opacity:0.5;pointer-events:none;cursor:default">
-            <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
-            <div class="di-info">
-              <span class="di-name">Sailor Piece</span>
-              <span class="di-count">Coming soon</span>
-            </div>
-            <span class="di-arrow">→</span>
+          <a class="dropdown-item di-coming-soon">
+            <span class="di-img-wrap"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" class="di-img" alt="GPO"/></span>
+            <span class="di-name">Sailor Piece <span class="di-soon-badge">Soon</span></span>
           </a>
           <a href="shop?game=bf" class="dropdown-item">
-            <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
-            <div class="di-info">
-              <span class="di-name">Blox Fruits</span>
-              <span class="di-count">14 items</span>
-            </div>
-            <span class="di-arrow">→</span>
+            <span class="di-img-wrap"><img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" class="di-img" alt="BF"/></span>
+            <span class="di-name">Blox Fruits</span>
+            <svg class="di-arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
           <a href="shop?game=rivals" class="dropdown-item">
-            <span class="di-emoji" style="display:flex;align-items:center;flex-shrink:0;"><img src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" style="width:36px;height:36px;border-radius:8px;object-fit:cover;"/></span>
-            <div class="di-info">
-              <span class="di-name">Rivals</span>
-              <span class="di-count">13 items</span>
-            </div>
-            <span class="di-arrow">→</span>
+            <span class="di-img-wrap"><img src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" class="di-img" alt="Rivals"/></span>
+            <span class="di-name">Rivals</span>
+            <svg class="di-arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         </div>
       </div>
@@ -180,7 +167,7 @@
             <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" alt="Steal A Brainrot"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Steal A Brainrot</div>
-              <div class="hgc-price">From <b>$1.99</b></div>
+              <div class="hgc-price">From <b id="hgc-price-sab" data-usd="2.13">$2.13</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
@@ -196,7 +183,7 @@
             <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" alt="Blox Fruits"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Blox Fruits</div>
-              <div class="hgc-price">From <b>$8.50</b></div>
+              <div class="hgc-price">From <b id="hgc-price-bf" data-usd="8.50">$8.50</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
@@ -204,7 +191,7 @@
             <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" alt="Rivals"/></div>
             <div class="hgc-info">
               <div class="hgc-name">Rivals</div>
-              <div class="hgc-price">From <b>$0.99</b></div>
+              <div class="hgc-price">From <b id="hgc-price-rivals" data-usd="0.99">$0.99</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
@@ -990,6 +977,21 @@
   <script src="script.js"></script>
   <script src="currency.js"></script>
   <script src="cart.js?v=2"></script>
+  <script>
+  (function(){
+    var games = { sab:'Steal A Brainrot', bf:'Blox Fruits', rivals:'Rivals' };
+    Object.keys(games).forEach(function(key){
+      var items = CATALOGUE.filter(function(p){ return p.game === games[key] && p.priceNum > 0; });
+      if (!items.length) return;
+      var min = Math.min.apply(null, items.map(function(p){ return p.priceNum; }));
+      var el = document.getElementById('hgc-price-' + key);
+      if (el && isFinite(min)) {
+        el.dataset.usd = min;
+        el.textContent = (typeof MB_CURRENCY !== 'undefined') ? MB_CURRENCY.formatPrice(min) : '$' + min.toFixed(2);
+      }
+    });
+  })();
+  </script>
   <link rel="stylesheet" href="chat.css"/>
   <script src="chat.js"></script>
   <script src="firebase-config.js"></script>
