@@ -153,10 +153,25 @@ function buildFilterUI() {
     if (inp) {
       inp.addEventListener('input', e => {
         searchQuery = e.target.value;
-        buildFilterUI();
+        // Toggle clear button without rebuilding the entire UI
+        const wrap = inp.parentElement;
+        let clrBtn = document.getElementById('shopSearchClear');
+        if (searchQuery && !clrBtn) {
+          clrBtn = document.createElement('button');
+          clrBtn.className = 'shop-search-clear';
+          clrBtn.id = 'shopSearchClear';
+          clrBtn.textContent = '✕';
+          wrap.appendChild(clrBtn);
+          clrBtn.addEventListener('click', () => {
+            searchQuery = '';
+            buildFilterUI();
+            renderShopGrid();
+          });
+        } else if (!searchQuery && clrBtn) {
+          clrBtn.remove();
+        }
         renderShopGrid();
       });
-      inp.focus();
     }
 
     const clr = document.getElementById('shopSearchClear');
