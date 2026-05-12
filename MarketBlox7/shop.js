@@ -190,12 +190,7 @@ function getFilteredProducts() {
 
 // ── Card renderer ──────────────────────────────────────────────────
 function cardHTML(p) {
-  const catLabel = {
-    bs: 'Best Sellers', new: 'New', bundles: 'Bundle',
-    cyber: 'Cyber', divine: 'Divine', index: 'Index', op: 'OP'
-  }[p.category] || '';
-
-  const badge = catLabel ? `<div class="pc-badge pc-badge-${p.category}">${catLabel}</div>` : '';
+  const badge = '';
 
   const img = p.img
     ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=pc-emoji>${p.emoji}</div>'"/>`
