@@ -240,6 +240,30 @@ body {
   gap: 0.5rem;
   justify-self: end;
 }
+/* 3D NAV ICONS */
+@keyframes ni-float {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  50%      { transform: translateY(-4px) rotate(-4deg); }
+}
+@keyframes ni-float-sup {
+  0%,100% { transform: translateY(0px) scale(1); }
+  50%      { transform: translateY(-4px) scale(1.06); }
+}
+.ni-wrap {
+  display: inline-block;
+  vertical-align: -6px;
+  margin-right: 5px;
+  filter: drop-shadow(0 3px 7px rgba(0,200,83,.55));
+  transition: filter 0.2s;
+}
+.ni-tut-wrap { animation: ni-float 2.8s ease-in-out infinite; }
+.ni-sup-wrap { animation: ni-float-sup 2.4s ease-in-out infinite; animation-delay: 0.5s; }
+.ni-svg { display: block; }
+.nav-link:hover .ni-wrap {
+  filter: drop-shadow(0 6px 14px rgba(0,200,83,.75));
+  animation-duration: 0.45s;
+}
+
 .nav-link {
   color: var(--text2);
   text-decoration: none;
@@ -247,6 +271,8 @@ body {
   font-weight: 700;
   transition: color 0.2s;
   position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 .nav-link::after {
   content: '';
