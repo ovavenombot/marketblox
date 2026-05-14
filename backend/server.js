@@ -24,15 +24,17 @@ const REDIRECT_URI       = `${process.env.BACKEND_URL}/api/discord/callback`;
 
 app.post('/api/create-checkout', async (req, res) => {
   try {
-    const { items, robloxUsername, email, discordId, discordUsername } = req.body;
+    const { items, robloxUsername, email, discordId, discordUsername, promoCode, discountAmt } = req.body;
 
     if (!items?.length || !robloxUsername || !email) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const subtotal = items.reduce((s, i) => s + i.priceNum * i.qty, 0);
-    const fee      = subtotal * FEE_RATE;
-    const orderId  = uuidv4();
+    const subtotal   = items.reduce((s, i) => s + i.priceNum * i.qty, 0);
+    const discount   = Math.min(parseFloat(discountAmt) || 0, subtotal);
+    const discounted = subtotal - discount;
+    const fee        = discounted * FEE_RATE;
+    const orderId    = uuidv4();
 
     const lineItems = items.map(item => ({
       price_data: {
@@ -42,6 +44,18 @@ app.post('/api/create-checkout', async (req, res) => {
       },
       quantity: item.qty,
     }));
+
+    // Discount as negative line item
+    if (discount > 0) {
+      lineItems.push({
+        price_data: {
+          currency:     'usd',
+          product_data: { name: `Discount (${promoCode || 'CODE'})` },
+          unit_amount:  -Math.round(discount * 100),
+        },
+        quantity: 1,
+      });
+    }
 
     // Processing fee as separate line item
     lineItems.push({
@@ -67,6 +81,7 @@ app.post('/api/create-checkout', async (req, res) => {
         discordId:       discordId       || '',
         discordUsername: discordUsername || '',
         items:           JSON.stringify(slimItems),
+        promoCode:       promoCode       || '',
       },
       success_url: `${process.env.SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.SITE_URL}/checkout.html`,
@@ -84,9 +99,9 @@ app.post('/api/create-checkout', async (req, res) => {
       robloxUsername,
       email,
       JSON.stringify(items),
-      subtotal,
+      discounted,
       fee,
-      subtotal + fee,
+      discounted + fee,
       session.id,
     );
 
@@ -166,7 +181,20 @@ app.post('/api/stripe-webhook', async (req, res) => {
 
   if (event.type === 'checkout.session.completed') {
     const session  = event.data.object;
-    const { orderId, robloxUsername, discordId, discordUsername, items } = session.metadata;
+    const { orderId, robloxUsername, discordId, discordUsername, items, promoCode } = session.metadata;
+
+    // Increment promo code usage after confirmed payment
+    if (promoCode) {
+      const FB_PROJECT = 'marketblox-ed6a3';
+      fetch(`https://firestore.googleapis.com/v1/projects/${FB_PROJECT}/databases/(default)/documents:commit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ writes: [{ transform: {
+          document: `projects/${FB_PROJECT}/databases/(default)/documents/promoCodes/${promoCode}`,
+          fieldTransforms: [{ fieldPath: 'usedCount', increment: { integerValue: '1' } }]
+        }}]})
+      }).catch(err => console.error('Promo usedCount increment failed:', err));
+    }
 
     db.prepare(`UPDATE orders SET status='paid', updated_at=datetime('now') WHERE uuid=?`).run(orderId);
 

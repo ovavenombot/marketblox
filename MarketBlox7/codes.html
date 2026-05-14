@@ -185,14 +185,20 @@
   import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-  const ADMIN_PASSWORD = 'marketblox2026';
+  const ADMIN_HASH = '25c0ec62d83aa6a3ec9d778ece9211fe61880ef34d2f79ffbd88999acb798a8a';
   const app = getApps().length ? getApps()[0] : initializeApp(window.FIREBASE_CONFIG);
   const db  = getFirestore(app);
 
+  async function hashPw(pw) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
   // ── Auth ─────────────────────────────────────────────────────────────────────
-  window.unlock = function() {
-    const pw = document.getElementById('pwInput').value;
-    if (pw === ADMIN_PASSWORD) {
+  window.unlock = async function() {
+    const pw   = document.getElementById('pwInput').value;
+    const hash = await hashPw(pw);
+    if (hash === ADMIN_HASH) {
       sessionStorage.setItem('mbAdminAuth', '1');
       document.getElementById('lockScreen').style.display = 'none';
       document.getElementById('adminApp').style.display   = 'block';

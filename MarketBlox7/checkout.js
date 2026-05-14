@@ -133,16 +133,6 @@ async function applyPromo() {
     badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 20 20" fill="#00c853"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Code applied — ${discStr}`;
     promoWrap.appendChild(badge);
 
-    // Increment usedCount atomically
-    await fetch(`https://firestore.googleapis.com/v1/projects/${FB_PROJECT}/databases/(default)/documents:commit`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ writes: [{ transform: {
-        document: `projects/${FB_PROJECT}/databases/(default)/documents/promoCodes/${code}`,
-        fieldTransforms: [{ fieldPath: 'usedCount', increment: { integerValue: '1' } }]
-      }}]})
-    });
-
   } catch(e) {
     showFieldError('promoInput', 'Could not validate code. Try again.');
   } finally {
@@ -201,6 +191,13 @@ async function proceedToPayment() {
   btn.disabled = true;
 
   try {
+    const subtotal    = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+    const discountAmt = appliedPromo
+      ? (appliedPromo.type === 'percent'
+          ? subtotal * (appliedPromo.discount / 100)
+          : Math.min(appliedPromo.discount, subtotal))
+      : 0;
+
     const res = await fetch(`${BACKEND_URL}/api/create-checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -210,6 +207,8 @@ async function proceedToPayment() {
         email,
         discordId:       discordId       || null,
         discordUsername: discordUsername || null,
+        promoCode:       appliedPromo?.code  || null,
+        discountAmt:     discountAmt || 0,
       }),
     });
 
