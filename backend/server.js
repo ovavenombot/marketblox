@@ -61,7 +61,6 @@ app.post('/api/create-checkout', async (req, res) => {
       line_items: lineItems,
       mode:           'payment',
       customer_email: email,
-      currency_conversion: { enabled: true },
       metadata: {
         orderId,
         robloxUsername,
