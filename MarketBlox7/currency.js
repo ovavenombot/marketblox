@@ -138,6 +138,36 @@
       font-size: .65rem; font-weight: 900; flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0,200,83,.4);
     }
+
+    /* ── Mobile currency picker ── */
+    .cp-mob-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: .75rem 1rem;
+      background: rgba(0,200,83,.07); border: 1.5px solid rgba(0,200,83,.2);
+      border-radius: 12px; cursor: pointer; font-family: inherit;
+      font-size: .9rem; font-weight: 700; color: #1a3a20;
+      transition: background .15s;
+    }
+    .cp-mob-btn:hover { background: rgba(0,200,83,.13); }
+    .cp-mob-btn-left  { display: flex; align-items: center; gap: .5rem; }
+    .cp-mob-btn-right { display: flex; align-items: center; gap: .35rem; font-size: .75rem; font-weight: 600; color: #5a8a65; }
+    .cp-mob-arrow { transition: transform .25s; font-size: .7rem; }
+    .cp-mob-arrow.open { transform: rotate(180deg); }
+
+    .cp-mob-grid {
+      display: none; flex-wrap: wrap; gap: .4rem; padding: .6rem 0 .1rem;
+    }
+    .cp-mob-grid.open { display: flex; }
+    .cp-mob-opt {
+      display: flex; align-items: center; gap: .35rem;
+      padding: .45rem .7rem; border-radius: 10px;
+      border: 1.5px solid #e5eae8; background: #fff;
+      cursor: pointer; font-family: inherit; font-size: .8rem; font-weight: 700;
+      color: #1a3a20; flex: 1; min-width: 72px;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .cp-mob-opt:hover { border-color: #00c853; color: #00a846; }
+    .cp-mob-opt.active { background: #00c853; border-color: #00c853; color: #fff; }
   `;
   document.head.appendChild(style);
 
@@ -173,13 +203,57 @@
 
   function updateBtn() {
     const btn = document.getElementById('currencyPickerBtn');
-    if (!btn) return;
-    const cur = CURRENCIES[current];
-    btn.querySelector('.cp-flag').textContent = cur.flag;
-    btn.querySelector('.cp-code').textContent = current;
-    document.querySelectorAll('.cp-option').forEach(o => {
+    if (btn) {
+      const cur = CURRENCIES[current];
+      btn.querySelector('.cp-flag').textContent = cur.flag;
+      btn.querySelector('.cp-code').textContent = current;
+      document.querySelectorAll('.cp-option').forEach(o => {
+        o.classList.toggle('active', o.dataset.code === current);
+      });
+    }
+    // Update mobile picker
+    const mobFlag = document.getElementById('cpMobFlag');
+    const mobCode = document.getElementById('cpMobCode');
+    if (mobFlag) mobFlag.textContent = CURRENCIES[current].flag;
+    if (mobCode) mobCode.textContent = current;
+    document.querySelectorAll('.cp-mob-opt').forEach(o => {
       o.classList.toggle('active', o.dataset.code === current);
     });
+  }
+
+  function toggleMobile() {
+    const grid  = document.getElementById('cpMobGrid');
+    const arrow = document.getElementById('cpMobArrow');
+    if (!grid) return;
+    grid.classList.toggle('open');
+    if (arrow) arrow.classList.toggle('open', grid.classList.contains('open'));
+  }
+
+  function injectMobile() {
+    const slot = document.getElementById('mobileCurrencySlot');
+    if (!slot) return;
+    const cur = CURRENCIES[current];
+    slot.innerHTML = `
+      <div>
+        <button class="cp-mob-btn" onclick="window.MB_CURRENCY.toggleMobile()">
+          <span class="cp-mob-btn-left">
+            <span id="cpMobFlag">${cur.flag}</span>
+            <span id="cpMobCode">${current}</span>
+          </span>
+          <span class="cp-mob-btn-right">
+            Change currency
+            <span class="cp-mob-arrow" id="cpMobArrow">▼</span>
+          </span>
+        </button>
+        <div class="cp-mob-grid" id="cpMobGrid">
+          ${Object.entries(CURRENCIES).map(([code, c]) => `
+            <button class="cp-mob-opt${code === current ? ' active' : ''}" data-code="${code}"
+              onclick="window.MB_CURRENCY.set('${code}');window.MB_CURRENCY.toggleMobile()">
+              <span>${c.flag}</span><span>${code}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>`;
   }
 
   function set(code) {
@@ -244,12 +318,13 @@
 
   async function init() {
     inject();
+    injectMobile();
     applyToAll();
     await fetchRates();
     applyToAll();
   }
 
-  window.MB_CURRENCY = { init, set, toggle, formatPrice, get current() { return current; } };
+  window.MB_CURRENCY = { init, set, toggle, toggleMobile, formatPrice, get current() { return current; } };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
