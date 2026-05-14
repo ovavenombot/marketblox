@@ -114,15 +114,43 @@
 
   <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="shop?game=sab">Steal A Brainrot</a>
-    <a href="shop.html?game=gpo">Sailor Piece</a>
-    <a href="shop?game=bf">Blox Fruits</a>
-    <a href="shop?game=rivals">Rivals</a>
+    <div class="mm-header">
+      <a href="/" class="logo" onclick="closeMobile()">
+        <div class="logo-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#00c853"/><rect x="6" y="6" width="7" height="7" rx="2" fill="white"/><rect x="15" y="6" width="7" height="7" rx="2" fill="white" opacity="0.6"/><rect x="6" y="15" width="7" height="7" rx="2" fill="white" opacity="0.6"/><rect x="15" y="15" width="7" height="7" rx="2" fill="white"/></svg></div>
+        <span>Market<b>Blox</b></span>
+      </a>
+      <button class="mm-close" onclick="closeMobile()" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <a href="account" class="mm-account-btn" onclick="closeMobile()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      My Account
+    </a>
+    <div class="mm-section-label">SHOP BY GAME</div>
+    <a href="shop?game=sab" class="mm-game-link" onclick="closeMobile()">
+      <img src="https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter" class="mm-game-thumb" alt="SAB"/>
+      <span class="mm-game-name">Steal A Brainrot</span>
+      <svg class="mm-game-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="shop.html?game=gpo" class="mm-game-link" onclick="closeMobile()">
+      <img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" class="mm-game-thumb" alt="Sailor Piece"/>
+      <span class="mm-game-name">Sailor Piece</span>
+      <svg class="mm-game-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="shop?game=bf" class="mm-game-link" onclick="closeMobile()">
+      <img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" class="mm-game-thumb" alt="Blox Fruits"/>
+      <span class="mm-game-name">Blox Fruits</span>
+      <svg class="mm-game-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="shop?game=rivals" class="mm-game-link" onclick="closeMobile()">
+      <img src="https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter" class="mm-game-thumb" alt="Rivals"/>
+      <span class="mm-game-name">Rivals</span>
+      <svg class="mm-game-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
     <div class="mobile-divider"></div>
-    <a href="#support" onclick="closeMobile()">Support</a>
-    <a href="tutorial" onclick="closeMobile()">Tutorial</a>
+    <a href="#support" class="mm-link-row" onclick="closeMobile()">Support</a>
+    <a href="tutorial" class="mm-link-row" onclick="closeMobile()">Tutorial</a>
     <div class="mobile-divider"></div>
-    <div id="mobileCurrencySlot" style="padding:.25rem 0"></div>
+    <div id="mobileCurrencySlot" style="padding:.25rem 1rem .75rem"></div>
   </div>
 
   <!-- HERO -->
