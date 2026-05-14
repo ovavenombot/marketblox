@@ -45,18 +45,6 @@ app.post('/api/create-checkout', async (req, res) => {
       quantity: item.qty,
     }));
 
-    // Discount as negative line item
-    if (discount > 0) {
-      lineItems.push({
-        price_data: {
-          currency:     'usd',
-          product_data: { name: `Discount (${promoCode || 'CODE'})` },
-          unit_amount:  -Math.round(discount * 100),
-        },
-        quantity: 1,
-      });
-    }
-
     // Processing fee as separate line item
     lineItems.push({
       price_data: {
@@ -67,6 +55,17 @@ app.post('/api/create-checkout', async (req, res) => {
       quantity: 1,
     });
 
+    // Create a one-time Stripe coupon for the discount
+    let stripeCoupon = null;
+    if (discount > 0) {
+      stripeCoupon = await stripe.coupons.create({
+        amount_off: Math.round(discount * 100),
+        currency:   'usd',
+        duration:   'once',
+        name:       `Discount (${promoCode || 'CODE'})`,
+      });
+    }
+
     // Strip heavy fields (img, emoji) to stay under Stripe's 500-char metadata limit
     const slimItems = items.map(({ id, name, priceNum, qty, game }) => ({ id, name, priceNum, qty, game }));
 
@@ -75,6 +74,7 @@ app.post('/api/create-checkout', async (req, res) => {
       line_items: lineItems,
       mode:           'payment',
       customer_email: email,
+      ...(stripeCoupon ? { discounts: [{ coupon: stripeCoupon.id }] } : {}),
       metadata: {
         orderId,
         robloxUsername,
