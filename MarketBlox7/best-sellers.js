@@ -1,5 +1,5 @@
-﻿// ================================
-//   MARKETBLOX — BEST SELLERS
+// ================================
+//   MARKETBLOX — BEST SELLERS BY GAME
 // ================================
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getFirestore, collection, getDocs, doc, setDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -7,20 +7,18 @@ import { getFirestore, collection, getDocs, doc, setDoc, increment } from 'https
 const app = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
 const db  = getFirestore(app);
 
-const GAME_META = {
-  'Steal A Brainrot': { label: '🧠 Steal A Brainrot', cls: 'tag-sab',     color: '#00c853' },
-  'Blox Fruits':      { label: '🍎 Blox Fruits',       cls: 'tag-bf',      color: '#ff7d35' },
-  'Rivals':           { label: '⚔️ Rivals',            cls: 'tag-rivals',  color: '#7c3aed' },
-};
-
-// Default priority if no Firestore data yet
-const DEFAULT_ORDER = [
-  'celestial-pegasus', 'bf-permanent-dragon', 'rivals-legendary-key',
-  'hydra-dragon', 'bf-permanent-control', 'rivals-heavy-duty',
-  'bf-permanent-kitsune', 'rivals-ultra-key', 'bf-permanent-yeti',
-  'tic-tac-sahur', 'rivals-classic-bundle', 'rivals-skin-case-1',
+// ── Games config ──────────────────────────────────────────────────────────
+const GAMES = [
+  { id: 'sab',    name: 'Steal A Brainrot',  catalogueGame: 'Steal A Brainrot',  color: '#00c853', shopUrl: 'shop.html?game=sab',    thumb: 'https://tr.rbxcdn.com/180DAY-63cb108a7787e6f8d662cfee57d4ab51/768/432/Image/Webp/noFilter' },
+  { id: 'rivals', name: 'Rivals',            catalogueGame: 'Rivals',            color: '#7c3aed', shopUrl: 'shop.html?game=rivals', thumb: 'https://tr.rbxcdn.com/180DAY-36fd690cbf4077d15d6689d8eb3d5875/768/432/Image/Webp/noFilter' },
+  { id: 'bf',     name: 'Blox Fruits',       catalogueGame: 'Blox Fruits',       color: '#ff7d35', shopUrl: 'shop.html?game=bf',     thumb: 'https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter' },
+  { id: 'gpo',    name: 'Sailor Piece', catalogueGame: 'Sailor Piece', color: '#0ea5e9', shopUrl: 'shop.html?game=gpo',  thumb: 'https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter' },
 ];
 
+let activeGame  = GAMES[0].id;
+let allCounts   = {};
+
+// ── Fetch purchase counts from Firestore ──────────────────────────────────
 async function fetchCounts() {
   try {
     const snap = await getDocs(collection(db, 'product_stats'));
@@ -30,6 +28,7 @@ async function fetchCounts() {
   } catch { return {}; }
 }
 
+// ── Track purchases (called from success.html) ────────────────────────────
 export async function trackPurchases(productIds) {
   for (const id of productIds) {
     try {
@@ -38,88 +37,154 @@ export async function trackPurchases(productIds) {
   }
 }
 
-function renderCard(p, rank) {
-  const gm      = GAME_META[p.game] || GAME_META['Steal A Brainrot'];
-  const isBest  = rank <= 3;
+// ── Render game tabs ──────────────────────────────────────────────────────
+function renderTabs() {
+  const tabsEl = document.getElementById('bsGameTabs');
+  if (!tabsEl) return;
+
+  tabsEl.innerHTML = GAMES.map(g => `
+    <button class="bs-tab${g.id === activeGame ? ' active' : ''}"
+            data-game="${g.id}"
+            style="--tab-color:${g.color}"
+            onclick="window.__bsSwitchGame('${g.id}')">
+      <img class="bs-tab-thumb" src="${g.thumb}" alt="${g.name}" loading="lazy"/>
+      ${g.name}
+    </button>
+  `).join('');
+
+  // Tab scroll arrows
+  const wrap  = tabsEl.parentElement;
+  const left  = document.getElementById('bsNavLeft');
+  const right = document.getElementById('bsNavRight');
+  if (left)  left.onclick  = () => { wrap.scrollBy({ left: -200, behavior: 'smooth' }); };
+  if (right) right.onclick = () => { wrap.scrollBy({ left:  200, behavior: 'smooth' }); };
+}
+
+// ── Switch active game tab ────────────────────────────────────────────────
+window.__bsSwitchGame = function(gameId) {
+  activeGame = gameId;
+  renderTabs();
+  renderGrid();
+  updateViewAll();
+};
+
+// ── Update "View all" link ────────────────────────────────────────────────
+function updateViewAll() {
+  const g   = GAMES.find(g => g.id === activeGame);
+  const btn = document.getElementById('bsViewAll');
+  if (btn && g) {
+    btn.href        = g.shopUrl;
+    btn.innerHTML   = `View all ${g.name} products <span>→</span>`;
+  }
+}
+
+// ── Render the product grid for the active game ───────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('bestSellersGrid');
+  if (!grid || typeof CATALOGUE === 'undefined') return;
+
+  const game     = GAMES.find(g => g.id === activeGame);
+  const products = CATALOGUE.filter(p => p.game === game.catalogueGame && p.img);
+
+  // Only show items that have at least 1 purchase
+  const withCounts = products
+    .map(p => ({ ...p, count: allCounts[p.id] || 0 }))
+    .filter(p => p.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
+
+  if (withCounts.length === 0) {
+    grid.innerHTML = `
+      <div class="bs-empty">
+        <div class="bs-empty-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <rect width="48" height="48" rx="14" fill="rgba(0,200,83,0.08)"/>
+            <path d="M24 14l2.9 8.9H36l-7.5 5.5 2.9 8.9L24 32l-7.5 5.4 2.9-8.9L12 23l9.1-.1L24 14z"
+                  fill="none" stroke="#00c853" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="bs-empty-title">No top picks yet</div>
+        <div class="bs-empty-sub">Rankings update automatically after the first purchases</div>
+        <a href="${game.shopUrl}" class="bs-empty-btn">Browse ${game.name} →</a>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = withCounts.map((p, i) => renderCard(p, i + 1, game.color)).join('');
+  grid.querySelectorAll('.bs-card').forEach(addTilt);
+  refreshPrices(grid);
+}
+
+// ── Render a single card ──────────────────────────────────────────────────
+function renderCard(p, rank, accentColor) {
+  const isBest   = rank <= 3;
   const priceStr = typeof MB_CURRENCY !== 'undefined'
-    ? MB_CURRENCY.formatPrice(p.priceNum)
-    : p.price;
+    ? MB_CURRENCY.formatPrice(p.priceNum) : p.price;
 
   return `
     <div class="bs-card${isBest ? ' bs-card--top' : ''}" data-id="${p.id}"
          onclick="window.location='product?id=${p.id}'">
       <div class="bs-card-shine"></div>
       <div class="bs-card-top">
-        ${isBest ? `<div class="bs-badge">⭐ BEST SELLER</div>` : '<div></div>'}
-        <div class="bs-game-tag ${gm.cls}">${gm.label}</div>
+        ${isBest ? `<div class="bs-badge" style="background:${accentColor}">BEST SELLER</div>` : '<div></div>'}
       </div>
       <div class="bs-img-wrap">
-        ${p.img
-          ? `<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=bs-emoji>${p.emoji}</div>'" loading="lazy"/>`
-          : `<div class="bs-emoji">${p.emoji}</div>`}
-        ${isBest ? `<div class="bs-rank-badge">#${rank}</div>` : ''}
+        <img src="${p.img}" alt="${p.name}"
+             onerror="this.style.display='none'" loading="lazy"/>
+        ${isBest ? `<div class="bs-rank-badge" style="background:${accentColor}">#${rank}</div>` : ''}
       </div>
       <div class="bs-body">
         <div class="bs-name">${p.name}</div>
         <div class="bs-price" data-usd="${p.priceNum}">${priceStr}</div>
       </div>
       <div class="bs-btns">
-        <a href="product?id=${p.id}" class="bs-btn-buy" onclick="event.stopPropagation()">⚡ BUY NOW</a>
+        <a href="product?id=${p.id}" class="bs-btn-buy" onclick="event.stopPropagation()"
+           style="background:${accentColor}">⚡ BUY NOW</a>
         <button class="bs-btn-cart" onclick="addToCart('${p.id}');event.stopPropagation()">Add to Cart</button>
       </div>
     </div>`;
 }
 
+// ── 3D tilt on hover ─────────────────────────────────────────────────────
 function addTilt(card) {
-  const inner = card;
   card.addEventListener('mousemove', (e) => {
     const r = card.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width  - 0.5;
     const y = (e.clientY - r.top)  / r.height - 0.5;
-    inner.style.transition = 'none';
-    inner.style.transform  = `perspective(700px) rotateY(${x * 14}deg) rotateX(${-y * 14}deg) translateZ(10px)`;
+    card.style.transition = 'none';
+    card.style.transform  = `perspective(700px) rotateY(${x*14}deg) rotateX(${-y*14}deg) translateZ(10px)`;
     const shine = card.querySelector('.bs-card-shine');
     if (shine) {
-      shine.style.opacity = '1';
+      shine.style.opacity    = '1';
       shine.style.background = `radial-gradient(circle at ${(x+.5)*100}% ${(y+.5)*100}%, rgba(255,255,255,.18) 0%, transparent 65%)`;
     }
   });
   card.addEventListener('mouseleave', () => {
-    inner.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
-    inner.style.transform  = 'perspective(700px) rotateY(0deg) rotateX(0deg) translateZ(0)';
+    card.style.transition = 'transform .55s cubic-bezier(.22,1,.36,1)';
+    card.style.transform  = 'perspective(700px) rotateY(0deg) rotateX(0deg) translateZ(0)';
     const shine = card.querySelector('.bs-card-shine');
     if (shine) shine.style.opacity = '0';
   });
 }
 
+// ── Refresh prices after currency switch ──────────────────────────────────
+function refreshPrices(grid) {
+  if (typeof MB_CURRENCY === 'undefined') return;
+  grid.querySelectorAll('[data-usd]').forEach(el => {
+    const n = parseFloat(el.dataset.usd);
+    if (!isNaN(n)) el.textContent = MB_CURRENCY.formatPrice(n);
+  });
+}
+
+// ── Main init ─────────────────────────────────────────────────────────────
 export async function renderBestSellers() {
   const grid = document.getElementById('bestSellersGrid');
   if (!grid || typeof CATALOGUE === 'undefined') return;
 
-  const counts = await fetchCounts();
-
-  // Sort: by Firestore count first, then default order
-  const ranked = [...CATALOGUE]
-    .filter(p => p.img)
-    .sort((a, b) => {
-      const ca = counts[a.id] ?? (DEFAULT_ORDER.indexOf(a.id) >= 0 ? 1000 - DEFAULT_ORDER.indexOf(a.id) * 10 : 0);
-      const cb = counts[b.id] ?? (DEFAULT_ORDER.indexOf(b.id) >= 0 ? 1000 - DEFAULT_ORDER.indexOf(b.id) * 10 : 0);
-      return cb - ca;
-    })
-    .slice(0, 8);
-
-  grid.innerHTML = ranked.map((p, i) => renderCard(p, i + 1)).join('');
-
-  // Apply 3D tilt to each card
-  grid.querySelectorAll('.bs-card').forEach(addTilt);
-
-  // Apply currency if already loaded
-  if (typeof MB_CURRENCY !== 'undefined') {
-    grid.querySelectorAll('[data-usd]').forEach(el => {
-      const n = parseFloat(el.dataset.usd);
-      if (!isNaN(n)) el.textContent = MB_CURRENCY.formatPrice(n);
-    });
-  }
+  allCounts = await fetchCounts();
+  renderTabs();
+  renderGrid();
+  updateViewAll();
 }
 
 // Auto-init

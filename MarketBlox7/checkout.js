@@ -9,6 +9,9 @@ const FEE_RATE = 0.0635;
 let cart = JSON.parse(localStorage.getItem('mb_cart') || '[]');
 let discordId       = localStorage.getItem('mb_discord_id')       || null;
 let discordUsername = localStorage.getItem('mb_discord_username') || null;
+let appliedPromo    = null; // { code, discount, type: 'percent'|'fixed' }
+
+const FB_PROJECT = 'marketblox-ed6a3';
 
 function init() {
   if (cart.length === 0) {
@@ -21,6 +24,10 @@ function init() {
 }
 
 // ── Render cart items ─────────────────────────────────────────────────────────
+
+function fmt(usd) {
+  return window.MB_CURRENCY ? window.MB_CURRENCY.formatPrice(usd) : `$${usd.toFixed(2)}`;
+}
 
 function renderItems() {
   const list  = document.getElementById('cartItemsList');
@@ -42,29 +49,106 @@ function renderItems() {
         <div class="co-item-name">${item.name}</div>
         <div class="co-item-game">${item.game || 'MarketBlox'}</div>
       </div>
-      <div class="co-item-price">$${(item.priceNum * item.qty).toFixed(2)}</div>
+      <div class="co-item-price">${fmt(item.priceNum * item.qty)}</div>
     </div>
   `).join('');
+}
+
+// Called by currency.js whenever the user switches currency
+function renderCart() {
+  renderItems();
+  updatePricing();
 }
 
 // ── Pricing ───────────────────────────────────────────────────────────────────
 
 function updatePricing() {
   const subtotal = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
-  const fee      = subtotal * FEE_RATE;
-  const total    = subtotal + fee;
 
-  document.getElementById('subtotalVal').textContent = `$${subtotal.toFixed(2)}`;
-  document.getElementById('feeVal').textContent      = `$${fee.toFixed(2)}`;
-  document.getElementById('totalVal').textContent    = `$${total.toFixed(2)}`;
+  let discountAmt = 0;
+  if (appliedPromo) {
+    discountAmt = appliedPromo.type === 'percent'
+      ? subtotal * (appliedPromo.discount / 100)
+      : Math.min(appliedPromo.discount, subtotal);
+  }
+
+  const discounted = subtotal - discountAmt;
+  const fee        = discounted * FEE_RATE;
+  const total      = discounted + fee;
+
+  document.getElementById('subtotalVal').textContent = fmt(subtotal);
+  document.getElementById('feeVal').textContent      = fmt(fee);
+  document.getElementById('totalVal').textContent    = fmt(total);
+
+  const discRow = document.getElementById('discountRow');
+  if (discRow) {
+    discRow.style.display = discountAmt > 0 ? 'flex' : 'none';
+    document.getElementById('discountVal').textContent    = `-${fmt(discountAmt)}`;
+    document.getElementById('discountLabel').textContent  = `Discount (${appliedPromo?.code})`;
+  }
 }
 
 // ── Promo code ────────────────────────────────────────────────────────────────
 
-function applyPromo() {
-  const code = document.getElementById('promoInput').value.trim();
+async function applyPromo() {
+  const raw  = document.getElementById('promoInput').value.trim();
+  const code = raw.toUpperCase();
   if (!code) return;
-  showFieldError('promoInput', 'Invalid or expired code');
+
+  const btn = document.querySelector('.co-promo-btn');
+  btn.textContent = '...';
+  btn.disabled = true;
+
+  // Clear old promo
+  appliedPromo = null;
+  const existingBadge = document.getElementById('promoBadge');
+  if (existingBadge) existingBadge.remove();
+
+  try {
+    const url = `https://firestore.googleapis.com/v1/projects/${FB_PROJECT}/databases/(default)/documents/promoCodes/${code}`;
+    const res = await fetch(url);
+
+    if (!res.ok) { showFieldError('promoInput', 'Invalid or expired code'); return; }
+
+    const data   = await res.json();
+    const fields = data.fields || {};
+    const active   = fields.active?.booleanValue;
+    const discount = parseFloat(fields.discount?.doubleValue ?? fields.discount?.integerValue ?? 0);
+    const type     = fields.type?.stringValue || 'percent';
+    const maxUses  = parseInt(fields.maxUses?.integerValue  ?? 0);
+    const usedCount= parseInt(fields.usedCount?.integerValue ?? 0);
+
+    if (!active)                              { showFieldError('promoInput', 'This code is no longer active'); return; }
+    if (maxUses > 0 && usedCount >= maxUses)  { showFieldError('promoInput', 'This code has reached its limit'); return; }
+
+    appliedPromo = { code, discount, type };
+    updatePricing();
+
+    // Show green success badge
+    const promoWrap = document.querySelector('.co-promo');
+    const badge = document.createElement('div');
+    badge.id = 'promoBadge';
+    badge.style.cssText = 'color:#00c853;font-size:.82rem;font-weight:700;margin-top:.5rem;display:flex;align-items:center;gap:.35rem';
+    const discStr = type === 'percent' ? `${discount}% off` : fmt(discount) + ' off';
+    badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 20 20" fill="#00c853"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Code applied — ${discStr}`;
+    promoWrap.appendChild(badge);
+
+    // Increment usedCount atomically
+    await fetch(`https://firestore.googleapis.com/v1/projects/${FB_PROJECT}/databases/(default)/documents:commit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ writes: [{ transform: {
+        document: `projects/${FB_PROJECT}/databases/(default)/documents/promoCodes/${code}`,
+        fieldTransforms: [{ fieldPath: 'usedCount', increment: { integerValue: '1' } }]
+      }}]})
+    });
+
+  } catch(e) {
+    showFieldError('promoInput', 'Could not validate code. Try again.');
+  } finally {
+    btn.textContent = 'Apply';
+    btn.disabled = false;
+  }
 }
 
 // ── Discord OAuth popup ───────────────────────────────────────────────────────

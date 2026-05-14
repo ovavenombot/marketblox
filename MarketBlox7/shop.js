@@ -24,6 +24,14 @@ const GAME_CONFIG = {
     catalogueGame: 'Rivals',
     hasCategories: false,
   },
+  gpo: {
+    name: 'Sailor Piece',
+    emoji: '⚓',
+    banner: 'https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter',
+    catalogueGame: 'Sailor Piece',
+    hasCategories: true,
+    categoriesKey: 'gpo',
+  },
 };
 
 const SAB_CATEGORIES = [
@@ -90,40 +98,131 @@ const SAB_CATEGORIES = [
   },
 ];
 
+const GPO_CATEGORIES = [
+  {
+    id: 'all', label: 'All Products',
+    icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 4v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>`,
+  },
+  {
+    id: 'bundles', label: 'Bundles',
+    icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="7" width="12" height="7" rx="2" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M5 7V5.5a3 3 0 0 1 6 0V7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+      <line x1="8" y1="7" x2="8" y2="14" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="2" y1="10.5" x2="14" y2="10.5" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+    </svg>`,
+  },
+  {
+    id: 'products', label: 'Products',
+    icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8 2L10 6H14L11 9L12.5 14L8 11.5L3.5 14L5 9L2 6H6L8 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+    </svg>`,
+  },
+  {
+    id: 'materials', label: 'Materials',
+    icon: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="10" width="3" height="4" rx="1" fill="currentColor" opacity="0.7"/>
+      <rect x="6.5" y="7" width="3" height="7" rx="1" fill="currentColor" opacity="0.85"/>
+      <rect x="11" y="4" width="3" height="10" rx="1" fill="currentColor"/>
+      <path d="M3.5 10L8 7l4.5-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>`,
+  },
+];
+
 const params = new URLSearchParams(window.location.search);
 const gameKey = params.get('game') || 'sab';
 const game = GAME_CONFIG[gameKey] || GAME_CONFIG['sab'];
 
 let activeCategory = 'all';
 let searchQuery = '';
+let sortOrder = 'default';
 
 const allProducts = CATALOGUE.filter(p => p.game === game.catalogueGame);
 
 // Set page title & banner
 document.getElementById('page-title').textContent = `${game.name} — MarketBlox`;
-document.getElementById('shopBanner').src = game.banner;
-document.getElementById('shopBanner').alt = game.name;
-document.getElementById('shopGameName').textContent = `${game.emoji} ${game.name}`;
-document.getElementById('shopGameMeta').textContent = `${allProducts.length} Items · Instant Delivery`;
-document.getElementById('shopGridTitle').textContent = `${game.emoji} ${game.name}`;
-document.getElementById('shopGridMeta').textContent = `${allProducts.length} Items · Instant Delivery`;
+document.getElementById('shopGameName').textContent = game.name;
+
+const SORT_LABELS = {
+  default: 'Default Order',
+  'price-asc': 'Price: Low → High',
+  'price-desc': 'Price: High → Low',
+};
+
+function sortDropdownHTML() {
+  return `
+    <div class="shop-sort-wrap" id="shopSortWrap">
+      <button class="shop-sort-btn" id="shopSortBtn" aria-expanded="false">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+          <path d="M2 4h11M4 7.5h7M6.5 11h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <span id="shopSortLabel">${SORT_LABELS[sortOrder]}</span>
+        <svg class="shop-sort-chevron" width="11" height="11" viewBox="0 0 11 11" fill="none">
+          <path d="M2 4l3.5 3.5L9 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="shop-sort-dropdown" id="shopSortDropdown">
+        ${Object.entries(SORT_LABELS).map(([val, label]) => `
+          <button class="shop-sort-option ${sortOrder === val ? 'active' : ''}" data-sort="${val}">${label}</button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function bindSortDropdown() {
+  const btn = document.getElementById('shopSortBtn');
+  const dropdown = document.getElementById('shopSortDropdown');
+  if (!btn || !dropdown) return;
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = dropdown.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+  });
+
+  dropdown.querySelectorAll('.shop-sort-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      sortOrder = opt.dataset.sort;
+      document.getElementById('shopSortLabel').textContent = SORT_LABELS[sortOrder];
+      dropdown.querySelectorAll('.shop-sort-option').forEach(o => o.classList.toggle('active', o.dataset.sort === sortOrder));
+      dropdown.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      renderShopGrid();
+    });
+  });
+
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }, { once: false, capture: false });
+}
 
 // ── Category + Search bar ──────────────────────────────────────────
 function buildFilterUI() {
   const section = document.getElementById('shopFilterBar');
   if (!section) return;
 
-  if (game.hasCategories) {
-    // Category tabs
-    const tabs = SAB_CATEGORIES.map(c => `
-      <button class="cat-tab ${c.id === activeCategory ? 'active' : ''}" data-cat="${c.id}">
-        <span class="cat-tab-icon">${c.icon}</span>
-        ${c.label}
-      </button>
-    `).join('');
+  const activeCats = game.categoriesKey === 'gpo' ? GPO_CATEGORIES : SAB_CATEGORIES;
+  // Category tabs (SAB + GPO)
+  const tabsHTML = game.hasCategories ? `
+    <div class="cat-tabs-wrap">
+      <div class="cat-tabs" id="catTabs">
+        ${activeCats.map(c => `
+          <button class="cat-tab ${c.id === activeCategory ? 'active' : ''}" data-cat="${c.id}">
+            <span class="cat-tab-icon">${c.icon}</span>${c.label}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  ` : '';
 
-    // Search bar
-    const search = `
+  // Search + sort row (all games)
+  const searchSortHTML = `
+    <div class="shop-search-sort-row">
       <div class="shop-search-wrap">
         <svg class="shop-search-ico" width="16" height="16" viewBox="0 0 16 16" fill="none">
           <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.6"/>
@@ -132,64 +231,54 @@ function buildFilterUI() {
         <input class="shop-search-input" id="shopSearchInput" type="text" placeholder="Search items…" value="${searchQuery}"/>
         ${searchQuery ? `<button class="shop-search-clear" id="shopSearchClear">✕</button>` : ''}
       </div>
-    `;
+      ${sortDropdownHTML()}
+    </div>
+  `;
 
-    section.innerHTML = `
-      <div class="cat-tabs-wrap"><div class="cat-tabs" id="catTabs">${tabs}</div></div>
-      ${search}
-    `;
+  section.innerHTML = tabsHTML + searchSortHTML;
 
-    // Event listeners
-    section.querySelectorAll('.cat-tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeCategory = btn.dataset.cat;
-        searchQuery = '';
-        buildFilterUI();
-        renderShopGrid();
-      });
+  // Category tab clicks
+  section.querySelectorAll('.cat-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.dataset.cat;
+      searchQuery = '';
+      buildFilterUI();
+      renderShopGrid();
     });
+  });
 
-    const inp = document.getElementById('shopSearchInput');
-    if (inp) {
-      inp.addEventListener('input', e => {
-        searchQuery = e.target.value;
-        // Toggle clear button without rebuilding the entire UI
-        const wrap = inp.parentElement;
-        let clrBtn = document.getElementById('shopSearchClear');
-        if (searchQuery && !clrBtn) {
-          clrBtn = document.createElement('button');
-          clrBtn.className = 'shop-search-clear';
-          clrBtn.id = 'shopSearchClear';
-          clrBtn.textContent = '✕';
-          wrap.appendChild(clrBtn);
-          clrBtn.addEventListener('click', () => {
-            searchQuery = '';
-            buildFilterUI();
-            renderShopGrid();
-          });
-        } else if (!searchQuery && clrBtn) {
-          clrBtn.remove();
-        }
-        renderShopGrid();
-      });
-    }
-
-    const clr = document.getElementById('shopSearchClear');
-    if (clr) {
-      clr.addEventListener('click', () => {
-        searchQuery = '';
-        buildFilterUI();
-        renderShopGrid();
-      });
-    }
-  } else {
-    section.innerHTML = '';
+  // Search input
+  const inp = document.getElementById('shopSearchInput');
+  if (inp) {
+    inp.addEventListener('input', e => {
+      searchQuery = e.target.value;
+      const wrap = inp.parentElement;
+      let clrBtn = document.getElementById('shopSearchClear');
+      if (searchQuery && !clrBtn) {
+        clrBtn = document.createElement('button');
+        clrBtn.className = 'shop-search-clear';
+        clrBtn.id = 'shopSearchClear';
+        clrBtn.textContent = '✕';
+        wrap.appendChild(clrBtn);
+        clrBtn.addEventListener('click', () => { searchQuery = ''; buildFilterUI(); renderShopGrid(); });
+      } else if (!searchQuery && clrBtn) {
+        clrBtn.remove();
+      }
+      renderShopGrid();
+    });
   }
+
+  const clr = document.getElementById('shopSearchClear');
+  if (clr) {
+    clr.addEventListener('click', () => { searchQuery = ''; buildFilterUI(); renderShopGrid(); });
+  }
+
+  bindSortDropdown();
 }
 
 // ── Filtered products ──────────────────────────────────────────────
 function getFilteredProducts() {
-  let list = allProducts;
+  let list = [...allProducts];
 
   if (game.hasCategories && activeCategory !== 'all') {
     list = list.filter(p => p.category === activeCategory);
@@ -198,6 +287,12 @@ function getFilteredProducts() {
   if (searchQuery.trim()) {
     const q = searchQuery.toLowerCase();
     list = list.filter(p => p.name.toLowerCase().includes(q));
+  }
+
+  if (sortOrder === 'price-asc') {
+    list.sort((a, b) => a.priceNum - b.priceNum);
+  } else if (sortOrder === 'price-desc') {
+    list.sort((a, b) => b.priceNum - a.priceNum);
   }
 
   return list;
@@ -246,8 +341,12 @@ function renderShopGrid() {
   const grid = document.getElementById('shopGrid');
   const filtered = getFilteredProducts();
 
-  // Update meta
-  document.getElementById('shopGridMeta').textContent = `${filtered.length} Items · Instant Delivery`;
+  // Update count (shows per-category filtered count)
+  const _cats = game.categoriesKey === 'gpo' ? GPO_CATEGORIES : SAB_CATEGORIES;
+  const label = activeCategory !== 'all'
+    ? `${filtered.length} Items · ${_cats.find(c => c.id === activeCategory)?.label || 'Category'}`
+    : `${filtered.length} Items · Instant Delivery`;
+  document.getElementById('shopGridMeta').textContent = label;
 
   if (allProducts.length === 0) {
     grid.innerHTML = `<div class="coming-soon-box"><div class="cs-emoji">${game.emoji}</div><h3>${game.name}</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div>`;

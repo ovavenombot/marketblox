@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 30px; background: #111; font-family: sans-serif; }
+  canvas { display: block; border-radius: 10px; box-shadow: 0 8px 40px rgba(0,200,83,0.25); }
+  a { display: block; margin-top: 14px; font-size: 14px; color: #00c853; text-decoration: none; }
+  #status { color: #aaa; font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="680" height="240"></canvas>
+<a id="dl">⬇ Download banner-marketblox.png (680×240)</a>
+<div id="status">Loading images…</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const W = 680, H = 240;
+
+// ── Pick colorful item images as background ───────────────────────────────
+const BG_IMGS = [
+  'sab/Candy_21.webp',
+  'sab/Arcadopus.webp',
+  'sab/Mi_GatitoHD.webp',
+  'sab/LosPuggies.png',
+  'sab/Fourtyone.webp',
+  'sab/SwaggyBros.jpg',
+  'sab/Chimino.jpg',
+  'sab/Carti.webp',
+];
+
+function loadImg(src) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload  = () => res(img);
+    img.onerror = () => res(null);
+    img.src = src;
+  });
+}
+
+Promise.all(BG_IMGS.map(loadImg)).then(imgs => {
+  draw(imgs.filter(Boolean));
+  document.getElementById('status').textContent = 'Done!';
+});
+
+function rr(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function outText(txt, x, y, size, fill, outline, lw) {
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font         = `900 ${size}px Impact, "Arial Black", Arial`;
+  ctx.lineWidth    = lw;
+  ctx.strokeStyle  = outline;
+  ctx.lineJoin     = 'round';
+  ctx.strokeText(txt, x, y);
+  ctx.fillStyle    = fill;
+  ctx.fillText(txt, x, y);
+}
+
+function draw(imgs) {
+  // ── 1. Blurry image mosaic background ──────────────────────────────────
+  const cols = 4;
+  const tw   = Math.ceil(W / cols);
+  const th   = Math.ceil(H / 2);
+  const pad  = 12; // draw slightly outside canvas to hide blur edge artifacts
+
+  ctx.filter = 'blur(7px)';
+  for (let i = 0; i < 8; i++) {
+    const img = imgs[i % imgs.length];
+    if (!img) continue;
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    ctx.drawImage(img,
+      col * tw - pad,
+      row * th - pad,
+      tw + pad * 2,
+      th + pad * 2
+    );
+  }
+  ctx.filter = 'none';
+
+  // ── 2. Dark green overlay ──────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(4, 14, 7, 0.78)';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── 3. Subtle dot grid on top ──────────────────────────────────────────
+  ctx.fillStyle = 'rgba(0,200,83,0.055)';
+  for (let x = 18; x < W; x += 30) {
+    for (let y = 18; y < H; y += 30) {
+      ctx.beginPath();
+      ctx.arc(x, y, 1.1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ── 4. Glows ───────────────────────────────────────────────────────────
+  let g = ctx.createRadialGradient(170, 120, 0, 170, 120, 180);
+  g.addColorStop(0, 'rgba(0,200,83,0.20)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  g = ctx.createRadialGradient(530, 120, 0, 530, 120, 140);
+  g.addColorStop(0, 'rgba(0,200,83,0.12)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // ════════════════════════════════════════════════════
+  //  LEFT  — SAVE / 50%  (center x = 165)
+  // ════════════════════════════════════════════════════
+  const LC = 165;
+
+  outText('SAVE', LC, 88, 66, '#ffffff', '#001a08', 9);
+
+  ctx.save();
+  ctx.shadowColor = '#00c853';
+  ctx.shadowBlur  = 22;
+  outText('50%', LC, 168, 82, '#00c853', '#001408', 10);
+  ctx.restore();
+
+  // ── Divider 1 ────────────────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(0,200,83,0.22)';
+  ctx.lineWidth   = 1;
+  ctx.setLineDash([4,5]);
+  ctx.beginPath(); ctx.moveTo(322, 18); ctx.lineTo(322, 222); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ════════════════════════════════════════════════════
+  //  MIDDLE — CHEAP / ITEMS  (center x = 443)
+  // ════════════════════════════════════════════════════
+  const MC = 443;
+
+  outText('CHEAP', MC, 92, 58, '#ffffff', '#001408', 7);
+  outText('ITEMS', MC, 168, 58, '#ffffff', '#001408', 7);
+
+  // Underline
+  const ul = ctx.createLinearGradient(MC - 110, 0, MC + 110, 0);
+  ul.addColorStop(0, 'rgba(0,200,83,0)');
+  ul.addColorStop(0.5, '#00c853');
+  ul.addColorStop(1, 'rgba(0,200,83,0)');
+  ctx.fillStyle = ul;
+  ctx.fillRect(MC - 110, 192, 220, 2);
+
+  // ── Divider 2 ────────────────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(0,200,83,0.22)';
+  ctx.lineWidth   = 1;
+  ctx.setLineDash([4,5]);
+  ctx.beginPath(); ctx.moveTo(558, 18); ctx.lineTo(558, 222); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ════════════════════════════════════════════════════
+  //  RIGHT — Logo + branding  (center x = 617)
+  // ════════════════════════════════════════════════════
+  const RC = 617;
+  const sq=28, gap=7, rad=7;
+  const logoW = sq*2+gap, logoH = sq*2+gap;
+  const lx = RC - logoW/2, ly = 40;
+
+  // Logo bg
+  rr(lx-8, ly-8, logoW+16, logoH+16, 12);
+  ctx.fillStyle = '#00c853';
+  ctx.fill();
+  rr(lx-8, ly-8, logoW+16, logoH+16, 12);
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // 4 squares
+  rr(lx, ly, sq, sq, rad);               ctx.fillStyle = 'white';                  ctx.fill();
+  rr(lx+sq+gap, ly, sq, sq, rad);        ctx.fillStyle = 'rgba(255,255,255,0.52)'; ctx.fill();
+  rr(lx, ly+sq+gap, sq, sq, rad);        ctx.fillStyle = 'rgba(255,255,255,0.52)'; ctx.fill();
+  rr(lx+sq+gap, ly+sq+gap, sq, sq, rad); ctx.fillStyle = 'white';                  ctx.fill();
+
+  // "MarketBlox" — measure and center properly
+  ctx.font = 'bold 16px "Arial Black", Arial';
+  const mW2 = ctx.measureText('Market').width;
+  const bW2 = ctx.measureText('Blox').width;
+  const nameX = RC - (mW2 + bW2 + 2) / 2;
+  ctx.textAlign    = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('Market', nameX, 152);
+  ctx.fillStyle = '#00c853';
+  ctx.fillText('Blox', nameX + mW2 + 2, 152);
+
+  // Domain badge
+  const bw = 118, bh = 24;
+  rr(RC - bw/2, 163, bw, bh, 7);
+  ctx.fillStyle = 'rgba(0,200,83,0.13)'; ctx.fill();
+  rr(RC - bw/2, 163, bw, bh, 7);
+  ctx.strokeStyle = 'rgba(0,200,83,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font         = '600 11px Arial';
+  ctx.fillStyle    = '#00c853';
+  ctx.fillText('marketblox.fun', RC, 175);
+
+  // Stars
+  ctx.font      = '13px Arial';
+  ctx.fillStyle = '#00c853';
+  ctx.fillText('★★★★★', RC, 202);
+
+  ctx.font      = '10px Arial';
+  ctx.fillStyle = 'rgba(255,255,255,0.32)';
+  ctx.fillText('Trusted Shop', RC, 218);
+
+  // ── Corner brackets ──────────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(0,200,83,0.4)';
+  ctx.lineWidth   = 2;
+  ctx.lineCap     = 'square';
+  const cs = 16;
+  [[8,8,1,1],[W-8,8,-1,1],[8,H-8,1,-1],[W-8,H-8,-1,-1]].forEach(([x,y,dx,dy])=>{
+    ctx.beginPath();
+    ctx.moveTo(x, y+dy*cs); ctx.lineTo(x,y); ctx.lineTo(x+dx*cs, y);
+    ctx.stroke();
+  });
+
+  // ── Download ──────────────────────────────────────────────────────────
+  const dl = document.getElementById('dl');
+  dl.href     = canvas.toDataURL('image/png');
+  dl.download = 'banner-marketblox.png';
+}
+</script>
+</body>
+</html>

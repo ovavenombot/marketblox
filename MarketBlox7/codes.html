@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promo Codes — MarketBlox Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #00c853; --green-dark: #00a846;
+      --bg: #f4f6f3; --white: #fff;
+      --text: #1a1f1b; --text2: #5a6b5e; --text3: #9aab9e;
+      --border: #e2e8e4; --red: #ef4444;
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── Lock screen ── */
+    #lockScreen {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; z-index: 999;
+    }
+    .lock-card {
+      background: var(--white); border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 2.5rem 2rem; width: 340px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .lock-logo { font-size: 1.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .lock-logo b { color: var(--green); }
+    .lock-sub { color: var(--text2); font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .lock-input {
+      width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border);
+      border-radius: 12px; font-size: 0.9rem; font-family: inherit;
+      outline: none; margin-bottom: 0.75rem; transition: border-color 0.2s;
+    }
+    .lock-input:focus { border-color: var(--green); }
+    .lock-btn {
+      width: 100%; padding: 0.8rem; background: var(--green); color: #fff;
+      border: none; border-radius: 12px; font-weight: 800; font-size: 0.95rem;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .lock-btn:hover { background: var(--green-dark); }
+    .lock-err { color: var(--red); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+
+    /* ── Main layout ── */
+    #adminApp { display: none; max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .admin-title { font-size: 1.6rem; font-weight: 900; }
+    .admin-title span { color: var(--green); }
+    .logout-btn {
+      padding: 0.5rem 1rem; background: none; border: 1.5px solid var(--border);
+      border-radius: 10px; font-size: 0.82rem; font-weight: 600; color: var(--text2);
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── Add code form ── */
+    .add-card {
+      background: var(--white); border: 1.5px solid var(--border); border-radius: 16px;
+      padding: 1.5rem; margin-bottom: 1.75rem;
+    }
+    .add-card h2 { font-size: 1rem; font-weight: 800; margin-bottom: 1.25rem; }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-bottom: 0.75rem; }
+    .field label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text2); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .field input, .field select {
+      width: 100%; padding: 0.65rem 0.85rem; border: 1.5px solid var(--border);
+      border-radius: 10px; font-size: 0.88rem; font-family: inherit; outline: none;
+      transition: border-color 0.2s; background: var(--white);
+    }
+    .field input:focus, .field select:focus { border-color: var(--green); }
+    .add-btn {
+      padding: 0.7rem 1.5rem; background: var(--green); color: #fff;
+      border: none; border-radius: 10px; font-weight: 800; font-size: 0.88rem;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .add-btn:hover { background: var(--green-dark); }
+    .add-msg { font-size: 0.82rem; font-weight: 600; margin-left: 0.75rem; }
+
+    /* ── Codes table ── */
+    .codes-card {
+      background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden;
+    }
+    .codes-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); font-size: 1rem; font-weight: 800; display: flex; align-items: center; justify-content: space-between; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 0.75rem 1.25rem; text-align: left; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text2); border-bottom: 1px solid var(--border); }
+    td { padding: 0.85rem 1.25rem; font-size: 0.87rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fbf9; }
+    .code-pill {
+      display: inline-block; padding: 0.25rem 0.65rem; background: #e8f9ef;
+      border-radius: 7px; font-weight: 800; font-size: 0.82rem; color: #00a846; letter-spacing: 0.05em;
+    }
+    .badge-active { display: inline-block; padding: 0.22rem 0.6rem; background: #e8f9ef; color: #00a846; border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .badge-inactive { display: inline-block; padding: 0.22rem 0.6rem; background: #fef2f2; color: var(--red); border-radius: 6px; font-size: 0.75rem; font-weight: 700; }
+    .uses-bar { display: flex; align-items: center; gap: 0.5rem; }
+    .uses-text { font-size: 0.82rem; color: var(--text2); min-width: 55px; }
+    .bar-wrap { flex: 1; max-width: 80px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.3s; }
+    .action-btn {
+      padding: 0.3rem 0.65rem; border-radius: 7px; font-size: 0.75rem; font-weight: 700;
+      cursor: pointer; border: 1.5px solid var(--border); background: none; transition: all 0.15s;
+      font-family: inherit;
+    }
+    .action-btn.toggle { color: var(--text2); }
+    .action-btn.toggle:hover { border-color: var(--green); color: var(--green); }
+    .action-btn.del { color: var(--red); border-color: #fca5a5; margin-left: 0.35rem; }
+    .action-btn.del:hover { background: #fef2f2; }
+    .empty-row td { text-align: center; color: var(--text3); padding: 2.5rem; }
+    .loading-row td { text-align: center; color: var(--text3); padding: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<!-- Lock screen -->
+<div id="lockScreen">
+  <div class="lock-card">
+    <div class="lock-logo">Market<b>Blox</b></div>
+    <p class="lock-sub">Admin — Promo Codes</p>
+    <input type="password" id="pwInput" class="lock-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')unlock()"/>
+    <button class="lock-btn" onclick="unlock()">Enter</button>
+    <p class="lock-err" id="lockErr">Wrong password</p>
+  </div>
+</div>
+
+<!-- Admin app -->
+<div id="adminApp">
+  <div class="admin-header">
+    <div class="admin-title">Promo <span>Codes</span></div>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </div>
+
+  <!-- Add new code -->
+  <div class="add-card">
+    <h2>Create New Code</h2>
+    <div class="form-row">
+      <div class="field">
+        <label>Code</label>
+        <input type="text" id="newCode" placeholder="e.g. SAVE10" style="text-transform:uppercase"/>
+      </div>
+      <div class="field">
+        <label>Discount</label>
+        <input type="number" id="newDiscount" placeholder="10" min="0" step="0.01"/>
+      </div>
+      <div class="field">
+        <label>Type</label>
+        <select id="newType">
+          <option value="percent">% Percent</option>
+          <option value="fixed">$ Fixed Amount (USD)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Max Uses (0 = unlimited)</label>
+        <input type="number" id="newMaxUses" placeholder="0" min="0" value="0"/>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addCode()">+ Add Code</button>
+    <span class="add-msg" id="addMsg"></span>
+  </div>
+
+  <!-- Existing codes -->
+  <div class="codes-card">
+    <div class="codes-header">
+      All Codes
+      <button class="action-btn toggle" onclick="loadCodes()" style="font-size:0.78rem">↻ Refresh</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Discount</th>
+          <th>Uses</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="codesTableBody">
+        <tr class="loading-row"><td colspan="5">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="firebase-config.js"></script>
+<script type="module">
+  import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+  const ADMIN_PASSWORD = 'marketblox2026';
+  const app = getApps().length ? getApps()[0] : initializeApp(window.FIREBASE_CONFIG);
+  const db  = getFirestore(app);
+
+  // ── Auth ─────────────────────────────────────────────────────────────────────
+  window.unlock = function() {
+    const pw = document.getElementById('pwInput').value;
+    if (pw === ADMIN_PASSWORD) {
+      sessionStorage.setItem('mbAdminAuth', '1');
+      document.getElementById('lockScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display   = 'block';
+      loadCodes();
+    } else {
+      document.getElementById('lockErr').style.display = 'block';
+    }
+  };
+
+  window.logout = function() {
+    sessionStorage.removeItem('mbAdminAuth');
+    location.reload();
+  };
+
+  if (sessionStorage.getItem('mbAdminAuth') === '1') {
+    document.getElementById('lockScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display   = 'block';
+  }
+
+  // ── Load codes ────────────────────────────────────────────────────────────────
+  window.loadCodes = async function() {
+    const tbody = document.getElementById('codesTableBody');
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="5">Loading…</td></tr>';
+    try {
+      const snap = await getDocs(collection(db, 'promoCodes'));
+      if (snap.empty) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No codes yet. Add one above.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '';
+      snap.forEach(d => {
+        const c = d.data();
+        const id = d.id;
+        const maxUses  = c.maxUses  || 0;
+        const usedCount= c.usedCount|| 0;
+        const pct = maxUses > 0 ? Math.min(100, Math.round((usedCount/maxUses)*100)) : 0;
+        const discStr = c.type === 'percent' ? `${c.discount}%` : `$${Number(c.discount).toFixed(2)} USD`;
+        const usesStr = maxUses === 0 ? `${usedCount} / ∞` : `${usedCount} / ${maxUses}`;
+        const statusBadge = c.active
+          ? `<span class="badge-active">Active</span>`
+          : `<span class="badge-inactive">Inactive</span>`;
+        const barWidth = maxUses > 0 ? pct : (usedCount > 0 ? 100 : 0);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="code-pill">${id}</span></td>
+          <td>${discStr}</td>
+          <td>
+            <div class="uses-bar">
+              <span class="uses-text">${usesStr}</span>
+              ${maxUses > 0 ? `<div class="bar-wrap"><div class="bar-fill" style="width:${barWidth}%"></div></div>` : ''}
+            </div>
+          </td>
+          <td>${statusBadge}</td>
+          <td>
+            <button class="action-btn toggle" onclick="toggleCode('${id}', ${c.active})">${c.active ? 'Deactivate' : 'Activate'}</button>
+            <button class="action-btn del" onclick="deleteCode('${id}')">Delete</button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    } catch(e) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Error loading codes.</td></tr>';
+    }
+  };
+
+  // ── Add code ──────────────────────────────────────────────────────────────────
+  window.addCode = async function() {
+    const code     = document.getElementById('newCode').value.trim().toUpperCase();
+    const discount = parseFloat(document.getElementById('newDiscount').value);
+    const type     = document.getElementById('newType').value;
+    const maxUses  = parseInt(document.getElementById('newMaxUses').value) || 0;
+    const msg      = document.getElementById('addMsg');
+
+    if (!code || isNaN(discount) || discount <= 0) {
+      msg.style.color = '#ef4444'; msg.textContent = 'Fill in code and a valid discount.'; return;
+    }
+
+    try {
+      await setDoc(doc(db, 'promoCodes', code), {
+        discount, type, maxUses, usedCount: 0, active: true, createdAt: serverTimestamp()
+      });
+      msg.style.color = '#00a846'; msg.textContent = `Code "${code}" created!`;
+      document.getElementById('newCode').value     = '';
+      document.getElementById('newDiscount').value = '';
+      document.getElementById('newMaxUses').value  = '0';
+      setTimeout(() => { msg.textContent = ''; }, 3000);
+      loadCodes();
+    } catch(e) {
+      msg.style.color = '#ef4444'; msg.textContent = 'Failed to save code.';
+    }
+  };
+
+  // ── Toggle active ─────────────────────────────────────────────────────────────
+  window.toggleCode = async function(id, current) {
+    await updateDoc(doc(db, 'promoCodes', id), { active: !current });
+    loadCodes();
+  };
+
+  // ── Delete ────────────────────────────────────────────────────────────────────
+  window.deleteCode = async function(id) {
+    if (!confirm(`Delete code "${id}"?`)) return;
+    await deleteDoc(doc(db, 'promoCodes', id));
+    loadCodes();
+  };
+
+  // Auto-uppercase code input
+  document.getElementById('newCode').addEventListener('input', e => {
+    e.target.value = e.target.value.toUpperCase();
+  });
+
+  if (sessionStorage.getItem('mbAdminAuth') === '1') loadCodes();
+</script>
+</body>
+</html>

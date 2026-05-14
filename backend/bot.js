@@ -318,8 +318,8 @@ client.on('interactionCreate', async interaction => {
         if (buyer) {
           await buyer.send(
             `🎉 **Thanks for your purchase from MarketBlox!** Your order has been completed successfully.\n\n`
-            + `We'd really appreciate a review on Trustpilot 💚\n`
-            + `https://www.trustpilot.com/review/marketblox.com`,
+            + `⭐ **Leave us a quick review on Trustpilot — it helps a lot!**\n`
+            + `https://www.trustpilot.com/review/marketblox.gg`,
           ).catch(() => {});
         }
       }

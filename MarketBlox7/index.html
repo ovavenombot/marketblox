@@ -5,6 +5,17 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MarketBlox — Roblox Items Store</title>
+
+  <!-- Open Graph / Discord embed -->
+  <meta property="og:type"        content="website"/>
+  <meta property="og:url"         content="https://marketblox.fun/"/>
+  <meta property="og:title"       content="MarketBlox | Cheap Roblox Items"/>
+  <meta property="og:description" content="Shop exclusive Roblox items for Steal A Brainrot, Blox Fruits & more. Fast delivery, verified sellers, and secure checkout — only on MarketBlox."/>
+  <meta property="og:image"       content="https://marketblox.fun/img/og-banner.png"/>
+  <meta property="og:image:width"  content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="description"         content="Shop exclusive Roblox items for Steal A Brainrot, Blox Fruits & more. Fast delivery, verified sellers, and secure checkout — only on MarketBlox."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=5"/>
@@ -54,9 +65,10 @@
             <span class="di-name">Steal A Brainrot</span>
             <svg class="di-arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a class="dropdown-item di-coming-soon">
+          <a href="shop.html?game=gpo" class="dropdown-item">
             <span class="di-img-wrap"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" class="di-img" alt="GPO"/></span>
-            <span class="di-name">Sailor Piece <span class="di-soon-badge">Soon</span></span>
+            <span class="di-name">Sailor Piece</span>
+            <svg class="di-arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
           <a href="shop?game=bf" class="dropdown-item">
             <span class="di-img-wrap"><img src="https://tr.rbxcdn.com/180DAY-a6f22ab57d42fcb6dc72261932faf953/768/432/Image/Webp/noFilter" class="di-img" alt="BF"/></span>
@@ -102,10 +114,10 @@
 
   <!-- MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
-    <a href="shop?game=sab">🧠 Steal A Brainrot</a>
-    <a style="opacity:0.45;pointer-events:none">🌊 Grand Piece Online — Coming Soon</a>
-    <a href="shop?game=bf">🍎 Blox Fruits</a>
-    <a href="shop?game=rivals">⚔️ Rivals</a>
+    <a href="shop?game=sab">Steal A Brainrot</a>
+    <a href="shop.html?game=gpo">Sailor Piece</a>
+    <a href="shop?game=bf">Blox Fruits</a>
+    <a href="shop?game=rivals">Rivals</a>
     <div class="mobile-divider"></div>
     <a href="#support" onclick="closeMobile()">Support</a>
     <a href="tutorial" onclick="closeMobile()">Tutorial</a>
@@ -115,10 +127,10 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-rating">
+        <a href="https://www.trustpilot.com/review/marketblox.fun" target="_blank" class="hero-rating" style="text-decoration:none;">
           <span class="stars-row">★★★★★</span>
-          <span>Trusted by thousands of players</span>
-        </div>
+          <span>Rated 4.5/5 on Trustpilot</span>
+        </a>
         <h1 class="hero-title">
           Get the <span class="hero-accent">Items you love,</span> Delivered in Minutes!
         </h1>
@@ -177,11 +189,11 @@
             </div>
             <div class="hgc-arrow">→</div>
           </div>
-          <div class="hgc hgc2" style="opacity:0.6;pointer-events:none">
-            <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt="Grand Piece Online"/></div>
+          <div class="hgc hgc2" onclick="window.location='shop.html?game=gpo'">
+            <div class="hgc-emoji"><img src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt="Sailor Piece"/></div>
             <div class="hgc-info">
-              <div class="hgc-name">Grand Piece Online</div>
-              <div class="hgc-price">Coming Soon</div>
+              <div class="hgc-name">Sailor Piece</div>
+              <div class="hgc-price">From <b data-usd="0.32">$0.32</b></div>
             </div>
             <div class="hgc-arrow">→</div>
           </div>
@@ -209,17 +221,30 @@
   <!-- BEST SELLERS -->
   <section class="game-select" id="shop">
     <div class="container">
-      <div class="section-tag">TOP PICKS</div>
-      <h2 class="section-heading">
-        <span class="fire-float">🔥</span> Top Best Sellers <span class="fire-float fire-float-delay">🔥</span>
-      </h2>
+      <div class="bs-top-row">
+        <div>
+          <div class="section-tag">BEST SELLERS BY GAME</div>
+          <h2 class="section-heading bs-fire-title" style="margin-bottom:0"><span class="fire-float">🔥</span> Top Picks In Every Game <span class="fire-float fire-float-delay">🔥</span></h2>
+        </div>
+        <div class="bs-nav-arrows">
+          <button class="bs-nav-btn" id="bsNavLeft">&#8249;</button>
+          <button class="bs-nav-btn" id="bsNavRight">&#8250;</button>
+        </div>
+      </div>
+      <div class="bs-tabs-wrap">
+        <div class="bs-game-tabs" id="bsGameTabs">
+          <!-- populated by best-sellers.js -->
+        </div>
+      </div>
       <div class="bs-grid" id="bestSellersGrid">
-        <!-- populated by best-sellers.js -->
         <div class="bs-skeleton"></div>
         <div class="bs-skeleton"></div>
         <div class="bs-skeleton"></div>
         <div class="bs-skeleton"></div>
         <div class="bs-skeleton"></div>
+      </div>
+      <div class="bs-view-all-wrap">
+        <a href="shop.html" class="bs-view-all-link" id="bsViewAll">View all products <span>→</span></a>
       </div>
     </div>
   </section>
@@ -229,7 +254,7 @@
     <div class="container">
       <div class="products-header">
         <div>
-          <h3 id="gameTitle" class="game-title">🧠 Steal A Brainrot</h3>
+          <h3 id="gameTitle" class="game-title">Steal A Brainrot</h3>
           <p id="productsCount" class="products-meta">12 Items · Instant Delivery</p>
         </div>
       </div>
@@ -365,7 +390,7 @@
       </div>
 
       <!-- Coming Soon grids -->
-      <div class="products-grid hidden" id="gpo-products"><div class="coming-soon-box"><div class="cs-emoji">🌊</div><h3>Grand Piece Online</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
+      <div class="products-grid hidden" id="gpo-products"><div class="coming-soon-box"><div class="cs-emoji">🌊</div><h3>Sailor Piece</h3><p>Coming soon! Join our Discord to be notified first.</p><a href="#support" class="btn-primary magnetic"><span class="btn-bg"></span><span class="btn-content">Join Discord</span></a></div></div>
       <div class="products-grid hidden" id="bf-products">
 
         <div class="product-card best-seller" data-aos onclick="window.location='product?id=bf-permanent-dragon'">
@@ -807,23 +832,72 @@
       <div class="section-tag">HELP</div>
       <h2 class="section-heading">Need Help?</h2>
       <div class="support-grid">
-        <a href="https://discord.gg/yourlink" target="_blank" class="support-card discord magnetic" data-aos>
-          <div class="sc-top">
-            <div class="sc-icon">💬</div>
-            <div class="sc-badge">Fastest</div>
+
+        <a href="https://discord.gg/muHRWMqpr8" target="_blank" class="support-card discord" data-aos>
+          <div class="sc-icon-wrap discord-icon-wrap">
+            <!-- Animated 3D Discord bubble icon -->
+            <svg class="sc-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="dg1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#c8ffe0"/>
+                </linearGradient>
+                <filter id="dshadow">
+                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#00c853" flood-opacity="0.35"/>
+                </filter>
+              </defs>
+              <!-- Bubble body -->
+              <rect x="6" y="8" width="52" height="38" rx="14" fill="url(#dg1)" filter="url(#dshadow)"/>
+              <!-- Bubble tail -->
+              <path d="M18 46 L12 58 L30 46Z" fill="url(#dg1)" filter="url(#dshadow)"/>
+              <!-- Chat dots -->
+              <circle cx="22" cy="27" r="4" fill="#00c853" class="sc-dot sc-dot1"/>
+              <circle cx="32" cy="27" r="4" fill="#00c853" class="sc-dot sc-dot2"/>
+              <circle cx="42" cy="27" r="4" fill="#00c853" class="sc-dot sc-dot3"/>
+            </svg>
+            <div class="sc-icon-shine"></div>
           </div>
-          <h3>Discord Server</h3>
-          <p>Join our server and open a ticket for instant support.</p>
-          <div class="sc-link">discord.gg/marketblox <span>→</span></div>
-        </a>
-        <a href="mailto:support@marketblox.gg" class="support-card email magnetic" data-aos>
-          <div class="sc-top">
-            <div class="sc-icon">📧</div>
+          <div class="sc-body">
+            <div class="sc-title-row">
+              <h3>Discord Server</h3>
+              <span class="sc-badge">Fastest</span>
+            </div>
+            <p>Join our server and open a ticket for instant support.</p>
+            <div class="sc-link">discord.gg/marketblox <span class="sc-arrow">→</span></div>
           </div>
-          <h3>Email Support</h3>
-          <p>Send us a message and we'll respond within the hour.</p>
-          <div class="sc-link">support@marketblox.gg <span>→</span></div>
         </a>
+
+        <a href="mailto:support@marketblox.fun" class="support-card email" data-aos>
+          <div class="sc-icon-wrap email-icon-wrap">
+            <!-- Animated 3D Envelope icon -->
+            <svg class="sc-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="eg1" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="100%" stop-color="#c8ffe0"/>
+                </linearGradient>
+                <filter id="eshadow">
+                  <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#00c853" flood-opacity="0.35"/>
+                </filter>
+              </defs>
+              <!-- Envelope body -->
+              <rect x="6" y="14" width="52" height="36" rx="10" fill="url(#eg1)" filter="url(#eshadow)"/>
+              <!-- Envelope flap lines -->
+              <path d="M6 20 L32 36 L58 20" stroke="#00c853" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Shine line -->
+              <line x1="14" y1="38" x2="26" y2="38" stroke="#00c853" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+            </svg>
+            <div class="sc-icon-shine"></div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-title-row">
+              <h3>Email Support</h3>
+            </div>
+            <p>Send us a message and we'll respond within the hour.</p>
+            <div class="sc-link">support@marketblox.fun <span class="sc-arrow">→</span></div>
+          </div>
+        </a>
+
       </div>
     </div>
   </section>
@@ -844,7 +918,7 @@
         <div class="footer-col">
           <h4>Games</h4>
           <a href="#" onclick="selectGame('sab');return false">Steal A Brainrot</a>
-          <a href="#" onclick="selectGame('gpo');return false">Grand Piece Online</a>
+          <a href="#" onclick="selectGame('gpo');return false">Sailor Piece</a>
           <a href="#" onclick="selectGame('bf');return false">Blox Fruits</a>
           <a href="#" onclick="selectGame('rivals');return false">Rivals</a>
         </div>
@@ -961,25 +1035,16 @@
           </div>
         </div>
 
-      </div>
-
-      <div class="gpm-cs-divider">
-        <span class="gpm-cs-label">🚀 COMING SOON</span>
-      </div>
-      <div class="gpm-grid">
-
-        <div class="gpm-card gpm-coming-soon">
-          <img class="gpm-bg" src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt="Grand Piece Online"/>
-          <div class="gpm-cs-overlay">COMING SOON...</div>
+        <div class="gpm-card" onclick="window.location='shop.html?game=gpo'">
+          <img class="gpm-bg" src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt="Sailor Piece"/>
+          <div class="gpm-badge gpm-badge-new">⚓ NEW</div>
           <div class="gpm-card-footer">
             <img class="gpm-icon" src="https://tr.rbxcdn.com/180DAY-33fe4e3dfcce376ad216aa402643b993/768/432/Image/Webp/noFilter" alt=""/>
-            <span>Grand Piece Online</span>
+            <span>Sailor Piece</span>
           </div>
         </div>
 
       </div>
-
-      <p class="gpm-footer-text">MORE GAMES COMING SOON! 🚀</p>
     </div>
   </div>
 

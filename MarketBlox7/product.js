@@ -6,7 +6,7 @@
 const PRODUCTS = {
   'los-mobilis': {
     name: 'Los Mobilis',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$3.67',
     priceNum: 3.67,
     original: '$4.99',
@@ -18,7 +18,7 @@ const PRODUCTS = {
   },
   '67': {
     name: '67',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$3.99',
     priceNum: 3.99,
     original: '$5.99',
@@ -30,7 +30,7 @@ const PRODUCTS = {
   },
   'celestial-pegasus': {
     name: 'Celestial Pegasus',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$29.99',
     priceNum: 29.99,
     original: '',
@@ -42,7 +42,7 @@ const PRODUCTS = {
   },
   'tic-tac-sahur': {
     name: 'Tic Tac Sahur',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$14.99',
     priceNum: 14.99,
     original: '',
@@ -54,7 +54,7 @@ const PRODUCTS = {
   },
   'esok-sekolah': {
     name: 'Esok Sekolah',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$4.99',
     priceNum: 4.99,
     original: '',
@@ -66,7 +66,7 @@ const PRODUCTS = {
   },
   'hydra-dragon': {
     name: 'Hydra Dragon Cannelloni',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$82.99',
     priceNum: 82.99,
     original: '',
@@ -78,7 +78,7 @@ const PRODUCTS = {
   },
   'cursed-burguru': {
     name: 'Cursed Burguru & Fryuru',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$149.99',
     priceNum: 149.99,
     original: '',
@@ -90,7 +90,7 @@ const PRODUCTS = {
   },
   'money-puggy': {
     name: 'Money Money Puggy',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$5.99',
     priceNum: 5.99,
     original: '',
@@ -102,7 +102,7 @@ const PRODUCTS = {
   },
   'sigma-cat': {
     name: 'Sigma Cat',
-    game: '🧠 Steal A Brainrot',
+    game: 'Steal A Brainrot',
     price: '$12.99',
     priceNum: 12.99,
     original: '',
@@ -116,7 +116,7 @@ const PRODUCTS = {
   // ── RIVALS ───────────────────────────────────────────────────
   'rivals-legendary-key': {
     name: 'Legendary Key Bundle [x1.1k]',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$33.67',
     priceNum: 33.67,
     original: '',
@@ -128,7 +128,7 @@ const PRODUCTS = {
   },
   'rivals-ultra-key': {
     name: 'Ultra Key Bundle [x450]',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$15.67',
     priceNum: 15.67,
     original: '',
@@ -140,7 +140,7 @@ const PRODUCTS = {
   },
   'rivals-heavy-duty': {
     name: 'Heavy Duty Bundle',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$13.99',
     priceNum: 13.99,
     original: '',
@@ -152,7 +152,7 @@ const PRODUCTS = {
   },
   'rivals-classic-bundle': {
     name: 'Classic Bundle',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$8.49',
     priceNum: 8.49,
     original: '',
@@ -164,7 +164,7 @@ const PRODUCTS = {
   },
   'rivals-season-pass-level': {
     name: '+10 Season Pass Level',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$7.49',
     priceNum: 7.49,
     original: '',
@@ -176,7 +176,7 @@ const PRODUCTS = {
   },
   'rivals-pixel-bundle': {
     name: 'Pixel Bundle',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$6.99',
     priceNum: 6.99,
     original: '',
@@ -188,7 +188,7 @@ const PRODUCTS = {
   },
   'rivals-skin-case-1': {
     name: 'Skin Case 1 [x3]',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$5.89',
     priceNum: 5.89,
     original: '',
@@ -200,7 +200,7 @@ const PRODUCTS = {
   },
   'rivals-skin-case-2': {
     name: 'Skin Case 2 [x3]',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$5.69',
     priceNum: 5.69,
     original: '',
@@ -212,7 +212,7 @@ const PRODUCTS = {
   },
   'rivals-skin-case-3': {
     name: 'Skin Case 3 [x3]',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$5.69',
     priceNum: 5.69,
     original: '',
@@ -224,7 +224,7 @@ const PRODUCTS = {
   },
   'rivals-exogun-bundle': {
     name: 'ExoGun Bundle',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$4.99',
     priceNum: 4.99,
     original: '',
@@ -236,7 +236,7 @@ const PRODUCTS = {
   },
   'rivals-prime-season-pass': {
     name: 'Prime Season Pass',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$4.99',
     priceNum: 4.99,
     original: '$6.99',
@@ -248,7 +248,7 @@ const PRODUCTS = {
   },
   'rivals-medkit-bundle': {
     name: 'Medkit Bundle',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$1.99',
     priceNum: 1.99,
     original: '',
@@ -260,7 +260,7 @@ const PRODUCTS = {
   },
   'rivals-rpg-bundle': {
     name: 'RPG Bundle',
-    game: '⚔️ Rivals',
+    game: 'Rivals',
     price: '$0.99',
     priceNum: 0.99,
     original: '',
@@ -274,7 +274,7 @@ const PRODUCTS = {
   // ── BLOX FRUITS ──────────────────────────────────────────────
   'bf-permanent-dragon': {
     name: 'Permanent Dragon',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$30.99',
     priceNum: 30.99,
     original: '',
@@ -286,7 +286,7 @@ const PRODUCTS = {
   },
   'bf-permanent-control': {
     name: 'Permanent Control',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$25.00',
     priceNum: 25.00,
     original: '',
@@ -298,7 +298,7 @@ const PRODUCTS = {
   },
   'bf-permanent-kitsune': {
     name: 'Permanent Kitsune',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$24.00',
     priceNum: 24.00,
     original: '',
@@ -310,7 +310,7 @@ const PRODUCTS = {
   },
   'bf-permanent-yeti': {
     name: 'Permanent Yeti',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$18.00',
     priceNum: 18.00,
     original: '',
@@ -322,7 +322,7 @@ const PRODUCTS = {
   },
   'bf-permanent-tiger': {
     name: 'Permanent Tiger',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$17.00',
     priceNum: 17.00,
     original: '',
@@ -334,7 +334,7 @@ const PRODUCTS = {
   },
   'bf-permanent-dough': {
     name: 'Permanent Dough',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$15.00',
     priceNum: 15.00,
     original: '',
@@ -346,7 +346,7 @@ const PRODUCTS = {
   },
   'bf-permanent-mammoth': {
     name: 'Permanent Mammoth',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$13.75',
     priceNum: 13.75,
     original: '',
@@ -358,7 +358,7 @@ const PRODUCTS = {
   },
   'bf-permanent-spirit': {
     name: 'Permanent Spirit',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$13.75',
     priceNum: 13.75,
     original: '',
@@ -370,7 +370,7 @@ const PRODUCTS = {
   },
   'bf-permanent-gas': {
     name: 'Permanent Gas',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$13.50',
     priceNum: 13.50,
     original: '',
@@ -382,7 +382,7 @@ const PRODUCTS = {
   },
   'bf-permanent-venom': {
     name: 'Permanent Venom',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$13.25',
     priceNum: 13.25,
     original: '',
@@ -394,7 +394,7 @@ const PRODUCTS = {
   },
   'bf-permanent-t-rex': {
     name: 'Permanent T-Rex',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$12.75',
     priceNum: 12.75,
     original: '',
@@ -406,7 +406,7 @@ const PRODUCTS = {
   },
   'bf-permanent-portal': {
     name: 'Permanent Portal',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$11.00',
     priceNum: 11.00,
     original: '',
@@ -418,7 +418,7 @@ const PRODUCTS = {
   },
   'bf-permanent-creation': {
     name: 'Permanent Creation',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$9.75',
     priceNum: 9.75,
     original: '',
@@ -430,7 +430,7 @@ const PRODUCTS = {
   },
   'bf-permanent-buddha': {
     name: 'Permanent Buddha',
-    game: '🍎 Blox Fruits',
+    game: 'Blox Fruits',
     price: '$8.50',
     priceNum: 8.50,
     original: '',
@@ -451,7 +451,7 @@ const product = PRODUCTS[productId] || PRODUCTS['los-mobilis'];
 
 // Track which game the user is browsing
 (function trackGameView() {
-  const gameKeyMap = { 'Steal A Brainrot': 'sab', 'Blox Fruits': 'bf', 'Grand Piece Online': 'gpo', 'Rivals': 'rivals', '⚔️ Rivals': 'rivals' };
+  const gameKeyMap = { 'Steal A Brainrot': 'sab', 'Blox Fruits': 'bf', 'Sailor Piece': 'gpo', 'Rivals': 'rivals' };
   const key = Object.keys(gameKeyMap).find(k => product.game.includes(k));
   if (!key) return;
   const views = JSON.parse(localStorage.getItem('mb_game_views') || '{}');
@@ -489,13 +489,12 @@ if (product.original) {
 
 // Image
 const mainImg = document.getElementById('main-img');
-const gameEmoji = product.game.includes('Blox Fruits') ? '🍎' : product.game.includes('Rivals') ? '⚔️' : '🧠';
 if (product.img) {
   mainImg.onerror = () => {
     mainImg.style.display = 'none';
     const fallback = document.createElement('div');
     fallback.className = 'img-fallback';
-    fallback.textContent = gameEmoji;
+    fallback.textContent = '📦';
     mainImg.parentElement.appendChild(fallback);
   };
   mainImg.src = product.img;
@@ -506,7 +505,7 @@ if (product.img) {
   mainImg.style.display = 'none';
   const fallback = document.createElement('div');
   fallback.className = 'img-fallback';
-  fallback.textContent = gameEmoji;
+  fallback.textContent = '📦';
   mainImg.parentElement.appendChild(fallback);
 }
 

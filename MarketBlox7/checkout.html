@@ -36,6 +36,7 @@
       <span>Market<b>Blox</b></span>
     </a>
     <div class="nav-right">
+      <span id="currencyPickerSlot"></span>
       <a href="/" class="nav-link co-back">← Continue Shopping</a>
     </div>
   </nav>
@@ -82,6 +83,10 @@
             <div class="co-price-row">
               <span>Subtotal</span>
               <span id="subtotalVal">$0.00</span>
+            </div>
+            <div class="co-price-row co-discount-row" id="discountRow" style="display:none;color:#00c853">
+              <span id="discountLabel">Discount</span>
+              <span id="discountVal">-$0.00</span>
             </div>
             <div class="co-price-row">
               <span>Processing Fee</span>
@@ -179,6 +184,8 @@
     </div>
   </main>
 
+  <script src="firebase-config.js"></script>
+  <script src="currency.js"></script>
   <script src="checkout.js"></script>
 </body>
 </html>

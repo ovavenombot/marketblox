@@ -42,11 +42,11 @@
     .currency-picker { position: relative; }
 
     .cp-btn {
-      display: flex; align-items: center; gap: 7px;
+      display: flex; align-items: center; gap: 8px;
       background: linear-gradient(135deg, #00c853 0%, #00a846 100%);
       border: none;
-      border-radius: 12px; padding: 7px 13px; cursor: pointer;
-      color: #fff; font-family: inherit; font-size: .82rem; font-weight: 800;
+      border-radius: 14px; padding: 10px 18px; cursor: pointer;
+      color: #fff; font-family: inherit; font-size: .92rem; font-weight: 800;
       transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
       white-space: nowrap; letter-spacing: .02em;
       box-shadow: 0 3px 12px rgba(0,200,83,.3);

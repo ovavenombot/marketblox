@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 30px; background: #111; font-family: sans-serif; }
+  canvas { display: block; border-radius: 10px; max-width: 100%; box-shadow: 0 8px 40px rgba(0,200,83,0.25); }
+  a { display: block; margin-top: 14px; font-size: 14px; color: #00c853; text-decoration: none; }
+  p { color: #aaa; font-size: 12px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1200" height="630"></canvas>
+<a id="dl">⬇ Download og-banner.png (1200×630) — upload this to /img/og-banner.png on your site</a>
+<p>Open with Live Server, then right-click → Save image as… OR click the download link above.</p>
+<script>
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const W = 1200, H = 630;
+
+const BG_IMGS = [
+  'sab/Candy_21.webp',
+  'sab/Arcadopus.webp',
+  'sab/Mi_GatitoHD.webp',
+  'sab/LosPuggies.png',
+  'sab/Fourtyone.webp',
+  'sab/SwaggyBros.jpg',
+  'sab/Chimino.jpg',
+  'sab/Carti.webp',
+  'sab/Chill_Puppy.webp',
+  'sab/Noel.webp',
+  'sab/PoTaTo.webp',
+  'sab/Graipuss.webp',
+];
+
+function loadImg(src) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload  = () => res(img);
+    img.onerror = () => res(null);
+    img.src = src;
+  });
+}
+
+Promise.all(BG_IMGS.map(loadImg)).then(imgs => draw(imgs.filter(Boolean)));
+
+function rr(x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function draw(imgs) {
+  // ── Blurry image mosaic background ───────────────────────────────────
+  const cols = 4, rows = 3;
+  const tw = Math.ceil(W / cols), th = Math.ceil(H / rows);
+  const pad = 16;
+  ctx.filter = 'blur(10px)';
+  for (let i = 0; i < cols * rows; i++) {
+    const img = imgs[i % imgs.length];
+    if (!img) continue;
+    ctx.drawImage(img, (i%cols)*tw - pad, Math.floor(i/cols)*th - pad, tw+pad*2, th+pad*2);
+  }
+  ctx.filter = 'none';
+
+  // ── Dark overlay ──────────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(4, 14, 7, 0.80)';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Dot grid ──────────────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(0,200,83,0.05)';
+  for (let x = 24; x < W; x += 40) {
+    for (let y = 24; y < H; y += 40) {
+      ctx.beginPath(); ctx.arc(x, y, 1.5, 0, Math.PI*2); ctx.fill();
+    }
+  }
+
+  // ── Center glow ───────────────────────────────────────────────────────
+  let g = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, 480);
+  g.addColorStop(0, 'rgba(0,200,83,0.16)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // ── Logo icon (center-top area) ───────────────────────────────────────
+  const sq=52, gap=13, rad=13;
+  const logoW = sq*2+gap;
+  const lx = W/2 - logoW/2, ly = 108;
+
+  rr(lx-16, ly-16, logoW+32, logoW+32, 22);
+  ctx.fillStyle = '#00c853'; ctx.fill();
+  rr(lx-16, ly-16, logoW+32, logoW+32, 22);
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth=2; ctx.stroke();
+
+  rr(lx, ly, sq, sq, rad);               ctx.fillStyle='white';                  ctx.fill();
+  rr(lx+sq+gap, ly, sq, sq, rad);        ctx.fillStyle='rgba(255,255,255,0.5)';  ctx.fill();
+  rr(lx, ly+sq+gap, sq, sq, rad);        ctx.fillStyle='rgba(255,255,255,0.5)';  ctx.fill();
+  rr(lx+sq+gap, ly+sq+gap, sq, sq, rad); ctx.fillStyle='white';                  ctx.fill();
+
+  // ── "MarketBlox" wordmark ─────────────────────────────────────────────
+  ctx.font = 'bold 72px "Arial Black", Arial';
+  const mW = ctx.measureText('Market').width;
+  const bW = ctx.measureText('Blox').width;
+  const wordX = W/2 - (mW + bW + 4) / 2;
+
+  ctx.textBaseline = 'middle';
+  ctx.textAlign    = 'left';
+  ctx.fillStyle    = '#ffffff';
+  ctx.fillText('Market', wordX, 338);
+  ctx.fillStyle = '#00c853';
+  ctx.fillText('Blox', wordX + mW + 4, 338);
+
+  // ── Tagline ───────────────────────────────────────────────────────────
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font         = '400 28px Arial';
+  ctx.fillStyle    = 'rgba(255,255,255,0.55)';
+  ctx.fillText('Cheap Roblox Items · Fast Delivery · 100% Safe', W/2, 396);
+
+  // ── Green accent line ─────────────────────────────────────────────────
+  const lineG = ctx.createLinearGradient(W/2-200, 0, W/2+200, 0);
+  lineG.addColorStop(0, 'rgba(0,200,83,0)');
+  lineG.addColorStop(0.5, '#00c853');
+  lineG.addColorStop(1, 'rgba(0,200,83,0)');
+  ctx.fillStyle = lineG;
+  ctx.fillRect(W/2-200, 420, 400, 2);
+
+  // ── Domain badge ──────────────────────────────────────────────────────
+  const bw=240, bh=52, bx=W/2-bw/2, by=440;
+  rr(bx, by, bw, bh, 14);
+  ctx.fillStyle = 'rgba(0,200,83,0.13)'; ctx.fill();
+  rr(bx, by, bw, bh, 14);
+  ctx.strokeStyle='rgba(0,200,83,0.45)'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.font      = '600 22px Arial';
+  ctx.fillStyle = '#00c853';
+  ctx.fillText('marketblox.fun', W/2, by+bh/2);
+
+  // ── Stars ─────────────────────────────────────────────────────────────
+  ctx.font      = '22px Arial';
+  ctx.fillStyle = '#00c853';
+  ctx.fillText('★★★★★  Trusted Shop', W/2, 530);
+
+  // ── Corner brackets ───────────────────────────────────────────────────
+  ctx.strokeStyle='rgba(0,200,83,0.35)'; ctx.lineWidth=3; ctx.lineCap='square';
+  const cs=28;
+  [[16,16,1,1],[W-16,16,-1,1],[16,H-16,1,-1],[W-16,H-16,-1,-1]].forEach(([x,y,dx,dy])=>{
+    ctx.beginPath();
+    ctx.moveTo(x, y+dy*cs); ctx.lineTo(x,y); ctx.lineTo(x+dx*cs, y);
+    ctx.stroke();
+  });
+
+  // ── Download ──────────────────────────────────────────────────────────
+  const dl = document.getElementById('dl');
+  dl.href     = canvas.toDataURL('image/png');
+  dl.download = 'og-banner.png';
+}
+</script>
+</body>
+</html>

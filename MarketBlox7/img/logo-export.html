@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; background: transparent; }
+  canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1024" height="1024"></canvas>
+<a id="dl" style="display:block;margin:10px;font-family:sans-serif;font-size:14px">Click here to download PNG</a>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const s = 1024;
+
+function roundRect(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// Green background
+roundRect(0, 0, s, s, 180);
+ctx.fillStyle = '#00c853';
+ctx.fill();
+
+// Top-left square (full white)
+roundRect(108*2, 108*2, 128*2, 128*2, 28*2);
+ctx.fillStyle = 'white';
+ctx.fill();
+
+// Top-right square (60% white)
+roundRect(276*2, 108*2, 128*2, 128*2, 28*2);
+ctx.fillStyle = 'rgba(255,255,255,0.6)';
+ctx.fill();
+
+// Bottom-left square (60% white)
+roundRect(108*2, 276*2, 128*2, 128*2, 28*2);
+ctx.fillStyle = 'rgba(255,255,255,0.6)';
+ctx.fill();
+
+// Bottom-right square (full white)
+roundRect(276*2, 276*2, 128*2, 128*2, 28*2);
+ctx.fillStyle = 'white';
+ctx.fill();
+
+// Download link
+const dl = document.getElementById('dl');
+dl.href = canvas.toDataURL('image/png');
+dl.download = 'marketblox-logo.png';
+dl.textContent = '⬇ Download marketblox-logo.png (1024×1024)';
+</script>
+</body>
+</html>

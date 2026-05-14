@@ -2,116 +2,6 @@
 //   MARKETBLOX V4 — SCRIPT.JS
 // ================================
 
-// 3D ANIMATED BACKGROUND with Three.js via CDN
-(function() {
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-  script.onload = init3D;
-  document.head.appendChild(script);
-})();
-
-function init3D() {
-  const canvas = document.getElementById('particles');
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 30;
-
-  // FLOATING CUBES (Roblox-style blocks)
-  const cubes = [];
-  const cubeGeo = new THREE.BoxGeometry(1, 1, 1);
-  const colors = [0x00c853, 0x00a846, 0x69f0ae, 0x1b5e20, 0x004d40];
-
-  for (let i = 0; i < 40; i++) {
-    const mat = new THREE.MeshPhongMaterial({
-      color: colors[Math.floor(Math.random() * colors.length)],
-      transparent: true,
-      opacity: Math.random() * 0.25 + 0.05,
-      shininess: 80,
-    });
-    const cube = new THREE.Mesh(cubeGeo, mat);
-    const scale = Math.random() * 2 + 0.5;
-    cube.scale.set(scale, scale, scale);
-    cube.position.set(
-      (Math.random() - 0.5) * 80,
-      (Math.random() - 0.5) * 60,
-      (Math.random() - 0.5) * 30
-    );
-    cube.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-    cube.userData = {
-      rotX: (Math.random() - 0.5) * 0.008,
-      rotY: (Math.random() - 0.5) * 0.008,
-      floatSpeed: Math.random() * 0.003 + 0.001,
-      floatOffset: Math.random() * Math.PI * 2,
-    };
-    scene.add(cube);
-    cubes.push(cube);
-  }
-
-  // DOTS / PARTICLES
-  const dotGeo = new THREE.SphereGeometry(0.12, 6, 6);
-  for (let i = 0; i < 80; i++) {
-    const dot = new THREE.Mesh(dotGeo, new THREE.MeshBasicMaterial({
-      color: Math.random() > 0.5 ? 0x00c853 : 0xcccccc,
-      transparent: true,
-      opacity: Math.random() * 0.3 + 0.05,
-    }));
-    dot.position.set(
-      (Math.random() - 0.5) * 100,
-      (Math.random() - 0.5) * 80,
-      (Math.random() - 0.5) * 40
-    );
-    dot.userData = {
-      floatSpeed: Math.random() * 0.002 + 0.0005,
-      floatOffset: Math.random() * Math.PI * 2,
-    };
-    scene.add(dot);
-    cubes.push(dot);
-  }
-
-  // LIGHTS
-  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-  const dirLight = new THREE.DirectionalLight(0x00c853, 1);
-  dirLight.position.set(10, 20, 10);
-  scene.add(dirLight);
-  const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.4);
-  dirLight2.position.set(-10, -10, 10);
-  scene.add(dirLight2);
-
-  // MOUSE PARALLAX
-  let mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
-
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  let t = 0;
-  function animate() {
-    requestAnimationFrame(animate);
-    t += 0.01;
-    camera.position.x += (mouseX * 3 - camera.position.x) * 0.03;
-    camera.position.y += (-mouseY * 2 - camera.position.y) * 0.03;
-    camera.lookAt(scene.position);
-    cubes.forEach(c => {
-      if (c.userData.rotX) {
-        c.rotation.x += c.userData.rotX;
-        c.rotation.y += c.userData.rotY;
-      }
-      c.position.y += Math.sin(t * c.userData.floatSpeed * 100 + c.userData.floatOffset) * 0.01;
-    });
-    renderer.render(scene, camera);
-  }
-  animate();
-}
 
 // FLOATING STARS IN HERO
 const heroStars = document.getElementById('heroStars');
@@ -149,10 +39,10 @@ function closeMobile() {
 
 // GAME SWITCHER
 const gameInfo = {
-  sab:    { title: '🧠 Steal A Brainrot', meta: '12 Items · Instant Delivery' },
-  gpo:    { title: '🌊 Grand Piece Online', meta: 'Coming Soon' },
-  bf:     { title: '🍎 Blox Fruits', meta: 'Coming Soon' },
-  rivals: { title: '⚔️ Rivals', meta: 'Coming Soon' }
+  sab:    { title: 'Steal A Brainrot', meta: '12 Items · Instant Delivery' },
+  gpo:    { title: 'Sailor Piece', meta: 'Coming Soon' },
+  bf:     { title: 'Blox Fruits', meta: 'Coming Soon' },
+  rivals: { title: 'Rivals', meta: 'Coming Soon' }
 };
 
 function selectGame(game) {
