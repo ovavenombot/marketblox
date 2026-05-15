@@ -150,7 +150,7 @@
       <div class="acc-profile-info">
         <div class="acc-profile-name">
           <span id="profileName">Loading…</span>
-          <span class="acc-badge">User</span>
+          <span class="acc-badge" id="profileBadge">User</span>
         </div>
         <div class="acc-profile-email" id="profileEmail"></div>
       </div>
@@ -186,6 +186,10 @@
       <button class="acc-tab" id="tabProfile" onclick="switchTab('profile')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Profile
+      </button>
+      <button class="acc-tab" id="tabAdmin" onclick="switchTab('admin')" style="display:none;background:linear-gradient(135deg,#fff3e0,#fff8e1);border-color:#ffb300;color:#ff8f00;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7z"/></svg>
+        Admin
       </button>
     </div>
 
@@ -227,6 +231,88 @@
         <button class="acc-save-btn" onclick="changePassword()">Update Password</button>
         <div class="acc-msg" id="pwMsg"></div>
       </div>
+    </div>
+
+    <!-- Admin panel -->
+    <div id="panelAdmin" style="display:none">
+
+      <!-- Stats -->
+      <div class="adm-stats" id="admStats">
+        <div class="adm-stat"><div class="adm-stat-label">Total Revenue</div><div class="adm-stat-value green" id="admRevenue">—</div></div>
+        <div class="adm-stat"><div class="adm-stat-label">Total Orders</div><div class="adm-stat-value" id="admOrders">—</div></div>
+        <div class="adm-stat"><div class="adm-stat-label">Total Users</div><div class="adm-stat-value" id="admUsers">—</div></div>
+        <div class="adm-stat"><div class="adm-stat-label">Active Promos</div><div class="adm-stat-value orange" id="admPromos">—</div></div>
+      </div>
+
+      <!-- Sub-tabs -->
+      <div class="adm-subtabs">
+        <button class="adm-subtab active" id="admTabOrders"   onclick="admSwitch('orders')">Recent Orders</button>
+        <button class="adm-subtab"        id="admTabBuyers"   onclick="admSwitch('buyers')">Top Buyers</button>
+        <button class="adm-subtab"        id="admTabPromos"   onclick="admSwitch('promos')">Promo Codes</button>
+      </div>
+
+      <!-- Recent Orders -->
+      <div id="admPanelOrders">
+        <div class="adm-card">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead><tr><th>#</th><th>Date</th><th>Roblox</th><th>Email</th><th>Items</th><th>Total</th><th>Method</th></tr></thead>
+              <tbody id="admOrdersBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:#aaa">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Buyers -->
+      <div id="admPanelBuyers" style="display:none">
+        <div class="adm-card">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead><tr><th>Rank</th><th>Roblox</th><th>Email</th><th>Orders</th><th>Total Spent</th></tr></thead>
+              <tbody id="admBuyersBody"><tr><td colspan="5" style="text-align:center;padding:2rem;color:#aaa">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Promo Codes -->
+      <div id="admPanelPromos" style="display:none">
+        <div class="adm-promo-form">
+          <div class="adm-promo-form-title">Create New Promo Code</div>
+          <div class="adm-form-row">
+            <div class="adm-field">
+              <label class="adm-label">Code</label>
+              <input class="adm-input" id="newPromoCode" placeholder="e.g. SAVE20" style="text-transform:uppercase"/>
+            </div>
+            <div class="adm-field" style="max-width:110px">
+              <label class="adm-label">Discount</label>
+              <input class="adm-input" id="newPromoDiscount" type="number" placeholder="20" min="0"/>
+            </div>
+            <div class="adm-field" style="max-width:120px">
+              <label class="adm-label">Type</label>
+              <select class="adm-select" id="newPromoType">
+                <option value="percent">% Off</option>
+                <option value="fixed">€ Fixed</option>
+              </select>
+            </div>
+            <div class="adm-field" style="max-width:110px">
+              <label class="adm-label">Max Uses (0=∞)</label>
+              <input class="adm-input" id="newPromoMax" type="number" placeholder="0" min="0"/>
+            </div>
+            <button class="adm-btn" onclick="createPromo()">+ Create</button>
+          </div>
+          <div class="adm-msg" id="promoMsg"></div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead><tr><th>Code</th><th>Discount</th><th>Type</th><th>Uses</th><th>Max</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="admPromosBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:#aaa">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </main>
@@ -302,15 +388,19 @@
       getFirestore, doc, getDoc, collection, query, where, orderBy, getDocs, limit
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
+    const ADMIN_EMAIL = 'profaze272@gmail.com';
+
     const app  = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
     const db   = getFirestore(app);
     let currentUser = null;
     let selectedAmt = null;
+    let isAdmin     = false;
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = 'login'; return; }
       currentUser = user;
+      isAdmin = user.email === ADMIN_EMAIL;
       renderUser(user);
       document.getElementById('accMain').style.display = '';
       await Promise.all([loadBalance(user.uid), loadOrders(user.uid), loadTransactions(user.uid)]);
@@ -331,6 +421,15 @@
       document.getElementById('profileEmail').textContent  = user.email;
       document.getElementById('settingName').value         = name;
       document.getElementById('settingEmail').value        = user.email;
+
+      if (isAdmin) {
+        const badge = document.getElementById('profileBadge');
+        badge.textContent = '★ Admin';
+        badge.className   = 'acc-badge-admin';
+        document.getElementById('tabAdmin').style.display = '';
+        loadAdminStats();
+        loadAdminOrders();
+      }
     }
 
     async function loadBalance(uid) {
@@ -498,9 +597,150 @@
       document.getElementById('panelOrders').style.display  = tab === 'orders'       ? '' : 'none';
       document.getElementById('panelTx').style.display      = tab === 'transactions' ? '' : 'none';
       document.getElementById('panelProfile').style.display = tab === 'profile'      ? '' : 'none';
+      document.getElementById('panelAdmin').style.display   = tab === 'admin'        ? '' : 'none';
       document.getElementById('tabOrders').classList.toggle('active',  tab === 'orders');
       document.getElementById('tabTx').classList.toggle('active',      tab === 'transactions');
       document.getElementById('tabProfile').classList.toggle('active', tab === 'profile');
+      document.getElementById('tabAdmin').classList.toggle('active',   tab === 'admin');
+    };
+
+    // ── ADMIN ────────────────────────────────────────────────────────────────
+
+    async function adminFetch(action, extra = {}) {
+      const idToken = await currentUser.getIdToken();
+      const res = await fetch('/.netlify/functions/admin-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, action, ...extra }),
+      });
+      return res.json();
+    }
+
+    async function adminPromoFetch(action, extra = {}) {
+      const idToken = await currentUser.getIdToken();
+      const res = await fetch('/.netlify/functions/admin-promos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, action, ...extra }),
+      });
+      return res.json();
+    }
+
+    async function loadAdminStats() {
+      const data = await adminFetch('stats');
+      if (data.error) return;
+      document.getElementById('admRevenue').textContent = '€' + (data.totalRevenue / 100).toFixed(2);
+      document.getElementById('admOrders').textContent  = data.totalOrders;
+      document.getElementById('admUsers').textContent   = data.totalUsers;
+      document.getElementById('admPromos').textContent  = data.activePromos;
+    }
+
+    async function loadAdminOrders() {
+      const data = await adminFetch('orders');
+      const tbody = document.getElementById('admOrdersBody');
+      if (data.error || !data.orders.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:#aaa">${data.error || 'No orders yet'}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.orders.map(o => {
+        const date  = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+        const items = (o.items || []).map(i => i.name).join(', ') || '—';
+        const badge = o.paymentMethod === 'wallet'
+          ? '<span class="adm-badge adm-badge-wallet">Wallet</span>'
+          : '<span class="adm-badge adm-badge-paid">Stripe</span>';
+        return `<tr>
+          <td class="adm-mono">#${o.id.slice(-6).toUpperCase()}</td>
+          <td style="white-space:nowrap;font-size:.78rem">${date}</td>
+          <td style="font-weight:600">${o.robloxUsername || '—'}</td>
+          <td style="font-size:.78rem;color:#666">${o.email || '—'}</td>
+          <td style="font-size:.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${items}</td>
+          <td style="font-weight:800;color:var(--green)">€${((o.total||0)/100).toFixed(2)}</td>
+          <td>${badge}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function loadAdminBuyers() {
+      const data = await adminFetch('top-buyers');
+      const tbody = document.getElementById('admBuyersBody');
+      if (data.error || !data.buyers.length) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:2rem;color:#aaa">${data.error || 'No data'}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.buyers.map((b, i) => {
+        const rank    = i + 1;
+        const rankCls = rank === 1 ? 'adm-rank-1' : rank === 2 ? 'adm-rank-2' : rank === 3 ? 'adm-rank-3' : '';
+        const medal   = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+        return `<tr>
+          <td class="adm-rank ${rankCls}">${medal}</td>
+          <td style="font-weight:700">${b.robloxUsername || '—'}</td>
+          <td style="font-size:.78rem;color:#666">${b.email || '—'}</td>
+          <td style="text-align:center">${b.orderCount}</td>
+          <td style="font-weight:800;color:var(--green)">€${(b.total/100).toFixed(2)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function loadAdminPromos() {
+      const data = await adminFetch('promos');
+      const tbody = document.getElementById('admPromosBody');
+      if (data.error) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:#aaa">${data.error}</td></tr>`; return; }
+      if (!data.promos.length) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:#aaa">No promo codes yet</td></tr>`; return; }
+      tbody.innerHTML = data.promos.map(p => `<tr>
+        <td class="adm-mono">${p.id}</td>
+        <td style="font-weight:700">${p.discount}${p.type === 'percent' ? '%' : '€'}</td>
+        <td>${p.type === 'percent' ? '% Off' : '€ Fixed'}</td>
+        <td style="text-align:center">${p.usedCount || 0}</td>
+        <td style="text-align:center">${p.maxUses || '∞'}</td>
+        <td><span class="adm-badge ${p.active ? 'adm-badge-on' : 'adm-badge-off'}">${p.active ? 'Active' : 'Off'}</span></td>
+        <td style="display:flex;gap:.4rem">
+          <button class="adm-btn-toggle" onclick="togglePromo('${p.id}')">${p.active ? 'Disable' : 'Enable'}</button>
+          <button class="adm-btn-danger" onclick="deletePromo('${p.id}')">Delete</button>
+        </td>
+      </tr>`).join('');
+    }
+
+    window.admSwitch = (sub) => {
+      document.getElementById('admPanelOrders').style.display = sub === 'orders' ? '' : 'none';
+      document.getElementById('admPanelBuyers').style.display = sub === 'buyers' ? '' : 'none';
+      document.getElementById('admPanelPromos').style.display = sub === 'promos' ? '' : 'none';
+      document.getElementById('admTabOrders').classList.toggle('active', sub === 'orders');
+      document.getElementById('admTabBuyers').classList.toggle('active', sub === 'buyers');
+      document.getElementById('admTabPromos').classList.toggle('active', sub === 'promos');
+      if (sub === 'buyers' && document.getElementById('admBuyersBody').innerHTML.includes('Loading')) loadAdminBuyers();
+      if (sub === 'promos' && document.getElementById('admPromosBody').innerHTML.includes('Loading')) loadAdminPromos();
+    };
+
+    window.createPromo = async () => {
+      const code     = document.getElementById('newPromoCode').value.trim().toUpperCase();
+      const discount = document.getElementById('newPromoDiscount').value;
+      const type     = document.getElementById('newPromoType').value;
+      const maxUses  = document.getElementById('newPromoMax').value || '0';
+      const msg      = document.getElementById('promoMsg');
+      if (!code || !discount) { msg.style.color = '#e53935'; msg.textContent = 'Code and discount are required.'; return; }
+      msg.textContent = '…';
+      const data = await adminPromoFetch('create', { code, discount, type, maxUses });
+      if (data.success) {
+        msg.style.color = '#00c853'; msg.textContent = `Code "${code}" created!`;
+        document.getElementById('newPromoCode').value = '';
+        document.getElementById('newPromoDiscount').value = '';
+        loadAdminPromos();
+      } else {
+        msg.style.color = '#e53935'; msg.textContent = data.error || 'Failed to create.';
+      }
+    };
+
+    window.togglePromo = async (code) => {
+      await adminPromoFetch('toggle', { code });
+      loadAdminPromos();
+      loadAdminStats();
+    };
+
+    window.deletePromo = async (code) => {
+      if (!confirm(`Delete promo code "${code}"?`)) return;
+      await adminPromoFetch('delete', { code });
+      loadAdminPromos();
+      loadAdminStats();
     };
 
     window.saveName = async () => {
