@@ -119,12 +119,16 @@
       const err   = document.getElementById('loginError');
       if (!email) { err.textContent = 'Enter your email first.'; return; }
       try {
-        await sendPasswordResetEmail(auth, email);
+        const res = await fetch('/.netlify/functions/send-password-reset', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
         err.className = 'auth-error auth-success';
         err.textContent = 'Reset link sent! Check your inbox.';
       } catch (ex) {
         err.className = 'auth-error';
-        err.textContent = friendlyError(ex.code);
+        err.textContent = 'Could not send reset email. Try again.';
       }
     };
 
