@@ -334,7 +334,7 @@
 .co-discord-linked {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   background: var(--green-light);
   border: 1.5px solid var(--green);
   border-radius: var(--radius-sm);
@@ -342,6 +342,64 @@
   font-size: 0.9rem;
   color: var(--text);
   font-weight: 500;
+}
+
+.co-discord-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.co-discord-avatar-fallback {
+  background: #5865F2;
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.co-discord-linked-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.co-discord-linked-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.co-discord-linked-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #00a846;
+  font-weight: 600;
+}
+
+.co-discord-unlink {
+  background: none;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #666;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.co-discord-unlink:hover {
+  border-color: #e53935;
+  color: #e53935;
 }
 
 /* Pay button */

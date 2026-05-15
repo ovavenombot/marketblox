@@ -9,6 +9,7 @@ const FEE_RATE = 0.0635;
 let cart = JSON.parse(localStorage.getItem('mb_cart') || '[]');
 let discordId       = localStorage.getItem('mb_discord_id')       || null;
 let discordUsername = localStorage.getItem('mb_discord_username') || null;
+let discordAvatar   = localStorage.getItem('mb_discord_avatar')   || null;
 let appliedPromo    = null; // { code, discount, type: 'percent'|'fixed' }
 
 const FB_PROJECT = 'marketblox-ed6a3';
@@ -123,6 +124,7 @@ async function applyPromo() {
 
     appliedPromo = { code, discount, type };
     updatePricing();
+    updateWalletBtn();
 
     // Show green success badge
     const promoWrap = document.querySelector('.co-promo');
@@ -146,7 +148,31 @@ async function applyPromo() {
 function showDiscordLinked() {
   document.getElementById('discordBtn').style.display = 'none';
   document.getElementById('discordUserDisplay').textContent = discordUsername;
+
+  const avatarImg      = document.getElementById('discordAvatarImg');
+  const avatarFallback = document.getElementById('discordAvatarFallback');
+  if (avatarImg && discordAvatar && discordId) {
+    const url = `https://cdn.discordapp.com/avatars/${discordId}/${discordAvatar}.png?size=64`;
+    avatarImg.src = url;
+    avatarImg.style.display = '';
+    if (avatarFallback) avatarFallback.style.display = 'none';
+  } else if (avatarFallback) {
+    if (avatarImg) avatarImg.style.display = 'none';
+    avatarFallback.style.display = 'flex';
+  }
+
   document.getElementById('discordLinked').style.display = 'flex';
+}
+
+function unlinkDiscord() {
+  discordId       = null;
+  discordUsername = null;
+  discordAvatar   = null;
+  localStorage.removeItem('mb_discord_id');
+  localStorage.removeItem('mb_discord_username');
+  localStorage.removeItem('mb_discord_avatar');
+  document.getElementById('discordLinked').style.display = 'none';
+  document.getElementById('discordBtn').style.display = '';
 }
 
 function linkDiscord() {
@@ -164,9 +190,12 @@ function linkDiscord() {
     if (!e.data || !e.data.discordId) return;
     discordId       = e.data.discordId;
     discordUsername = e.data.discordUsername;
+    discordAvatar   = e.data.discordAvatar || null;
 
     localStorage.setItem('mb_discord_id',       discordId);
     localStorage.setItem('mb_discord_username', discordUsername);
+    if (discordAvatar) localStorage.setItem('mb_discord_avatar', discordAvatar);
+    else               localStorage.removeItem('mb_discord_avatar');
 
     showDiscordLinked();
     window.removeEventListener('message', onMsg);
@@ -263,10 +292,76 @@ function showGlobalError(msg) {
   payBtn.parentElement.insertBefore(div, payBtn);
 }
 
+// ── Wallet checkout ───────────────────────────────────────────────────────────
+
+window._mbCartTotalCents = function() {
+  const subtotal    = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+  const discountAmt = appliedPromo
+    ? (appliedPromo.type === 'percent'
+        ? subtotal * (appliedPromo.discount / 100)
+        : Math.min(appliedPromo.discount, subtotal))
+    : 0;
+  const discounted = subtotal - discountAmt;
+  const fee        = discounted * FEE_RATE;
+  return Math.round((discounted + fee) * 100);
+};
+
+function updateWalletBtn() {
+  if (window._updateWalletBtn) window._updateWalletBtn();
+}
+
+async function walletCheckout() {
+  clearErrors();
+  const roblox = document.getElementById('robloxInput').value.trim();
+  const email  = document.getElementById('emailInput').value.trim();
+  let valid = true;
+  if (!roblox) { showFieldError('robloxInput', 'Roblox username is required'); valid = false; }
+  if (!email || !email.includes('@')) { showFieldError('emailInput', 'A valid email is required'); valid = false; }
+  if (!valid) return;
+
+  const user = window._mbFirebaseUser;
+  if (!user) { showGlobalError('You must be logged in to pay with wallet.'); return; }
+
+  const btn = document.getElementById('walletPayBtn');
+  const origText = btn.textContent;
+  btn.textContent = '⏳ Processing…';
+  btn.disabled = true;
+
+  try {
+    const idToken = await user.getIdToken();
+    const subtotal = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+    const discountAmt = appliedPromo
+      ? (appliedPromo.type === 'percent'
+          ? subtotal * (appliedPromo.discount / 100)
+          : Math.min(appliedPromo.discount, subtotal))
+      : 0;
+
+    const res  = await fetch('/.netlify/functions/wallet-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken, items: cart, robloxUsername: roblox, email, discountAmt }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+
+    localStorage.removeItem('mb_cart');
+    window.location.href = 'success?wallet=true&order_id=' + data.orderId;
+  } catch (err) {
+    showGlobalError(err.message);
+    btn.textContent = origText;
+    btn.disabled = false;
+    updateWalletBtn();
+  }
+}
+
 // ── Navbar scroll shadow ──────────────────────────────────────────────────────
 
 window.addEventListener('scroll', () => {
   document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 10);
 });
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+  document.getElementById('robloxInput')?.addEventListener('input', updateWalletBtn);
+});
