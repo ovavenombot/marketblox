@@ -146,14 +146,15 @@ app.get('/api/discord/callback', async (req, res) => {
     const user = await userRes.json();
 
     // Escape values to prevent XSS
-    const safeId   = String(user.id       || '').replace(/[^0-9]/g, '');
-    const safeName = String(user.username || '').replace(/['"<>&]/g, '');
+    const safeId     = String(user.id       || '').replace(/[^0-9]/g, '');
+    const safeName   = String(user.username || '').replace(/['"<>&]/g, '');
+    const safeAvatar = String(user.avatar   || '').replace(/[^a-zA-Z0-9_]/g, '');
 
     res.send(`
       <!DOCTYPE html><html><body>
       <script>
         window.opener && window.opener.postMessage(
-          { discordId: '${safeId}', discordUsername: '${safeName}' },
+          { discordId: '${safeId}', discordUsername: '${safeName}', discordAvatar: '${safeAvatar}' },
           '*'
         );
         window.close();
@@ -255,6 +256,68 @@ app.get('/api/order/by-session/:sessionId', (req, res) => {
   const order = db.prepare('SELECT * FROM orders WHERE stripe_session_id=?').get(req.params.sessionId);
   if (!order) return res.status(404).json({ error: 'Not found' });
   res.json({ orderId: order.id, uuid: order.uuid, status: order.status });
+});
+
+// ── POST /api/wallet-order-complete ──────────────────────────────────────────
+// Called by the Netlify wallet-checkout function after a successful wallet
+// payment so we can create the Discord ticket and send the buyer a DM.
+
+app.post('/api/wallet-order-complete', async (req, res) => {
+  const secret = req.headers['x-ticket-secret'];
+  if (!process.env.TICKET_SECRET || secret !== process.env.TICKET_SECRET) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const { orderId, email, robloxUsername, discordId, discordUsername, items, subtotal, fee, total } = req.body;
+
+    if (!orderId || !robloxUsername || !email) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Avoid duplicate inserts if the request is retried
+    const existing = db.prepare('SELECT * FROM orders WHERE uuid=?').get(orderId);
+    if (!existing) {
+      db.prepare(`
+        INSERT INTO orders
+          (uuid, discord_id, discord_username, roblox_username, email, items, subtotal, fee, total, payment_method, status)
+        VALUES (?,?,?,?,?,?,?,?,?,'wallet','paid')
+      `).run(
+        orderId,
+        discordId       || null,
+        discordUsername || null,
+        robloxUsername,
+        email,
+        JSON.stringify(items || []),
+        subtotal || 0,
+        fee      || 0,
+        total    || 0,
+      );
+    }
+
+    const order = db.prepare('SELECT * FROM orders WHERE uuid=?').get(orderId);
+    if (!order) return res.status(500).json({ error: 'Order insert failed' });
+
+    const parsedItems = JSON.parse(order.items || '[]');
+
+    // Fire-and-forget ticket + DM (don't block the HTTP response)
+    (async () => {
+      try {
+        await createOrderTicket(order, parsedItems);
+        if (discordId) {
+          const updated = db.prepare('SELECT * FROM orders WHERE uuid=?').get(orderId);
+          await dmUser(discordId, updated);
+        }
+      } catch (err) {
+        console.error('[wallet-order-complete] Discord error:', err);
+      }
+    })();
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('wallet-order-complete error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

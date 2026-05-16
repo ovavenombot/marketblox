@@ -142,6 +142,9 @@ async function createOrderTicket(order, items) {
   if (process.env.STAFF_ROLE_ID) {
     overrides.push({ id: process.env.STAFF_ROLE_ID, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages] });
   }
+  if (order.discord_id) {
+    overrides.push({ id: order.discord_id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages] });
+  }
 
   const channel = await guild.channels.create({
     name:              `order-${order.id}`,
@@ -194,30 +197,36 @@ async function dmUser(discordId, order) {
     const user  = await client.users.fetch(discordId);
     const items = JSON.parse(order.items || '[]');
 
-    // Build clickable link to the order ticket channel
     const channelLink = order.ticket_channel_id
       ? `https://discord.com/channels/${process.env.GUILD_ID}/${order.ticket_channel_id}`
       : null;
 
-    const ticketLine = channelLink
-      ? `📩 Your order ticket has been created: **[MarketBlox › #order-${order.id}](${channelLink})**`
-      : `📩 Your order ticket has been created: **#order-${order.id}**`;
+    // Create a one-time invite to the ticket channel so the buyer can join the server
+    let inviteUrl = null;
+    if (order.ticket_channel_id) {
+      try {
+        const guild   = await client.guilds.fetch(process.env.GUILD_ID);
+        const channel = await guild.channels.fetch(order.ticket_channel_id);
+        const invite  = await channel.createInvite({ maxUses: 1, maxAge: 604800, unique: true }); // 7 days, 1 use
+        inviteUrl = invite.url;
+      } catch (err) {
+        console.error('Could not create invite:', err);
+      }
+    }
+
+    const lines = [];
+    if (inviteUrl)   lines.push(`🔗 **Join the server:** ${inviteUrl}`);
+    if (channelLink) lines.push(`🎫 **Your ticket:** [#order-${order.id}](${channelLink})`);
+    if (!lines.length) lines.push(`📩 Your order ticket has been created: **#order-${order.id}**`);
 
     const embed = new EmbedBuilder()
-      .setTitle('📦 Full Order Details')
+      .setTitle('📦 Your MarketBlox Order')
       .setColor(0x00c853)
-      .setDescription(ticketLine)
+      .setDescription(lines.join('\n\n') + '\n\nJoin the server and open your ticket — a staff member will deliver your items there.')
       .addFields(
-        { name: 'ID',              value: `${order.id}`,                                        inline: true },
+        { name: 'Order ID',        value: `${order.id}`,                                        inline: true },
         { name: 'Roblox Username', value: order.roblox_username,                                inline: true },
-        { name: 'Email',           value: order.email,                                          inline: true },
-        { name: 'Discord ID',      value: discordId,                                            inline: true },
-        { name: 'Total',           value: `$${order.total.toFixed(2)}`,                         inline: true },
-        { name: 'Payment Method',  value: order.payment_method || 'stripe',                     inline: true },
-        { name: 'Status',          value: order.status,                                         inline: true },
-        { name: 'Stripe ID',       value: order.stripe_session_id || 'N/A',                     inline: false },
-        { name: 'Created At',      value: order.created_at || new Date().toISOString(),          inline: true },
-        { name: 'Updated At',      value: order.updated_at || new Date().toISOString(),          inline: true },
+        { name: 'Total',           value: `€${order.total.toFixed(2)}`,                         inline: true },
         { name: 'Items',           value: items.map(i => `• **${i.name}** x${i.qty}`).join('\n') },
       )
       .setTimestamp();

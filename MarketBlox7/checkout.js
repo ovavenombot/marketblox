@@ -339,7 +339,7 @@ async function walletCheckout() {
     const res  = await fetch('/.netlify/functions/wallet-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken, items: cart, robloxUsername: roblox, email, discountAmt }),
+      body: JSON.stringify({ idToken, items: cart, robloxUsername: roblox, email, discountAmt, discordId: discordId || null, discordUsername: discordUsername || null }),
     });
     const data = await res.json();
 

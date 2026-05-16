@@ -2229,9 +2229,9 @@ body {
     0 30px 80px rgba(0,0,0,0.18),
     0 0 40px rgba(0,200,83,0.08);
   border-radius: 22px;
-  padding: 2.25rem 2rem 1.75rem;
-  width: min(1080px, 92vw);
-  max-height: 88vh;
+  padding: 2.5rem 2.5rem 2rem;
+  width: min(1200px, 94vw);
+  max-height: 92vh;
   overflow-y: auto;
   position: relative;
   transform: scale(0.93) translateY(24px);
@@ -2288,14 +2288,14 @@ body {
 }
 .gpm-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
 }
 .gpm-card {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
-  height: 195px;
+  height: 250px;
   cursor: pointer;
   transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s;
   box-shadow: 0 4px 16px rgba(0,0,0,0.10);

@@ -18,7 +18,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   try {
-    const { idToken, items, robloxUsername, email, discountAmt } = JSON.parse(event.body);
+    const { idToken, items, robloxUsername, email, discountAmt, discordId, discordUsername } = JSON.parse(event.body);
 
     if (!idToken) return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated' }) };
     if (!items || items.length === 0) return { statusCode: 400, body: JSON.stringify({ error: 'No items in cart' }) };
@@ -56,16 +56,39 @@ exports.handler = async (event) => {
 
       t.set(orderRef, {
         userId,
-        email:          email || decoded.email || '',
+        email:           email || decoded.email || '',
         robloxUsername,
-        items:          items.map(i => ({ name: i.name, amount: Math.round(i.priceNum * i.qty * 100), qty: i.qty })),
-        total:          totalCents,
-        currency:       'eur',
-        status:         'paid',
-        paymentMethod:  'wallet',
-        createdAt:      admin.firestore.FieldValue.serverTimestamp(),
+        discordId:       discordId       || null,
+        discordUsername: discordUsername || null,
+        items:           items.map(i => ({ name: i.name, amount: Math.round(i.priceNum * i.qty * 100), qty: i.qty })),
+        total:           totalCents,
+        currency:        'eur',
+        status:          'paid',
+        paymentMethod:   'wallet',
+        createdAt:       admin.firestore.FieldValue.serverTimestamp(),
       });
     });
+
+    // Notify Railway backend to create Discord ticket (fire-and-forget)
+    const BACKEND_URL   = process.env.BACKEND_URL   || 'https://marketblox-production.up.railway.app';
+    const TICKET_SECRET = process.env.TICKET_SECRET || '';
+    if (TICKET_SECRET) {
+      fetch(`${BACKEND_URL}/api/wallet-order-complete`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'x-ticket-secret': TICKET_SECRET },
+        body:    JSON.stringify({
+          orderId,
+          email:           email || decoded.email || '',
+          robloxUsername,
+          discordId:       discordId       || null,
+          discordUsername: discordUsername || null,
+          items,
+          subtotal:        discounted,
+          fee,
+          total:           discounted + fee,
+        }),
+      }).catch(err => console.error('[wallet-checkout] Railway notify failed:', err));
+    }
 
     return {
       statusCode: 200,
