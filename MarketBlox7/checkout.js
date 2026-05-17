@@ -171,6 +171,8 @@ function unlinkDiscord() {
   localStorage.removeItem('mb_discord_id');
   localStorage.removeItem('mb_discord_username');
   localStorage.removeItem('mb_discord_avatar');
+  // Also clear from Firestore so page reload doesn't restore it
+  if (window._mbSaveDiscord) window._mbSaveDiscord(null, null, null);
   document.getElementById('discordLinked').style.display = 'none';
   document.getElementById('discordBtn').style.display = '';
 }
@@ -180,11 +182,17 @@ function linkDiscord() {
   const left = Math.round((screen.width  - w) / 2);
   const top  = Math.round((screen.height - h) / 2);
 
-  window.open(
+  const popup = window.open(
     `${BACKEND_URL}/api/discord/auth`,
     'Discord Auth',
     `width=${w},height=${h},left=${left},top=${top},toolbar=no,menubar=no`
   );
+
+  if (!popup) {
+    // Popup was blocked — fall back to same-tab redirect
+    window.location.href = `${BACKEND_URL}/api/discord/auth`;
+    return;
+  }
 
   window.addEventListener('message', function onMsg(e) {
     if (!e.data || !e.data.discordId) return;
