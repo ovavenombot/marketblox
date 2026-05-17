@@ -4,7 +4,7 @@ const cors     = require('cors');
 const stripe   = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { v4: uuidv4 } = require('uuid');
 const { initDb, db } = require('./database');
-const { createOrderTicket, dmUser } = require('./bot');
+const { createOrderTicket, dmUser, updateBuyerRoles } = require('./bot');
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
@@ -214,6 +214,7 @@ app.post('/api/stripe-webhook', async (req, res) => {
           console.log(`[Order ${orderId}] Sending DM to Discord ID: ${discordId}`);
           await dmUser(discordId, updatedOrder);
           console.log(`[Order ${orderId}] DM sent successfully`);
+          await updateBuyerRoles(discordId);
         } else {
           console.log(`[Order ${orderId}] No Discord ID — skipping DM`);
         }
@@ -307,6 +308,7 @@ app.post('/api/wallet-order-complete', async (req, res) => {
         if (discordId) {
           const updated = db.prepare('SELECT * FROM orders WHERE uuid=?').get(orderId);
           await dmUser(discordId, updated);
+          await updateBuyerRoles(discordId);
         }
       } catch (err) {
         console.error('[wallet-order-complete] Discord error:', err);

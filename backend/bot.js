@@ -582,4 +582,46 @@ setTimeout(() => {
   if (!botReady) console.error('[Bot] Still not ready after 30s — Discord gateway may be blocked');
 }, 30000);
 
-module.exports = { createOrderTicket, dmUser };
+// ── Auto-assign buyer roles based on total spending ───────────────────────────
+
+const ROLE_BUYER      = '1388957675320115301'; // bought at least 1 item
+const ROLE_SPENDER_10 = '1366024130037678162'; // $10+
+const ROLE_SPENDER_50 = '1381629079211479141'; // $50+
+const ROLE_SPENDER_100= '1381629319469858837'; // $100+
+
+async function updateBuyerRoles(discordId) {
+  if (!discordId) return;
+  await waitReady();
+  try {
+    const guild  = await client.guilds.fetch(process.env.GUILD_ID);
+    const member = await guild.members.fetch(discordId).catch(() => null);
+    if (!member) return; // buyer hasn't joined the server yet
+
+    const row = db.prepare(`
+      SELECT COALESCE(SUM(total), 0) AS total
+      FROM orders
+      WHERE discord_id = ? AND status IN ('paid', 'completed')
+    `).get(discordId);
+
+    const total = row?.total || 0;
+
+    const rolesToAdd = [ROLE_BUYER];
+    if (total >= 10)  rolesToAdd.push(ROLE_SPENDER_10);
+    if (total >= 50)  rolesToAdd.push(ROLE_SPENDER_50);
+    if (total >= 100) rolesToAdd.push(ROLE_SPENDER_100);
+
+    for (const roleId of rolesToAdd) {
+      if (!member.roles.cache.has(roleId)) {
+        await member.roles.add(roleId).catch(err =>
+          console.error(`Failed to add role ${roleId} to ${discordId}:`, err)
+        );
+      }
+    }
+
+    console.log(`[Roles] Updated roles for ${discordId} — total: $${total.toFixed(2)}, roles: ${rolesToAdd.join(', ')}`);
+  } catch (err) {
+    console.error('[Roles] updateBuyerRoles error:', err);
+  }
+}
+
+module.exports = { createOrderTicket, dmUser, updateBuyerRoles };
