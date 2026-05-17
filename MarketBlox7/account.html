@@ -255,6 +255,7 @@
         <button class="adm-subtab active" id="admTabOrders"   onclick="admSwitch('orders')">Recent Orders</button>
         <button class="adm-subtab"        id="admTabBuyers"   onclick="admSwitch('buyers')">Top Buyers</button>
         <button class="adm-subtab"        id="admTabPromos"   onclick="admSwitch('promos')">Promo Codes</button>
+        <button class="adm-subtab"        id="admTabWallet"  onclick="admSwitch('wallet')">Wallet Adjust</button>
       </div>
 
       <!-- Recent Orders -->
@@ -314,6 +315,55 @@
             <table class="adm-table">
               <thead><tr><th>Code</th><th>Discount</th><th>Type</th><th>Uses</th><th>Max</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="admPromosBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:#aaa">Loading…</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wallet Adjustment -->
+      <div id="admPanelWallet" style="display:none">
+        <div class="adm-promo-form">
+          <div class="adm-promo-form-title">Adjust User Wallet Balance</div>
+          <div class="adm-form-row">
+            <div class="adm-field" style="flex:1">
+              <label class="adm-label">User Email</label>
+              <input class="adm-input" id="walletEmail" type="email" placeholder="user@example.com"/>
+            </div>
+            <button class="adm-btn" onclick="lookupUser()">Search</button>
+          </div>
+          <div id="walletUserInfo" style="display:none;margin-top:.75rem;padding:.75rem 1rem;background:#f8fffe;border:1px solid #c8e6c9;border-radius:8px">
+            <div style="font-weight:700;font-size:.95rem" id="walletUserName"></div>
+            <div style="font-size:.8rem;color:#666" id="walletUserEmail2"></div>
+            <div style="font-size:.9rem;margin-top:.3rem">Current balance: <strong id="walletUserBalance"></strong></div>
+          </div>
+          <div id="walletAdjustForm" style="display:none;margin-top:1rem">
+            <div class="adm-form-row">
+              <div class="adm-field" style="max-width:140px">
+                <label class="adm-label">Type</label>
+                <select class="adm-select" id="walletAdjustType">
+                  <option value="add">Add Funds</option>
+                  <option value="remove">Remove Funds</option>
+                </select>
+              </div>
+              <div class="adm-field" style="max-width:140px">
+                <label class="adm-label">Amount (€)</label>
+                <input class="adm-input" id="walletAdjustAmount" type="number" placeholder="10.00" min="0.01" max="500" step="0.01"/>
+              </div>
+              <div class="adm-field" style="flex:1">
+                <label class="adm-label">Reason (required)</label>
+                <input class="adm-input" id="walletAdjustReason" placeholder="e.g. Refund for order #ABC123"/>
+              </div>
+              <button class="adm-btn" onclick="adjustWallet()">Apply</button>
+            </div>
+          </div>
+          <div class="adm-msg" id="walletMsg"></div>
+        </div>
+        <div class="adm-card" style="margin-top:1rem">
+          <div style="font-weight:700;margin-bottom:.75rem;font-size:.9rem">Recent Adjustments</div>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead><tr><th>Date</th><th>User</th><th>Amount</th><th>New Balance</th><th>Reason</th><th>Admin</th></tr></thead>
+              <tbody id="admWalletLogBody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:#aaa">Loading…</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -710,11 +760,14 @@
       document.getElementById('admPanelOrders').style.display = sub === 'orders' ? '' : 'none';
       document.getElementById('admPanelBuyers').style.display = sub === 'buyers' ? '' : 'none';
       document.getElementById('admPanelPromos').style.display = sub === 'promos' ? '' : 'none';
+      document.getElementById('admPanelWallet').style.display = sub === 'wallet' ? '' : 'none';
       document.getElementById('admTabOrders').classList.toggle('active', sub === 'orders');
       document.getElementById('admTabBuyers').classList.toggle('active', sub === 'buyers');
       document.getElementById('admTabPromos').classList.toggle('active', sub === 'promos');
+      document.getElementById('admTabWallet').classList.toggle('active', sub === 'wallet');
       if (sub === 'buyers' && document.getElementById('admBuyersBody').innerHTML.includes('Loading')) loadAdminBuyers();
       if (sub === 'promos' && document.getElementById('admPromosBody').innerHTML.includes('Loading')) loadAdminPromos();
+      if (sub === 'wallet' && document.getElementById('admWalletLogBody').innerHTML.includes('Loading')) loadWalletLog();
     };
 
     window.createPromo = async () => {
@@ -748,6 +801,100 @@
       loadAdminPromos();
       loadAdminStats();
     };
+
+    // ── WALLET ADJUST ─────────────────────────────────────────────────────────
+
+    let walletTargetUser = null;
+
+    async function adminWalletFetch(action, extra = {}) {
+      const idToken = await currentUser.getIdToken();
+      const res = await fetch('/.netlify/functions/admin-wallet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken, action, ...extra }),
+      });
+      return res.json();
+    }
+
+    window.lookupUser = async () => {
+      const email = document.getElementById('walletEmail').value.trim();
+      const msg   = document.getElementById('walletMsg');
+      if (!email) { msg.style.color = '#e53935'; msg.textContent = 'Enter an email address.'; return; }
+      msg.style.color = '#666'; msg.textContent = 'Searching…';
+      const data = await adminWalletFetch('lookup', { email });
+      if (data.error) {
+        msg.style.color = '#e53935'; msg.textContent = data.error;
+        document.getElementById('walletUserInfo').style.display   = 'none';
+        document.getElementById('walletAdjustForm').style.display = 'none';
+        walletTargetUser = null;
+        return;
+      }
+      walletTargetUser = data;
+      document.getElementById('walletUserName').textContent    = data.displayName || data.email;
+      document.getElementById('walletUserEmail2').textContent  = data.email;
+      document.getElementById('walletUserBalance').textContent = '€' + (data.balance / 100).toFixed(2);
+      document.getElementById('walletUserInfo').style.display   = '';
+      document.getElementById('walletAdjustForm').style.display = '';
+      msg.textContent = '';
+    };
+
+    window.adjustWallet = async () => {
+      const msg = document.getElementById('walletMsg');
+      if (!walletTargetUser) { msg.style.color = '#e53935'; msg.textContent = 'Search for a user first.'; return; }
+      const amountEur = parseFloat(document.getElementById('walletAdjustAmount').value);
+      const type      = document.getElementById('walletAdjustType').value;
+      const reason    = document.getElementById('walletAdjustReason').value.trim();
+      if (!amountEur || amountEur <= 0) { msg.style.color = '#e53935'; msg.textContent = 'Enter a valid amount.'; return; }
+      if (amountEur > 500)              { msg.style.color = '#e53935'; msg.textContent = 'Maximum is €500.'; return; }
+      if (!reason || reason.length < 3) { msg.style.color = '#e53935'; msg.textContent = 'Reason is required (min 3 characters).'; return; }
+
+      const amountCents = Math.round(amountEur * 100) * (type === 'remove' ? -1 : 1);
+      const verb = type === 'add' ? 'Add' : 'Remove';
+      if (!confirm(`${verb} €${amountEur.toFixed(2)} ${type === 'add' ? 'to' : 'from'} ${walletTargetUser.email}?\nReason: ${reason}`)) return;
+
+      msg.style.color = '#666'; msg.textContent = 'Applying…';
+      const data = await adminWalletFetch('adjust', {
+        userId:    walletTargetUser.uid,
+        userEmail: walletTargetUser.email,
+        amountCents,
+        reason,
+      });
+
+      if (data.success) {
+        const newBal = '€' + (data.newBalance / 100).toFixed(2);
+        msg.style.color = '#00c853'; msg.textContent = `Done! New balance: ${newBal}`;
+        walletTargetUser.balance = data.newBalance;
+        document.getElementById('walletUserBalance').textContent = newBal;
+        document.getElementById('walletAdjustAmount').value = '';
+        document.getElementById('walletAdjustReason').value = '';
+        loadWalletLog();
+      } else {
+        msg.style.color = '#e53935'; msg.textContent = data.error || 'Failed to apply adjustment.';
+      }
+    };
+
+    async function loadWalletLog() {
+      const tbody = document.getElementById('admWalletLogBody');
+      const data  = await adminWalletFetch('log');
+      if (data.error || !data.entries || !data.entries.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:#aaa">${data.error || 'No adjustments yet'}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = data.entries.map(e => {
+        const date     = e.at ? new Date(e.at).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+        const time     = e.at ? new Date(e.at).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) : '';
+        const sign     = e.amountCents > 0 ? '+' : '';
+        const amtColor = e.amountCents > 0 ? '#00a846' : '#e53935';
+        return `<tr>
+          <td style="white-space:nowrap;font-size:.78rem">${date} ${time}</td>
+          <td style="font-size:.78rem">${e.userEmail}</td>
+          <td style="font-weight:700;color:${amtColor}">${sign}€${(Math.abs(e.amountCents)/100).toFixed(2)}</td>
+          <td style="font-weight:600">€${(e.newBalance/100).toFixed(2)}</td>
+          <td style="font-size:.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.reason}</td>
+          <td style="font-size:.78rem;color:#666">${e.adminEmail}</td>
+        </tr>`;
+      }).join('');
+    }
 
     window.saveName = async () => {
       const name = document.getElementById('settingName').value.trim();
