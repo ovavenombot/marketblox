@@ -6,8 +6,6 @@
 [build.environment]
   SECRETS_SCAN_OMIT_PATHS = "MarketBlox7/firebase-config.js"
 
-[functions]
-  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/api/checkout"
