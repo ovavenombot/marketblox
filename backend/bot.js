@@ -134,20 +134,25 @@ async function registerCommands() {
 
 async function createOrderTicket(order, items) {
   await waitReady();
+  console.log(`[Ticket] Creating ticket for order ${order.id} | discord_id=${order.discord_id}`);
   const guild = await client.guilds.fetch(process.env.GUILD_ID);
   await guild.roles.fetch(); // cache roles so STAFF_ROLE_ID resolves
+  console.log(`[Ticket] Guild fetched: ${guild.name} | roles cached`);
 
   const overrides = [
     { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
   ];
   if (process.env.STAFF_ROLE_ID) {
     overrides.push({ id: process.env.STAFF_ROLE_ID, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages] });
+    console.log(`[Ticket] Staff role override added: ${process.env.STAFF_ROLE_ID}`);
   }
   if (order.discord_id) {
-    await guild.members.fetch(order.discord_id).catch(() => null); // cache member so ID resolves
+    const member = await guild.members.fetch(order.discord_id).catch(err => { console.warn(`[Ticket] member fetch failed for ${order.discord_id}:`, err.message); return null; });
+    console.log(`[Ticket] Member fetch for ${order.discord_id}: ${member ? 'found' : 'not in server'}`);
     overrides.push({ id: order.discord_id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages] });
   }
 
+  console.log(`[Ticket] Creating channel with ${overrides.length} overrides`);
   const channel = await guild.channels.create({
     name:              `order-${order.id}`,
     type:              ChannelType.GuildText,

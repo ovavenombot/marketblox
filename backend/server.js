@@ -333,11 +333,18 @@ app.post('/api/wallet-order-complete', async (req, res) => {
     // Fire-and-forget ticket + DM (don't block the HTTP response)
     (async () => {
       try {
+        console.log(`[Wallet ${orderId}] discordId="${discordId}" roblox="${robloxUsername}"`);
         await createOrderTicket(order, parsedItems);
+        console.log(`[Wallet ${orderId}] Ticket channel created`);
         if (discordId) {
           const updated = db.prepare('SELECT * FROM orders WHERE uuid=?').get(orderId);
+          console.log(`[Wallet ${orderId}] Sending DM to Discord ID: ${discordId}`);
           await dmUser(discordId, updated);
+          console.log(`[Wallet ${orderId}] DM sent`);
           await updateBuyerRoles(discordId);
+          console.log(`[Wallet ${orderId}] Roles updated`);
+        } else {
+          console.log(`[Wallet ${orderId}] No Discord ID — skipping DM and roles`);
         }
       } catch (err) {
         console.error('[wallet-order-complete] Discord error:', err);
