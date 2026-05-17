@@ -985,20 +985,23 @@
       <button class="drawer-close" onclick="closeCart()">✕</button>
     </div>
 
-    <div class="drawer-items" id="drawerItems"></div>
+    <!-- Scrollable body: items + suggestions scroll together -->
+    <div class="drawer-body">
+      <div class="drawer-items" id="drawerItems"></div>
 
-    <!-- EMPTY STATE -->
-    <div class="drawer-empty" id="drawerEmpty" style="display:flex">
-      <div class="drawer-empty-icon">🛒</div>
-      <h3>Your cart is empty</h3>
-      <p>Add some items to get started!</p>
-      <button class="drawer-empty-btn" onclick="closeCart()">Browse Products</button>
-    </div>
+      <!-- EMPTY STATE -->
+      <div class="drawer-empty" id="drawerEmpty" style="display:flex">
+        <div class="drawer-empty-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Add some items to get started!</p>
+        <button class="drawer-empty-btn" onclick="closeCart()">Browse Products</button>
+      </div>
 
-    <!-- SUGGESTIONS -->
-    <div class="drawer-suggestions" id="drawerSuggestions" style="display:none">
-      <div class="drawer-suggestions-title">You may also like</div>
-      <div class="suggestions-row" id="suggestionsRow"></div>
+      <!-- SUGGESTIONS -->
+      <div class="drawer-suggestions" id="drawerSuggestions" style="display:none">
+        <div class="drawer-suggestions-title">You may also like</div>
+        <div class="suggestions-row" id="suggestionsRow"></div>
+      </div>
     </div>
 
     <!-- FOOTER -->

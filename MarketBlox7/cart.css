@@ -106,10 +106,18 @@
 }
 .drawer-close:hover { background: var(--border); }
 
-/* DRAWER ITEMS */
-.drawer-items {
+/* SCROLLABLE BODY — items + suggestions scroll together */
+.drawer-body {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* DRAWER ITEMS */
+.drawer-items {
   padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
@@ -273,7 +281,7 @@
 /* YOU MAY ALSO LIKE */
 .drawer-suggestions {
   padding: 0 1.5rem 1rem;
-  flex-shrink: 0;
+  margin-top: auto;
 }
 .drawer-suggestions-title {
   font-family: var(--font-display);
