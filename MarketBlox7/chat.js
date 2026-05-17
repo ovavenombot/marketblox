@@ -268,7 +268,14 @@ function mbAddUserMessage(text) {
   const msgs = document.getElementById('mbChatMessages');
   const div = document.createElement('div');
   div.className = 'mb-msg user';
-  div.innerHTML = `<div class="mb-msg-bubble">${text}</div><div class="mb-msg-label">You</div>`;
+  const bubble = document.createElement('div');
+  bubble.className = 'mb-msg-bubble';
+  bubble.textContent = text;
+  const label = document.createElement('div');
+  label.className = 'mb-msg-label';
+  label.textContent = 'You';
+  div.appendChild(bubble);
+  div.appendChild(label);
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
