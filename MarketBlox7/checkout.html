@@ -219,7 +219,7 @@
   <script type="module">
     import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
     const app  = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
@@ -229,8 +229,9 @@
       if (!user) return;
       window._mbFirebaseUser = user;
 
-      const snap    = await getDoc(doc(db, 'users', user.uid));
-      const balance = snap.exists() ? (snap.data().balance || 0) : 0;
+      const snap     = await getDoc(doc(db, 'users', user.uid));
+      const userData = snap.exists() ? snap.data() : {};
+      const balance  = userData.balance || 0;
       window._mbWalletBalance = balance;
 
       const section = document.getElementById('walletSection');
@@ -242,7 +243,23 @@
       const emailInput = document.getElementById('emailInput');
       if (emailInput && !emailInput.value) emailInput.value = user.email || '';
 
+      // Pre-populate Discord if saved to their account
+      if (userData.discordId && window._mbSetDiscord) {
+        window._mbSetDiscord(userData.discordId, userData.discordUsername || '', userData.discordAvatar || null);
+      }
+
       updateWalletBtn();
+
+      // Expose save function so checkout.js can persist Discord to Firestore
+      window._mbSaveDiscord = async (id, username, avatar) => {
+        try {
+          await setDoc(doc(db, 'users', user.uid), {
+            discordId:       id       || null,
+            discordUsername: username || null,
+            discordAvatar:   avatar   || null,
+          }, { merge: true });
+        } catch (e) { console.error('Failed to save Discord to account:', e); }
+      };
     });
 
     window._updateWalletBtn = function() {

@@ -198,9 +198,21 @@ function linkDiscord() {
     else               localStorage.removeItem('mb_discord_avatar');
 
     showDiscordLinked();
+    if (window._mbSaveDiscord) window._mbSaveDiscord(discordId, discordUsername, discordAvatar);
     window.removeEventListener('message', onMsg);
   });
 }
+
+// Called by checkout.html module script to pre-populate Discord from Firestore
+window._mbSetDiscord = function(id, username, avatar) {
+  discordId       = id;
+  discordUsername = username || '';
+  discordAvatar   = avatar  || null;
+  if (id)       localStorage.setItem('mb_discord_id',       id);
+  if (username) localStorage.setItem('mb_discord_username', username);
+  if (avatar)   localStorage.setItem('mb_discord_avatar',   avatar);
+  showDiscordLinked();
+};
 
 // ── Payment ───────────────────────────────────────────────────────────────────
 
