@@ -69,25 +69,30 @@ exports.handler = async (event) => {
       });
     });
 
-    // Notify Railway backend to create Discord ticket (fire-and-forget)
+    // Notify Railway backend to create Discord ticket
+    // Must be awaited — Netlify Lambda freezes execution on return, killing fire-and-forget fetches
     const BACKEND_URL   = process.env.BACKEND_URL   || 'https://marketblox-production.up.railway.app';
     const TICKET_SECRET = process.env.TICKET_SECRET || '';
     if (TICKET_SECRET) {
-      fetch(`${BACKEND_URL}/api/wallet-order-complete`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'x-ticket-secret': TICKET_SECRET },
-        body:    JSON.stringify({
-          orderId,
-          email:           email || decoded.email || '',
-          robloxUsername,
-          discordId:       discordId       || null,
-          discordUsername: discordUsername || null,
-          items,
-          subtotal:        discounted,
-          fee,
-          total:           discounted + fee,
-        }),
-      }).catch(err => console.error('[wallet-checkout] Railway notify failed:', err));
+      try {
+        await fetch(`${BACKEND_URL}/api/wallet-order-complete`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'x-ticket-secret': TICKET_SECRET },
+          body:    JSON.stringify({
+            orderId,
+            email:           email || decoded.email || '',
+            robloxUsername,
+            discordId:       discordId       || null,
+            discordUsername: discordUsername || null,
+            items,
+            subtotal:        discounted,
+            fee,
+            total:           discounted + fee,
+          }),
+        });
+      } catch (err) {
+        console.error('[wallet-checkout] Railway notify failed:', err.message);
+      }
     }
 
     return {
