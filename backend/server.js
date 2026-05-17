@@ -6,6 +6,12 @@ const { v4: uuidv4 } = require('uuid');
 const { initDb, db } = require('./database');
 const { createOrderTicket, dmUser, updateBuyerRoles } = require('./bot');
 
+const admin = require('firebase-admin');
+if (!admin.apps.length && process.env.FIREBASE_SERVICE_ACCOUNT) {
+  admin.initializeApp({ credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)) });
+}
+const firestore = () => admin.apps.length ? admin.firestore() : null;
+
 const app  = express();
 const PORT = process.env.PORT || 3001;
 
@@ -203,6 +209,29 @@ app.post('/api/stripe-webhook', async (req, res) => {
     if (!order) return res.json({ received: true });
 
     const parsedItems = JSON.parse(items || '[]');
+
+    // Mirror order to Firestore so the admin panel can see it
+    const fsDb = firestore();
+    if (fsDb) {
+      fsDb.collection('orders').doc(orderId).set({
+        userId:          '',
+        email:           order.email || '',
+        robloxUsername:  robloxUsername || '',
+        discordId:       discordId || '',
+        discordUsername: discordUsername || '',
+        total:           Math.round(order.total * 100), // in cents like wallet orders
+        currency:        'eur',
+        status:          'paid',
+        paymentMethod:   'stripe',
+        stripeSessionId: session.id || '',
+        items:           parsedItems.map(i => ({
+          name:   i.name || '',
+          qty:    i.qty  || 1,
+          amount: Math.round((i.priceNum || 0) * (i.qty || 1) * 100),
+        })),
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      }).catch(err => console.error('Firestore mirror failed:', err));
+    }
 
     // Create ticket first, then DM with the channel link
     (async () => {
