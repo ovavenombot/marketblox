@@ -135,6 +135,7 @@ async function registerCommands() {
 async function createOrderTicket(order, items) {
   await waitReady();
   const guild = await client.guilds.fetch(process.env.GUILD_ID);
+  await guild.roles.fetch(); // cache roles so STAFF_ROLE_ID resolves
 
   const overrides = [
     { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
@@ -143,6 +144,7 @@ async function createOrderTicket(order, items) {
     overrides.push({ id: process.env.STAFF_ROLE_ID, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages] });
   }
   if (order.discord_id) {
+    await guild.members.fetch(order.discord_id).catch(() => null); // cache member so ID resolves
     overrides.push({ id: order.discord_id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages] });
   }
 
